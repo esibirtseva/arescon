@@ -1,1 +1,0 @@
-$("#loginForm").submit(function(a){return window.location="/user.html",a.preventDefault(),!1}),$("#loginSubmitButton").click(function(){$("#loginForm").submit()});
