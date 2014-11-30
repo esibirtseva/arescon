@@ -58,24 +58,7 @@ $('.devices .item').click(function(){
 	active_device = !active_device;
 	$(this).show().toggleClass("active").removeClass("red");
 });
-// active_house.click(function(){
-// 	console.log("123");
-// 	// $('.houses .item').show();
-// 	// $(this).show().removeClass("active");
-// });
-// $(".get-started-btn").click(function(e){
-// 	show($('#loginform'));
-// 	e.preventDefault();
-//     return false;
-// });
-// $(".download-btn").click(function(e){
-// 	show($('#regform'));
-// 	e.preventDefault();
-//     return false;
-// });
-// var show = function(block){
-// 	block.css('display', 'block');	
-// }
-// var hide = function(block){
-// 	block.css('display', 'none');	
-// }
+
+$('.history_reports h4').click(function(){
+	$('.history_reports h4 .glyphicon').toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up');
+});
