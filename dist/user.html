@@ -1,8 +1,150 @@
-<!DOCTYPE html> <html class=no-js> <head> <meta charset=utf-8> <title>arescon</title> <meta name=description content=""> <meta name=viewport content="width=device-width"> <link rel="shortcut icon" href=/6df2b309.favicon.ico> <link href="http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic" rel=stylesheet type=text/css> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel=stylesheet href=styles/4c79cfe0.main.css>  <body> <!--[if lt IE 10]>
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>arescon</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/6df2b309.favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <link rel="stylesheet" href="styles/bdff598c.main.css">
+  </head>
+  <body>
+    <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]--> <div class="container-flex page_container"> <div class=row> <div class="side_menu col-xs-4 col-sm-3 col-lg-2"> <div class=user_info> <div class=user_photo></div> <div class=user_name><p>Василий Петрович</p>Некифоров</div> </div> <div class=menu_block> <h4>Данные</h4> <a class=active href=#>Приборы</a> <a href=#>Отчеты</a> </div> <div class=menu_block> <h4>Аккаунт</h4> <a href=#>Настройки</a> <a href=#>Выйти</a> </div> </div> <div class="content container col-xs-offset-4 col-sm-offset-3 col-lg-offset-2 col-xs-8 col-sm-9 col-lg-10"> <div class="header row"><h3>Приборы</h3></div> <div class=row> <div class="devices col-xs-12 col-sm-6 col-md-5"> <div class="device add row"> <div class="device_info col-xs-9"> <h4>Добавить прибор</h4> </div> <div class="device_status col-xs-2 bad"> <p class="glyphicon glyphicon-plus"></p> </div> <div class=col-xs-12> <form action=""> <label for=device_name>Название прибора</label> <input id=device_name class=form-control placeholder="Название прибора"> <label for=device_type>Выберите тип</label> <select class=form-control name="" id=device_type> <option value=water>Вода <option value=gas>Газ <option value=electricity>Электричество <option value=heat>Отопление </select> <input type=submit class="btn btn-info" value=Добавить> </form> </div> </div> <div class="device row active"> <div class="device_info col-xs-9"> <h4>Название прибора 1</h4> <p><span class=device_blue>&#9679;</span> вода</p> </div> <div class="device_status col-xs-2 good"> <p>Работает</p> <p class="glyphicon glyphicon-ok"></p> </div> </div> <div class="device row"> <div class="device_info col-xs-9"> <h4>Название прибора</h4> <p><span class=device_orange>&#9679;</span> электричество</p> </div> <div class="device_status col-xs-2 bad"> <p>Выключен</p> <p class="glyphicon glyphicon-remove"></p> </div> </div> <div class="device row"> <div class="device_info col-xs-9"> <h4>Название прибора</h4> <p><span class=device_green>&#9679;</span> газ</p> </div> <div class="device_status col-xs-2 wait"> <p>Не подключен</p> <p class="glyphicon glyphicon-warning-sign"></p> </div> </div> </div> <div class="data hidden-xs col-sm-6 col-md-7"> <div class="device_info row"> <div class="col-xs-5 col-md-4 col-lg-3"><div class=device_image></div></div> <div class="device_name col-xs-6"> <h4>Название прибора 1</h4> <p>Описание прибора. Например, местоположение в квартире</p> </div> </div> <div class=data_block> <h4> <select> <option value=month>Месячное <option value=week>Недельное <option value=day>Дневное </select> потребление </h4> <canvas id=dailyUsageChart width=370 height=250></canvas> </div> <div class=data_block> <h4>Показатели</h4> <dl class=dl-horizontal> <dt>Всего израсходовано <dd>240.7 <dt>В среднем в месяц <dd>42.3 <dt>Рублей в месяц <dd>768 рублей </dl> </div> <div class=data_block> <h4>Доля расходов</h4> <canvas id=shareUsageChart width=370 height=250></canvas> </div> </div> </div> </div> </div> </div> <footer></footer> <script src=scripts/33fe479f.vendor.js></script> <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. --> <script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+    <![endif]-->
+
+
+    <div class="container-flex page_container">
+      <div class="row">
+        <div class="side_menu col-xs-4 col-sm-3 col-lg-2">
+          <div class="user_info">
+            <div class="user_photo"></div>
+            <div class="user_name"><p>Василий Петрович</p>Некифоров</div>
+          </div>
+          <div class="menu_block">
+            <h4>Данные</h4>
+            <a class="active" href="#">Приборы</a>
+            <a href="#">Отчеты</a>
+          </div>
+          <div class="menu_block">
+            <h4>Аккаунт</h4>
+            <a href="#">Настройки</a>
+            <a href="#">Выйти</a>
+          </div>
+        </div>
+        <div class="content container col-xs-offset-4 col-sm-offset-3 col-lg-offset-2 col-xs-8 col-sm-9 col-lg-10">
+          <div class="header row"><h3>Приборы</h3></div>
+          <div class="row">
+            <div class="devices col-xs-12 col-sm-6 col-md-5">
+              <div class="device add row">
+                <div class="device_info col-xs-9">
+                  <h4>Добавить прибор</h4>
+                </div>
+                <div class="device_status col-xs-2 bad">
+                  <p class="glyphicon glyphicon-plus"></p>
+                </div>
+                <div class="col-xs-12">
+                  <form class="" action="">
+                    <label for="device_name">Название прибора</label>
+                    <input id="device_name" class="form-control" type="text" placeholder="Название прибора">
+                    <label for="device_type">Выберите тип</label>
+                    <select class="form-control" name="" id="device_type">
+                      <option value="water">Вода</option>
+                      <option value="gas">Газ</option>
+                      <option value="electricity">Электричество</option>
+                      <option value="heat">Отопление</option>
+                    </select>
+                    <input type="submit" class="btn btn-info" value="Добавить">
+                  </form>
+                </div>
+              </div>
+              <div class="device row active">
+                <div class="device_info col-xs-9">
+                  <h4>Название прибора 1</h4>
+                  <p><span class="device_blue">&#9679;</span> вода</p>
+                </div>
+                <div class="device_status col-xs-2 good">
+                  <p>Работает</p>
+                  <p class="glyphicon glyphicon-ok"></p>
+                </div>
+              </div>
+              <div class="device row">
+                <div class="device_info col-xs-9">
+                  <h4>Название прибора</h4>
+                  <p><span class="device_orange">&#9679;</span> электричество</p>
+                </div>
+                <div class="device_status col-xs-2 bad">
+                  <p>Выключен</p>
+                  <p class="glyphicon glyphicon-remove"></p>
+                </div>
+              </div>
+              <div class="device row">
+                <div class="device_info col-xs-9">
+                  <h4>Название прибора</h4>
+                  <p><span class="device_green">&#9679;</span> газ</p>
+                </div>
+                <div class="device_status col-xs-2 wait">
+                  <p>Не подключен</p>
+                  <p class="glyphicon glyphicon-warning-sign"></p>
+                </div>
+              </div>
+            </div>
+            <div class="data hidden-xs col-sm-6 col-md-7">
+              <div class="device_info row">
+                <div class="col-xs-5 col-md-4 col-lg-3"><div class="device_image"></div></div>
+                <div class="device_name col-xs-6">
+                  <h4>Название прибора 1</h4>
+                  <p>Описание прибора. Например, местоположение в квартире</p>
+                </div>
+              </div>
+              <div class="data_block">
+                <h4>
+                  <select>
+                    <option value="month">Месячное</option>
+                    <option value="week">Недельное</option>
+                    <option value="day">Дневное</option>
+                  </select> потребление
+                </h4>
+                <canvas id="dailyUsageChart" width="370" height="250"></canvas>  
+              </div>
+              <div class="data_block">
+                <h4>Показатели</h4>
+                <dl class="dl-horizontal">
+                  <dt>Всего израсходовано</dt>
+                  <dd>240.7</dd>
+                  <dt>В среднем в месяц</dt>
+                  <dd>42.3</dd>
+                  <dt>Рублей в месяц</dt>
+                  <dd>768 рублей</dd>
+                </dl>
+              </div> 
+              <div class="data_block">
+                <h4>Доля расходов</h4>
+                <canvas id="shareUsageChart" width="370" height="250"></canvas>  
+              </div>               
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer></footer>
+
+
+    <script src="scripts/d4213ac7.vendor.js"></script>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
       e=o.createElement(i);r=o.getElementsByTagName(i)[0];
       e.src='//www.google-analytics.com/analytics.js';
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-      ga('create','UA-XXXXX-X');ga('send','pageview');</script> <script src=scripts/ffb7703d.main.js></script>  
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
+
+        <script src="scripts/a2bb7d53.main.js"></script>
+</body>
+</html>
