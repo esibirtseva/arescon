@@ -12,23 +12,23 @@
     <link href="styles/jquery.fancybox.css" rel="stylesheet">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="styles/06aeb485.vendor.css">
-    <link rel="stylesheet" href="styles/2df28c42.main.css">
+    <link rel="stylesheet" href="styles/dab72079.main.css">
   </head>
     <body>
       <section class="hero" id="main">
-	  <nav class="nav navbar-nav">
+    <nav class="nav navbar-nav">
   <div class="padded">
     <ul>
       <li class="active"><a id="link1" class="nav-section1" href="#main">Главная</a></li>
       <li><a id="link2" class="nav-section2" href="login.html">Вход</a></li>
-	  <li><a id="link2" class="nav-section2" href="#news">Лента новостей</a></li>
+    <li><a id="link2" class="nav-section2" href="#news">Лента новостей</a></li>
       <li><a id="link3" class="nav-section3" href="#about">Описание системы</a></li>
       <li><a id="link4" class="nav-section4" href="#features">Функционал</a></li>
       <li><a id="link4" class="nav-section5" href="#contacts">Контакты</a></li>
     </ul>
   </div>
 </nav>
-	  
+    
         <div class="container">
           <div class="row">
             <div class="col-md-12 text-right">
@@ -157,7 +157,7 @@
             <div class="col-md-2 col-md-offset-3">
               <ul class="footer-nav">
                 <li><a href="#main">Главная</a></li>
-                <li><a href="#news">Лента новостей</a></li>				
+                <li><a href="#news">Лента новостей</a></li>       
                 <li><a href="#about">Описание системы</a></li>
                 <li><a href="#features">Функционал</a></li>
                 <li><a href="#contacts">Контакты</a></li>
@@ -173,7 +173,7 @@
         </div>
       </footer>
       
-      <script src="scripts/560915c2.vendor.js"></script>
+      <script src="scripts/7e34caa3.vendor.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
@@ -184,21 +184,6 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>
-	<script>
-function scrollNav() {
-    $('.nav a').click(function () {
-        $('.active').removeClass('active');
-        $(this).closest('li').addClass('active');
-        var theClass = $(this).attr('class');
-        $('.' + theClass).parent('li').addClass('active');
-        $('html, body').stop().animate({ scrollTop: $($(this).attr('href')).offset().top  }, 400);
-        return false;
-    });
-    $('.scrollTop a').scrollTop();
-}
-scrollNav();
-//@ sourceURL=pen.js
-</script>
 
         <script src="scripts/6974e078.main.js"></script>
 </body>

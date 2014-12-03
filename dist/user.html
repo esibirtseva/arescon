@@ -9,7 +9,7 @@
     <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="styles/06aeb485.vendor.css">
-    <link rel="stylesheet" href="styles/2df28c42.main.css">
+    <link rel="stylesheet" href="styles/dab72079.main.css">
   </head>
   <body>
     <!--[if lt IE 10]>
@@ -91,6 +91,16 @@
                   <p class="glyphicon glyphicon-warning-sign"></p>
                 </div>
               </div>
+              <div id="d4" class="device row">
+                <div class="device_info col-xs-9">
+                  <h4>Название прибора 1</h4>
+                  <p><span class="device_blue">&#9679;</span> вода</p>
+                </div>
+                <div class="device_status col-xs-2 good">
+                  <p>Работает</p>
+                  <p class="glyphicon glyphicon-ok"></p>
+                </div>
+              </div>
             </div>
             <div class="data hidden-xs col-sm-6 col-md-7">
               <div class="device_info row">
@@ -117,74 +127,74 @@
                     </select>
                   </div>
                 </form>
-                <h4>Потребление</h4
-				<!-- tabs right -->
-			  <div class="tabbable tabs-right">
-				<ul class="nav nav-tabs">
-				  <li class="active"><a href="#1" data-toggle="tab">График</a></li>
-				  <li><a href="#2" data-toggle="tab">Таблица</a></li>
-				</ul>
-				<div class="tab-content">
-				  <div class="tab-pane active" id="1">
-						<canvas id="dailyUsageChart" width="370" height="250"></canvas>  
-				   </div>
-				   <div class="tab-pane" id="2">
-				   <!--put TABLE HERE-->
-				   <table class="table table-hover">
-						<thead>
-							<tr>
-								<th>Дата</th>
-								<th>Время</th>
-								<th>Потребление</th>
-								<th>Расходы (руб.)</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>1.11.11</td>
-								<td>12:00</td>
-								<td>48.8</td>
-								<td>760</td>
-							</tr>
-							<tr>
-								<td>1.12.11</td>
-								<td>12:00</td>
-								<td>55.4</td>
-								<td>795</td>
-							</tr>
-							<tr>
-								<td>1.01.12</td>
-								<td>12:00</td>
-								<td>60.1</td>
-								<td>820</td>
-							</tr>
-							<tr>
-								<td>1.02.12</td>
-								<td>12:00</td>
-								<td>55.4</td>
-								<td>795</td>
-							</tr>
-							<tr>
-								<td>1.04.12</td>
-								<td>12:00</td>
-								<td>60.1</td>
-								<td>820</td>
-							</tr>
-							<tr>
-								<td>1.03.12</td>
-								<td>12:00</td>
-								<td>48.8</td>
-								<td>760</td>
-							</tr>			
-						</tbody>
-					</table>
-				   
-				   
-				   </div>
+                <h4>Потребление</h4>
+                <!-- tabs right -->
+                <div class="tabbable tabs-right">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#1" data-toggle="tab">График</a></li>
+                  <li><a href="#2" data-toggle="tab">Таблица</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="1">
+                    <canvas id="dailyUsageChart" width="370" height="250"></canvas>  
+                    <div id="dailyUsageLegend" class="legend"></div> 
+                   </div>
+                   <div class="tab-pane" id="2">
+                   <!--put TABLE HERE-->
+                   <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Дата</th>
+                        <th>Время</th>
+                        <th>Потребление</th>
+                        <th>Расходы (руб.)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1.11.11</td>
+                        <td>12:00</td>
+                        <td>48.8</td>
+                        <td>760</td>
+                      </tr>
+                      <tr>
+                        <td>1.12.11</td>
+                        <td>12:00</td>
+                        <td>55.4</td>
+                        <td>795</td>
+                      </tr>
+                      <tr>
+                        <td>1.01.12</td>
+                        <td>12:00</td>
+                        <td>60.1</td>
+                        <td>820</td>
+                      </tr>
+                      <tr>
+                        <td>1.02.12</td>
+                        <td>12:00</td>
+                        <td>55.4</td>
+                        <td>795</td>
+                      </tr>
+                      <tr>
+                        <td>1.04.12</td>
+                        <td>12:00</td>
+                        <td>60.1</td>
+                        <td>820</td>
+                      </tr>
+                      <tr>
+                        <td>1.03.12</td>
+                        <td>12:00</td>
+                        <td>48.8</td>
+                        <td>760</td>
+                      </tr>     
+                    </tbody>
+                  </table>
+                   
+                   
+                   </div>
 
-				  </div>				
-			  </div>
-              <div class="data_block">
+                  </div>        
+                </div>
                 <h4>Показатели</h4>
                 <dl class="dl-horizontal">
                   <dt>Всего израсходовано</dt>
@@ -207,7 +217,7 @@
     <footer></footer>
 
 
-    <script src="scripts/560915c2.vendor.js"></script>
+    <script src="scripts/7e34caa3.vendor.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>

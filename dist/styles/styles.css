@@ -375,11 +375,11 @@ nav ul li {
   float: left; 
   display: inline; 
   margin-right: 0px;
-  &:nth-child(even) a {
+  list-style: none;
+}
+nav ul li :nth-child(even) a{
     font-style: bold;
-  }
-  list-style: none;}
-
+}
 nav ul li a {
   display: block;
   padding: 20px;
@@ -388,16 +388,16 @@ nav ul li a {
 text-shadow: 1px 1px 5px #626262;
 z-index: 9999;
 padding: 10px;
-  &:hover {
+  color: #fff;
+  text-decoration: none;}
+nav ul li a:hover {
     color: #fff;
     -webkit-transition: all .2s ease-in-out;
        -moz-transition: all .2s ease-in-out;
         -ms-transition: all .2s ease-in-out;
          -o-transition: all .2s ease-in-out;
             transition: all .2s ease-in-out;
-  }
-  color: #fff;
-  text-decoration: none;}
+}
 
 nav ul li.active a {
   font-style: bold;}
