@@ -138,7 +138,36 @@ var data = [
 ]
 var ctxDailyUsage, dailyUsageChart, dataDailyUsage, optionsDailyUsage;
 window.onload = function(){
-    console.log(data);
+    //daterange
+    var a = $('input[name="daterange"]').daterangepicker(
+        {
+            ranges: {
+                'Сегодня': [moment(), moment()],
+                'Вчера': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Последние 7 дней': [moment().subtract('days', 6), moment()],
+                'Последние 30 дней': [moment().subtract('days', 29), moment()],
+                'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
+                'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            },
+            startDate: moment().subtract('days', 29),
+            endDate: moment(),
+            locale: {
+                applyLabel: 'Применить',
+                cancelLabel: 'Очистить',
+                fromLabel: 'С',
+                toLabel: 'До',
+                customRangeLabel: 'Другой',
+                daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт','Сб'],
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                firstDay: 1
+            }
+        },
+        function(start, end) {
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+    );
+
+    console.log(a);
     //daily
     ctxDailyUsage = $("#dailyUsageChart").get(0).getContext("2d");
     ctxDailyUsage.canvas.width = $("#dailyUsageChart").parent().width();

@@ -8,8 +8,8 @@
     <link rel="shortcut icon" href="/6df2b309.favicon.ico">
     <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-    <link rel="stylesheet" href="styles/2d856255.main.css">
+    <link rel="stylesheet" href="styles/06aeb485.vendor.css">
+    <link rel="stylesheet" href="styles/2df28c42.main.css">
   </head>
   <body>
     <!--[if lt IE 10]>
@@ -101,13 +101,23 @@
                 </div>
               </div>
               <div class="data_block">
-                <h4>
-                  <select>
-                    <option value="month">Месячное</option>
-                    <option value="week">Недельное</option>
-                    <option value="day">Дневное</option>
-                  </select> потребление
-                </h4>
+                <form>
+                  <div class="rangepicker form-inline">
+                    <label for="date_filter">Интервал времени:</label>
+                    <input type="text" name="daterange" id="date_filter" class="form-control" placeholder="Выберите интервал">
+                  </div>
+                  <div class="frequencypicker form-inline">
+                    <label for="date_filter">Частота съема:</label>
+                    <input type="text" name="frequency" id="frequency" class="form-control" placeholder="Число">
+                    <select class="form-control" name="" id="">
+                      <option value="">Час</option>
+                      <option value="">День</option>
+                      <option value="">Неделя</option>
+                      <option value="">Месяц</option>
+                    </select>
+                  </div>
+                </form>
+                <h4>Потребление</h4>
                 <canvas id="dailyUsageChart" width="370" height="250"></canvas>  
               </div>
               <div class="data_block">
@@ -133,7 +143,7 @@
     <footer></footer>
 
 
-    <script src="scripts/d4213ac7.vendor.js"></script>
+    <script src="scripts/560915c2.vendor.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
