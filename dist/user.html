@@ -117,9 +117,73 @@
                     </select>
                   </div>
                 </form>
-                <h4>Потребление</h4>
-                <canvas id="dailyUsageChart" width="370" height="250"></canvas>  
-              </div>
+                <h4>Потребление</h4
+				<!-- tabs right -->
+			  <div class="tabbable tabs-right">
+				<ul class="nav nav-tabs">
+				  <li class="active"><a href="#1" data-toggle="tab">График</a></li>
+				  <li><a href="#2" data-toggle="tab">Таблица</a></li>
+				</ul>
+				<div class="tab-content">
+				  <div class="tab-pane active" id="1">
+						<canvas id="dailyUsageChart" width="370" height="250"></canvas>  
+				   </div>
+				   <div class="tab-pane" id="2">
+				   <!--put TABLE HERE-->
+				   <table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Дата</th>
+								<th>Время</th>
+								<th>Потребление</th>
+								<th>Расходы (руб.)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1.11.11</td>
+								<td>12:00</td>
+								<td>48.8</td>
+								<td>760</td>
+							</tr>
+							<tr>
+								<td>1.12.11</td>
+								<td>12:00</td>
+								<td>55.4</td>
+								<td>795</td>
+							</tr>
+							<tr>
+								<td>1.01.12</td>
+								<td>12:00</td>
+								<td>60.1</td>
+								<td>820</td>
+							</tr>
+							<tr>
+								<td>1.02.12</td>
+								<td>12:00</td>
+								<td>55.4</td>
+								<td>795</td>
+							</tr>
+							<tr>
+								<td>1.04.12</td>
+								<td>12:00</td>
+								<td>60.1</td>
+								<td>820</td>
+							</tr>
+							<tr>
+								<td>1.03.12</td>
+								<td>12:00</td>
+								<td>48.8</td>
+								<td>760</td>
+							</tr>			
+						</tbody>
+					</table>
+				   
+				   
+				   </div>
+
+				  </div>				
+			  </div>
               <div class="data_block">
                 <h4>Показатели</h4>
                 <dl class="dl-horizontal">
