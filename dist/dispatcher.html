@@ -10,7 +10,7 @@
     <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <link rel="stylesheet" href="styles/ef4ea08a.main.css">
+    <link rel="stylesheet" href="styles/2d856255.main.css">
   </head>
   <body>
     <!--[if lt IE 10]>
@@ -48,16 +48,16 @@
               <div class="filter_type">
                 <span>Тип счетчика</span>
                 <label class="checkbox-inline">
-                  <input type="checkbox" id="inlineCheckbox1" value="option1"> Все
+                  <input type="checkbox" id="inlineCheckbox1" value="option1" checked="checked"> Все
                 </label>
                 <label class="checkbox-inline">
-                  <input type="checkbox" id="inlineCheckbox1" value="option1"> Вода
+                  <input type="checkbox" id="inlineCheckbox1" value="option1" disabled="disabled"> Вода
                 </label>
                 <label class="checkbox-inline">
-                  <input type="checkbox" id="inlineCheckbox2" value="option2"> Электричество
+                  <input type="checkbox" id="inlineCheckbox2" value="option2" disabled="disabled"> Электричество
                 </label>
                 <label class="checkbox-inline">
-                  <input type="checkbox" id="inlineCheckbox3" value="option3"> Газ
+                  <input type="checkbox" id="inlineCheckbox3" value="option3" disabled="disabled"> Газ
                 </label>
               </div>
             </div>
@@ -67,46 +67,223 @@
               <div id="map"></div>
             </div>
             <div class="filter_precision col-md-5">
-              <div class="houses">
-                <div class="item">
-                  <p>Адрес: какой-то адрес 1</p>
+              <div class="company">
+                <div class="item active row">
+                  <p class="col-xs-6">Управляющая компания</p>
+                  <div class="balance col-xs-3">1768</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
                 </div>
-                <div class="item">
-                  <p>Адрес: какой-то адрес 2</p>
+              </div>
+              <div class="tszhs">
+                <div id="tszh1" class="item row">
+                  <p class="col-xs-6">ТСЖ 1</p>
+                  <div class="balance negative col-xs-3">132</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                  <div style="clear: both;"></div>
+                  <div class="houses nested" style="display:none;">
+                    <div id="house1" class="item row">
+                      <p class="col-xs-6">Дом: адрес1</p>
+                      <div class="balance negative col-xs-3">90</div>
+                      <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                      <div style="clear: both;"></div>
+                      <div class="apartments nested" style="display:none;">
+                        <div id="apartment1" class="item row">
+                          <p class="col-xs-6">Квартира: 2</p>
+                          <div class="balance col-xs-3">120</div>
+                          <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                          <div style="clear: both;"></div>
+                          <div class="devices nested" style="display:none;">
+                            <div id="device1" class="item row">
+                              <p class="col-xs-6"><span class="device_green">&#9679;</span> Газ: название прибора </p>
+                              <div class="balance col-xs-3">137</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>
+                            <div id="device2" class="item row">
+                              <p class="col-xs-6"><span class="device_blue">&#9679;</span> Вода: название прибора </p>
+                              <div class="balance col-xs-3">15</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>
+                            <div id="device3" class="item row">
+                              <p class="col-xs-6"><span class="device_orange">&#9679;</span> Электричество: название прибора </p>
+                              <div class="balance negative col-xs-3">2</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="house2" class="item row">
+                      <p class="col-xs-6">Дом: адрес2</p>
+                      <div class="balance negative col-xs-3">90</div>
+                      <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                      <div style="clear: both;"></div>
+                      <div class="apartments nested" style="display:none;">
+                        <div id="apartment1" class="item row">
+                          <p class="col-xs-6">Квартира: 2</p>
+                          <div class="balance col-xs-3">120</div>
+                          <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                          <div style="clear: both;"></div>
+                          <div class="devices nested" style="display:none;">
+                            <div id="device1" class="item row">
+                              <p class="col-xs-6"><span class="device_green">&#9679;</span> Газ: название прибора </p>
+                              <div class="balance col-xs-3">137</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>
+                            <div id="device2" class="item row">
+                              <p class="col-xs-6"><span class="device_blue">&#9679;</span> Вода: название прибора </p>
+                              <div class="balance col-xs-3">15</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>
+                            <div id="device3" class="item row">
+                              <p class="col-xs-6"><span class="device_orange">&#9679;</span> Электричество: название прибора </p>
+                              <div class="balance negative col-xs-3">2</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="item red">
-                  <p>Адрес: какой-то адрес 3</p>
+                <div id="tszh2" class="item row">
+                  <p class="col-xs-6">ТСЖ 2</p>
+                  <div class="balance negative col-xs-3">132</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                  <div style="clear: both;"></div>
+                  <div class="houses nested" style="display:none;">
+                    <div id="house3" class="item row">
+                      <p class="col-xs-6">Дом: адрес3</p>
+                      <div class="balance negative col-xs-3">90</div>
+                      <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                      <div style="clear: both;"></div>
+                      <div class="apartments nested" style="display:none;">
+                        <div id="apartment1" class="item row">
+                          <p class="col-xs-6">Квартира: 2</p>
+                          <div class="balance col-xs-3">120</div>
+                          <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                          <div style="clear: both;"></div>
+                          <div class="devices nested" style="display:none;">
+                            <div id="device1" class="item row">
+                              <p class="col-xs-6"><span class="device_green">&#9679;</span> Газ: название прибора </p>
+                              <div class="balance col-xs-3">137</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>
+                            <div id="device2" class="item row">
+                              <p class="col-xs-6"><span class="device_blue">&#9679;</span> Вода: название прибора </p>
+                              <div class="balance col-xs-3">15</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>
+                            <div id="device3" class="item row">
+                              <p class="col-xs-6"><span class="device_orange">&#9679;</span> Электричество: название прибора </p>
+                              <div class="balance negative col-xs-3">2</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="house4" class="item row">
+                      <p class="col-xs-6">Дом: адрес4</p>
+                      <div class="balance negative col-xs-3">90</div>
+                      <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                      <div style="clear: both;"></div>
+                      <div class="apartments nested" style="display:none;">
+                        <div id="apartment1" class="item row">
+                          <p class="col-xs-6">Квартира: 2</p>
+                          <div class="balance col-xs-3">120</div>
+                          <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                          <div style="clear: both;"></div>
+                          <div class="devices nested" style="display:none;">
+                            <div id="device1" class="item row">
+                              <p class="col-xs-6"><span class="device_green">&#9679;</span> Газ: название прибора </p>
+                              <div class="balance col-xs-3">137</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>
+                            <div id="device2" class="item row">
+                              <p class="col-xs-6"><span class="device_blue">&#9679;</span> Вода: название прибора </p>
+                              <div class="balance col-xs-3">15</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>
+                            <div id="device3" class="item row">
+                              <p class="col-xs-6"><span class="device_orange">&#9679;</span> Электричество: название прибора </p>
+                              <div class="balance negative col-xs-3">2</div>
+                              <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                            </div>                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="item">
-                  <p>Адрес: какой-то адрес 4</p>
+                <!-- <div id="tszh2" class="item row">
+                  <p class="col-xs-6">ТСЖ 2</p>
+                  <div class="balance col-xs-3">600</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                </div>
+                <div id="tszh3" class="item row">
+                  <p class="col-xs-6">ТСЖ 3</p>
+                  <div class="balance col-xs-3">1100</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                </div>
+              </div>
+              <div class="houses" style="display:none;">
+                <div id="house1" class="item row">
+                  <p class="col-xs-6">Дом: адрес1</p>
+                  <div class="balance negative col-xs-3">90</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                </div>
+                <div id="house2" class="item row">
+                  <p class="col-xs-6">Дом: адрес2</p>
+                  <div class="balance negative col-xs-3">42</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                </div>
+                <div id="house3" class="item row">
+                  <p class="col-xs-6">Дом: адрес3</p>
+                  <div class="balance col-xs-3">0</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
+                </div>
+                <div id="house4" class="item row">
+                  <p class="col-xs-6">Дом: адрес3</p>
+                  <div class="balance col-xs-3">0</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
                 </div>
               </div>
               <div class="apartments" style="display:none;">
-                <div class="item">
-                  <p>Квартира: 5</p>
+                <div id="apartment1" class="item row">
+                  <p class="col-xs-6">Квартира: 2</p>
+                  <div class="balance col-xs-3">120</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
                 </div>
-                <div class="item red">
-                  <p>Квартира: 7</p>
+                <div id="apartment2" class="item row">
+                  <p class="col-xs-6">Квартира: 5</p>
+                  <div class="balance negative col-xs-3">40</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
                 </div>
-                <div class="item">
-                  <p>Квартира: 43</p>
-                </div>
-                <div class="item">
-                  <p>Квартира: 126</p>
+                <div id="apartment3" class="item row">
+                  <p class="col-xs-6">Квартира: 17</p>
+                  <div class="balance col-xs-3">137</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
                 </div>
               </div>
               <div class="devices" style="display:none;">
-                <div class="item">
-                  <p>Название прибора <span class="device_green">&#9679;</span> газ</p>
+                <div id="device1" class="item row">
+                  <p class="col-xs-6"><span class="device_green">&#9679;</span> Газ: название прибора </p>
+                  <div class="balance col-xs-3">137</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
                 </div>
-                <div class="item">
-                  <p>Название прибора <span class="device_green">&#9679;</span> вода</p>
+                <div id="device2" class="item row">
+                  <p class="col-xs-6"><span class="device_blue">&#9679;</span> Вода: название прибора </p>
+                  <div class="balance col-xs-3">15</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
                 </div>
-                <div class="item">
-                  <p>Название прибора <span class="device_green">&#9679;</span> электричество</p>
+                <div id="device3" class="item row">
+                  <p class="col-xs-6"><span class="device_orange">&#9679;</span> Электричество: название прибора </p>
+                  <div class="balance negative col-xs-3">2</div>
+                  <a class="col-xs-3" href="dreports.html">получить отчет</a>
                 </div>
-              </div>
-              <a class="btn btn-info" href="dreports.html">Получить отчет</a>
+                
+              </div> -->
+              <!-- <a class="btn btn-info" href="dreports.html">Получить отчет</a> -->
             </div>
           </div>
         </div>
@@ -127,7 +304,7 @@
       ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>
 
-        <script src="scripts/4cd782be.main.js"></script>
+        <script src="scripts/6974e078.main.js"></script>
         <script src="scripts/map.js"></script>
 </body>
 </html>
