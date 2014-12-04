@@ -18,21 +18,14 @@ window.onload = function(){
 		myMap.controls.remove('fullscreenControl');
 		myMap.controls.remove('typeSelector');
 
+		addAllHouses();
+	});
+	var addAllHouses = function(){
 		for (var i = 0; i < points.length; i++){
 			var placemark = addHouse(points[i].coords[0], points[i].coords[1], false);
 			points[i].placemark = placemark;
 		}
-		// var placemark = addHouse(points[3].coords[0], points[3].coords[1], true);
-		// points[3].placemark = placemark;
-
-		//events
-		// myMap.events.add('click', function (e) {
-		//     // Получение координат щелчка
-		//     var coords = e.get('coords');
-		//     alert(coords.join(', '));
-		//     console.log(coords);
-		// });
-	});
+	}
 	var addHouse = function(x, y, isProblem){
 		var blue = 'islands#blueCircleDotIcon';
 		var red = 'islands#redCircleDotIcon'
@@ -90,22 +83,34 @@ window.onload = function(){
 			point: 4
 		}
 	];
-	$('.tszhs .item p').click(function(){
+	$('.company>.item>p').click(function(){
+		for (var i = 0; i < indexes_of_removed.length; i++){
+			myMap.geoObjects.add(points[indexes_of_removed[i]].placemark);
+		}
+	});
+	$('.tszhs>.item>p').click(function(){
+		for (var i = 0; i < indexes_of_removed.length; i++){
+			myMap.geoObjects.add(points[indexes_of_removed[i]].placemark);
+		}
 		points_to_default();
 		var id = $(this).parent().attr('id');
 		for (var i = 0; i < tszhs_data.length; i++){
 			if (id === tszhs_data[i].id){
-				highlight_points(tszhs_data[i].houses);
+				// highlight_points(tszhs_data[i].houses);
+				remove_but(tszhs_data[i].houses);
 			}
 		}
 	});
-	$('.houses .item p').click(function(){
+	$('.houses>.item>p').click(function(){
+		for (var i = 0; i < indexes_of_removed.length; i++){
+			myMap.geoObjects.add(points[indexes_of_removed[i]].placemark);
+		}
 		points_to_default();
 		var id = $(this).parent().attr('id');
 		for (var i = 0; i < houses_data.length; i++){
 			if (id === houses_data[i].id){
-				highlight_points([houses_data[i].point]);
-				console.log("highlight " + houses_data[i].point);
+				// highlight_points([houses_data[i].point]);
+				remove_but([houses_data[i].point]);
 			}
 		}
 	});
@@ -113,9 +118,19 @@ window.onload = function(){
 		for(var i = 0; i < points.length; i++){
 			if(arr_of_ids.indexOf(points[i].id) > -1){
 				points[i].placemark.options.set('preset', 'islands#redCircleDotIcon');
+				console.log(points[i].placemark.options.set('zIndex', -1));
 			}
 		}
 	};
+	var indexes_of_removed =[];
+	var remove_but = function(arr_of_ids){
+		for(var i = 0; i < points.length; i++){
+			if(arr_of_ids.indexOf(points[i].id) == -1){				 
+				myMap.geoObjects.remove(points[i].placemark);
+				indexes_of_removed.push(i);
+			}
+		}
+	}
 	var points_to_default = function(){
 		for(var i = 0; i < points.length; i++){
 			points[i].placemark.options.set('preset', 'islands#blueCircleDotIcon');
