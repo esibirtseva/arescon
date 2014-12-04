@@ -1,8 +1,29 @@
+var blue = {
+            fill: "rgba(151,187,205,0.2)",
+            stroke: "rgba(151,187,205,1)",
+            point: "rgba(151,187,205,1)"
+        },
+        red = {
+            fill: "rgba(231, 75, 59, 0.2)",
+            stroke: "rgba(231, 75, 59, 1)",
+            point: "rgba(231, 75, 59, 1)"
+        },
+        green = {
+            fill: "rgba(75, 231, 59, 0.2)",
+            stroke: "rgba(75, 231, 59, 1)",
+            point: "rgba(75, 231, 59, 1)"
+        },
+        orange = {
+            fill: "rgba(243, 156, 18, 0.2)",
+            stroke: "rgba(243, 156, 18, 1)",
+            point: "rgba(243, 156, 18, 1)"
+        };
 var data = [
     {
         htmlId: "d1",
         name: "Счетчик Techem AP",
         image: "images/water.jpg",
+        type: 0,//water
         description: "Водосчетчик Techem серий АР для горячей и холодной воды",
         dataDailyUsage : {
             labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
@@ -40,6 +61,7 @@ var data = [
         name: "Счетчик ГРАНД-25Т",
         image: "images/gas.jpg",
         description: "Электронные бытовые счетчики газа ГРАНД-25Т предназначены для измерения объема газа, расходуемого газопотребляющим оборудованием с суммарным максимальным расходом до 25 м3/час",
+        type: 1,//gas
         dataDailyUsage : {
             labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
             datasets: [
@@ -76,6 +98,7 @@ var data = [
         name: "Счетчик однофазный СОЭ-52",
         image: "images/electro.jpg",
         description: "Электросчётчики СОЭ-52 предназначены для учёта потребления электроэнергии в двухпроводных цепях электрического тока в закрытых помещениях",
+        type: 2,//electro
         dataDailyUsage : {
             labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
             datasets: [
@@ -112,6 +135,7 @@ var data = [
         name: "Счетчик СВ-15 Х \"МЕТЕР\"",
         description: "Счетчики воды крыльчатые СВ-15Х (одноструйные, сухоходные) предназначены для измерения объема горячей воды, протекающей по трубопроводу при температуре от 5°С до 90°С и рабочем давлении в водопроводной сети не более 1, 0 МПа",
         image: "images/water-2.jpeg",
+        type: 0,//water
         dataDailyUsage : {
             labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
             datasets: [
@@ -181,43 +205,7 @@ window.onload = function(){
     );
 
     //daily
-    ctxDailyUsage = $("#dailyUsageChart").get(0).getContext("2d");
-    ctxDailyUsage.canvas.width = $("#dailyUsageChart").parent().width();
-    dataDailyUsage = {
-        labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
-        datasets: [
-            {
-                label: "Холодная вода",
-                fillColor: "rgba(151,187,205,0.2)",
-                strokeColor: "rgba(151,187,205,1)",
-                pointColor: "rgba(151,187,205,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(151,187,205,1)",
-                data: [28, 48, 40, 19, 86, 27, 90]
-            },
-            {
-                label: "Горячая вода",
-                fillColor: "rgba(231, 75, 59, 0.2)",
-                strokeColor: "#E74B3B",
-                pointColor: "#E74B3B",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(151,187,205,1)",
-                data: [38, 28, 30, 49, 56, 47, 60]
-            }
-        ]
-    };
-    optionsDailyUsage = {
-        scaleShowGridLines : false,
-        showTooltips: true,
-        responsive: true,
-        legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
-    };
-    dailyUsageChart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
-    $('#dailyUsageLegend').html(dailyUsageChart.generateLegend());
-
-    dailyDataSetsStore = jQuery.extend({},dailyUsageChart.datasets);
+    setGraph("#dailyUsageChart", 2, [red, blue]);
     //share
     var ctxShareUsage = $("#shareUsageChart").get(0).getContext("2d");
     ctxShareUsage.canvas.width = $("#shareUsageChart").parent().width();
@@ -284,7 +272,7 @@ var focusDataSet = function(index){
         if (i != index) dailyUsageChart.datasets[i] = {};
     } 
     dailyUsageChart.update();
-}
+};
 $('.device').click(function(){
     $('.device').removeClass('active');
     var currentDevice = $(this);
@@ -303,5 +291,38 @@ var showDevice = function(htmlId){
         $('.data .device_name h4').html(currentDeviceData.name);
         $('.data .device_name p').html(currentDeviceData.description);
         $('.data .device_image').css("background-image", "url(" + currentDeviceData.image + ")");
+        if (currentDeviceData.type == 0) setGraph("#dailyUsageChart", 2, [red, blue]);
+        if (currentDeviceData.type == 1) setGraph("#dailyUsageChart", 1, [green]);
+        if (currentDeviceData.type == 2) setGraph("#dailyUsageChart", 1, [orange]);
     }
-}
+};
+var setGraph = function(canvasId, numOfLines, colors){
+    //daily
+    ctxDailyUsage = $(canvasId).get(0).getContext("2d");
+    ctxDailyUsage.canvas.width = $(canvasId).parent().width();
+    dataDailyUsage = {
+        labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
+        datasets: []
+    };
+    for (var i = 0; i < numOfLines; i++){
+        var data_points = [];
+        for (var j = 0; j < 7; j++) data_points.push(Math.random()*90);
+        dataDailyUsage.datasets.push({
+                label: "Холодная вода",
+                fillColor: colors[i].fill,
+                strokeColor: colors[i].stroke,
+                pointColor: colors[i].point,
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(151,187,205,1)",
+                data: data_points
+            });
+    }
+    optionsDailyUsage = {
+        scaleShowGridLines : false,
+        showTooltips: true,
+        responsive: true,
+        legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+    };
+    dailyUsageChart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+};

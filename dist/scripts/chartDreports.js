@@ -28,7 +28,6 @@ window.onload = function(){
             $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
         }
     );
-    //daily
     var blue = {
             fill: "rgba(151,187,205,0.2)",
             stroke: "rgba(151,187,205,1)",
@@ -43,7 +42,30 @@ window.onload = function(){
             fill: "rgba(75, 231, 59, 0.2)",
             stroke: "rgba(75, 231, 59, 1)",
             point: "rgba(75, 231, 59, 1)"
+        },
+        orange = {
+            fill: "rgba(243, 156, 18, 0.2)",
+            stroke: "rgba(243, 156, 18, 1)",
+            point: "rgba(243, 156, 18, 1)"
         };
+    //daily
+    var type = getParameterByName("type");
+    if (type != ""){
+        if (type == 0){
+            $('.data_block h4').html('Вода');
+            setGraph("#dailyUsageChart", 2, [red, blue]);
+        }
+        if (type == 1){
+            $('.data_block h4').html('Газ');
+            setGraph("#dailyUsageChart", 1, [green]);
+        }
+        if (type == 2){
+            $('.data_block h4').html('Электричество');
+            setGraph("#dailyUsageChart", 1, [orange]);
+        }
+        return;
+    }
+    
     setGraph("#dailyUsageChart", 2, [red, blue]);
     setGraph("#dailyUsageChart2", 1, [green]);
     setGraph("#dailyUsageChart3", 1, [blue]);
@@ -83,4 +105,10 @@ var setGraph = function(canvasId, numOfLines, colors){
         legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
     };
     var dailyUsageChart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+}
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
