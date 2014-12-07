@@ -5622,4 +5622,15 @@ dd {
 .devices>.item>p{
   padding-left: 40px;
 }
+td.b_label{
+  margin: 5px 10px;  
+  color: #2D2D2D; 
+}
+td.b_value{
+  color: #2D2D2D; 
+}
+td.b_value.negative{
+  color: #e74b3b; 
+}
+
 /* Responsive: Portrait tablets and up */

@@ -1,3 +1,13 @@
+ var getBaloonStr = function(labels, values){
+ 	var res=[];
+ 	res.push("<table>");
+	for (var i=0; i < labels.length; ++i) { 
+		res.push("<tr><td class='b_label' style='display: inline-block;'>"+labels[i]+": </td>");
+		res.push("<td class='b_value' style='display: inline-block;'>"+values[i]+"</td><tr>"); 
+	}
+	res.push("</table>");
+	return res.join("");
+ };
 window.onload = function(){
 	var map_container = $('#map');
 	map_container.height(map_container.width());
@@ -29,7 +39,11 @@ window.onload = function(){
 	var addHouse = function(x, y, isProblem){
 		var blue = 'islands#blueCircleDotIcon';
 		var red = 'islands#redCircleDotIcon'
-		var myPlacemark = new ymaps.Placemark([x, y],{},{
+		var myPlacemark = new ymaps.Placemark([x, y],{
+			name: "Какой-то адрес",
+			balloonContentHeader: "Иловайская улица, д. 3",
+            balloonContentBody: getBaloonStr(["Вода","Газ","Электричество", "Отопление"],[11237,2565,3487,-432])
+		},{
 			preset: isProblem?red:blue
 		});
 		myMap.geoObjects.add(myPlacemark);
