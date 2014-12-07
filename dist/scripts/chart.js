@@ -18,12 +18,21 @@ var blue = {
             stroke: "rgba(243, 156, 18, 1)",
             point: "rgba(243, 156, 18, 1)"
         };
+
+var dataTypeToMeasure = {
+    0 : "л",
+    1 : "куб. м.",
+    2 : "кВт.ч",
+    3 : "л",
+    4 : "отопл"
+};
 var data = [
     {
         htmlId: "d1",
+        htmlServiceId: "s1",
         name: "Счетчик Techem AP",
         image: "images/water.jpg",
-        type: 0,//water
+        type: 0,//watercold
         description: "Водосчетчик Techem серий АР для горячей и холодной воды",
         dataDailyUsage : {
             labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
@@ -58,6 +67,7 @@ var data = [
     },
     {
         htmlId: "d3",
+        htmlServiceId: "s2",
         name: "Счетчик ГРАНД-25Т",
         image: "images/gas.jpg",
         description: "Электронные бытовые счетчики газа ГРАНД-25Т предназначены для измерения объема газа, расходуемого газопотребляющим оборудованием с суммарным максимальным расходом до 25 м3/час",
@@ -95,6 +105,7 @@ var data = [
     },
     {
         htmlId: "d2",
+        htmlServiceId: "s3",
         name: "Счетчик однофазный СОЭ-52",
         image: "images/electro.jpg",
         description: "Электросчётчики СОЭ-52 предназначены для учёта потребления электроэнергии в двухпроводных цепях электрического тока в закрытых помещениях",
@@ -132,10 +143,11 @@ var data = [
     },
     {
         htmlId: "d4",
+        htmlServiceId: "s1",
         name: "Счетчик СВ-15 Х \"МЕТЕР\"",
         description: "Счетчики воды крыльчатые СВ-15Х (одноструйные, сухоходные) предназначены для измерения объема горячей воды, протекающей по трубопроводу при температуре от 5°С до 90°С и рабочем давлении в водопроводной сети не более 1, 0 МПа",
         image: "images/water-2.jpeg",
-        type: 0,//water
+        type: 3,//waterwarm
         dataDailyUsage : {
             labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
             datasets: [
@@ -168,6 +180,159 @@ var data = [
 
     },
 ]
+var dataServices = [
+    {
+        htmlId: "s1",
+        deviceIds: ["d1", "d4"],
+        name: "Вода",
+        bgColor: "#2980b8",
+        type: 0,//water
+        description: "Данные обо всех приборах данной услуги",
+        dataDailyUsage : {
+            labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
+            datasets: [
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        },
+        dataShareUsage : [
+            {
+                value: 350,
+                color:"rgba(66, 139, 202, 0.1)",
+                highlight: "#FF5A5E",
+                label: "Red"
+            },
+            {
+                value: 100,
+                color: "rgb(66, 139, 202)",
+                highlight: "#FFC870",
+                label: "Yellow"
+            }
+        ]
+
+    },
+    {
+        htmlId: "s2",
+        deviceIds: ["d2"],
+        name: "Газ",
+        bgColor: "#2dcc70",
+        type: 1,//gas
+        description: "Данные обо всех приборах данной услуги",
+        dataDailyUsage : {
+            labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
+            datasets: [
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        },
+        dataShareUsage : [
+            {
+                value: 350,
+                color:"rgba(66, 139, 202, 0.1)",
+                highlight: "#FF5A5E",
+                label: "Red"
+            },
+            {
+                value: 100,
+                color: "rgb(66, 139, 202)",
+                highlight: "#FFC870",
+                label: "Yellow"
+            }
+        ]
+
+    },
+    {
+        htmlId: "s3",
+        deviceIds: ["d3"],
+        name: "Электричество",
+        bgColor: "#f39c12",
+        type: 2,//electro
+        description: "Данные обо всех приборах данной услуги",
+        dataDailyUsage : {
+            labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
+            datasets: [
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        },
+        dataShareUsage : [
+            {
+                value: 350,
+                color:"rgba(66, 139, 202, 0.1)",
+                highlight: "#FF5A5E",
+                label: "Red"
+            },
+            {
+                value: 100,
+                color: "rgb(66, 139, 202)",
+                highlight: "#FFC870",
+                label: "Yellow"
+            }
+        ]
+
+    },
+    {
+        htmlId: "s4",
+        deviceIds: [],
+        name: "Отопление",
+        bgColor: "#e74b3b",
+        type: 4,//heating
+        description: "Данные обо всех приборах данной услуги",
+        dataDailyUsage : {
+            labels: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль"],
+            datasets: [
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        },
+        dataShareUsage : [
+            {
+                value: 350,
+                color:"rgba(66, 139, 202, 0.1)",
+                highlight: "#FF5A5E",
+                label: "Red"
+            },
+            {
+                value: 100,
+                color: "rgb(66, 139, 202)",
+                highlight: "#FFC870",
+                label: "Yellow"
+            }
+        ]
+    },
+];
 var ctxDailyUsage, dailyUsageChart, dataDailyUsage, optionsDailyUsage, dailyDataSetsStore;
 window.onload = function(){
     //devices
@@ -178,6 +343,7 @@ window.onload = function(){
     //daterange
     $('input[name="daterange"]').daterangepicker(
         {
+            format: 'DD.MM.YYYY',
             ranges: {
                 'Сегодня': [moment(), moment()],
                 'Вчера': [moment().subtract('days', 1), moment().subtract('days', 1)],
@@ -205,7 +371,7 @@ window.onload = function(){
     );
 
     //daily
-    setGraph("#dailyUsageChart", 2, [red, blue]);
+    showDevice("d1");
     //share
     var ctxShareUsage = $("#shareUsageChart").get(0).getContext("2d");
     ctxShareUsage.canvas.width = $("#shareUsageChart").parent().width();
@@ -256,48 +422,100 @@ window.onload = function(){
 };
 $(window).resize(function(){
     if (!ctxDailyUsage) return;
-    // ctxDailyUsage.canvas.width = $('.data').width();
-    // dailyUsageChart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
-    
     dailyUsageChart.resize();
-    // dailyUsageChart.update();
+});
+var currentDeviceId = "d1";
+$('#graph_tab').click(function(){   
+    setTimeout(function() {
+          showDevice(currentDeviceId);
+    }, 10);
+});
+$('#graph_tab_money').click(function(){   
+    setTimeout(function() {
+          
+        setGraph("#dailyUsageChartMoney", 1, [orange]);
+    }, 10);
 });
 var focusDataSet = function(index){
+    dailyUsageChart.update();
     dailyUsageChart.datasets = jQuery.extend({},dailyDataSetsStore);
     if (index == -1){
         dailyUsageChart.update();
         return;  
     } 
-    for (var i = 0; dailyUsageChart.datasets[i]; i++){
+    console.log(dailyUsageChart);
+    for (var i = 0; i < dailyUsageChart.datasets.length; i++){
         if (i != index) dailyUsageChart.datasets[i] = {};
     } 
-    dailyUsageChart.update();
+    console.log(dailyUsageChart);
+    dailyUsageChart.upadate();
 };
-$('.device').click(function(){
+
+$('.device').click(function(e){
     $('.device').removeClass('active');
+    $('.service').removeClass('active');
+    $('.service').removeClass('active_b');
     var currentDevice = $(this);
     currentDevice.addClass('active');
+    currentDevice.parent().parent().addClass('active');
     var id = currentDevice.attr('id');
+    currentDeviceId = id;
+    showDevice(id);
+    e.stopPropagation();
+});
+$('.service').click(function(){
+    $('.service').removeClass('active');
+    $('.service').removeClass('active_b');
+    $('.device').removeClass('active');
+    var currentService = $(this);
+    currentService.addClass('active_b');
+    var id = currentService.attr('id');
+    currentDeviceId = id;
     showDevice(id);
 });
 var showDevice = function(htmlId){
+    console.log(htmlId);
+    $('.data').html(deviceTemplate);
     var index = -1;
     for (var i = 0; i < data.length; i++){
         if (data[i].htmlId == htmlId) index = i;
     }
-    console.log(index);
     if (index != -1){
         var currentDeviceData = data[index];
+        $('.data .remove_device').attr("onclick", "removeDevice('"+htmlId+"');"); 
         $('.data .device_name h4').html(currentDeviceData.name);
         $('.data .device_name p').html(currentDeviceData.description);
         $('.data .device_image').css("background-image", "url(" + currentDeviceData.image + ")");
-        if (currentDeviceData.type == 0) setGraph("#dailyUsageChart", 2, [red, blue]);
+        $('#graph_tab .measure').html(dataTypeToMeasure[currentDeviceData.type]);
+        if (currentDeviceData.type == 0)setGraph("#dailyUsageChart", 1, [blue]);
+        if (currentDeviceData.type == 3)setGraph("#dailyUsageChart", 1, [red]);
         if (currentDeviceData.type == 1) setGraph("#dailyUsageChart", 1, [green]);
         if (currentDeviceData.type == 2) setGraph("#dailyUsageChart", 1, [orange]);
+        dailyDataSetsStore = jQuery.extend({},dataDailyUsage.datasets);
     }
+    else{
+        for (var i = 0; i < dataServices.length; i++){
+            if (dataServices[i].htmlId == htmlId) index = i;
+        }
+        if (index != -1){
+            var currentServiceData = dataServices[index];
+            $('.data .device_name h4').html(currentServiceData.name);
+            $('.data .device_name p').html(currentServiceData.description);
+            $('.data .device_image').css("background-image", "none");
+            $('.data .device_image').css("background-color", currentServiceData.bgColor);
+            $('#graph_tab .measure').html(dataTypeToMeasure[currentServiceData.type]);
+            if (currentServiceData.type == 0)setGraph("#dailyUsageChart", 2, [red, blue]);
+            if (currentServiceData.type == 1)setGraph("#dailyUsageChart", 1, [green]);
+            if (currentServiceData.type == 2)setGraph("#dailyUsageChart", 1, [orange]);
+        } 
+    }
+    if (htmlId == "s5") showODN();
 };
 var setGraph = function(canvasId, numOfLines, colors){
     //daily
+    console.log( $(canvasId).attr("height"));
+    $(canvasId).attr("height", "250");
+    
     ctxDailyUsage = $(canvasId).get(0).getContext("2d");
     ctxDailyUsage.canvas.width = $(canvasId).parent().width();
     dataDailyUsage = {
@@ -326,3 +544,14 @@ var setGraph = function(canvasId, numOfLines, colors){
     };
     dailyUsageChart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
 };
+var deviceTemplate = $('.data').html();
+var showODN = function(){
+    $('.data').html(odnTemplate);
+}
+var odnTemplate = 'template for ODN';
+var removeDevice = function(htmlId){
+    $('#'+htmlId).remove();
+    // console.log($('.device')[1]);
+    $('.device').last().click();
+    // showDevice($('.device').last().attr('id'));
+}
