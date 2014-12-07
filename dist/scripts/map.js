@@ -1,4 +1,62 @@
- var getBaloonStr = function(labels, values){
+var points = [
+		{
+			id: 1,
+			coords: [55.71855041425817, 37.66815246582029]
+		},
+		{
+			id: 2,
+			coords: [55.78283647321973, 37.55691589355467]
+		},
+		{
+			id: 3,
+			coords: [55.706921098504964, 37.470398559570306]
+		},
+		{
+			id: 4,
+			coords: [55.87404807445789, 37.690125122070306]
+		}
+];
+var tszhs_data = [
+	{
+		id: 'tszh1',
+		houses: [1, 2]
+	},
+	{
+		id: 'tszh2',
+		houses: [3, 4]
+	}
+];
+var houses_data = [
+	{
+		id: 'house1',
+		point: 1,
+		name: 'Иловайская улица, д. 3',
+		income: 15235,
+		waste: 13784
+	},
+	{
+		id: 'house2',
+		point: 2,
+		name: 'Башиловская улица, д. 15',
+		income: 15235,
+		waste: 13784
+	},
+	{
+		id: 'house3',
+		point: 3,
+		name: 'Нежинская улица, д. 13',
+		income: 15235,
+		waste: 13784
+	},
+	{
+		id: 'house4',
+		point: 4,
+		name: 'Минусинская улица, д. 37',
+		income: 15235,
+		waste: 13784
+	}
+];
+getBaloonStr = function(labels, values){
  	var res=[];
  	res.push("<table>");
 	for (var i=0; i < labels.length; ++i) { 
@@ -31,72 +89,35 @@ window.onload = function(){
 		addAllHouses();
 	});
 	var addAllHouses = function(){
-		for (var i = 0; i < points.length; i++){
-			var placemark = addHouse(points[i].coords[0], points[i].coords[1], false);
-			points[i].placemark = placemark;
+		for (var i = 0; i < houses_data.length; i++){
+			var placemark = addHouse(houses_data[i]);
+			var point = searchPointById(houses_data[i].point);
+			point.placemark = placemark;
 		}
 	}
-	var addHouse = function(x, y, isProblem){
+	var addHouse = function(house){
 		var blue = 'islands#blueCircleDotIcon';
-		var red = 'islands#redCircleDotIcon'
-		var myPlacemark = new ymaps.Placemark([x, y],{
-			name: "Какой-то адрес",
-			balloonContentHeader: "Иловайская улица, д. 3",
+		var myPlacemark = new ymaps.Placemark(searchPointById(house.point).coords,{
+			balloonContentHeader: house.name,
             balloonContentBody: getBaloonStr(["Вода","Газ","Электричество", "Отопление"],[11237,2565,3487,-432])
 		},{
-			preset: isProblem?red:blue
+			preset: blue
 		});
 		myMap.geoObjects.add(myPlacemark);
 		return myPlacemark;
 	}
+	var searchPointById = function(id){
+		var res = {};
+		for (var i = 0; i < points.length; i++){
+			if (points[i].id === id){
+				res = points[i];
+				break;
+			}
+		}
+		return res;
+	}
 
-
-	var points = [
-		{
-			id: 1,
-			coords: [55.71855041425817, 37.66815246582029]
-		},
-		{
-			id: 2,
-			coords: [55.78283647321973, 37.55691589355467]
-		},
-		{
-			id: 3,
-			coords: [55.706921098504964, 37.470398559570306]
-		},
-		{
-			id: 4,
-			coords: [55.87404807445789, 37.690125122070306]
-		}
-	];
-	var tszhs_data = [
-		{
-			id: 'tszh1',
-			houses: [1, 2]
-		},
-		{
-			id: 'tszh2',
-			houses: [3, 4]
-		}
-	];
-	var houses_data = [
-		{
-			id: 'house1',
-			point: 1
-		},
-		{
-			id: 'house2',
-			point: 2
-		},
-		{
-			id: 'house3',
-			point: 3
-		},
-		{
-			id: 'house4',
-			point: 4
-		}
-	];
+	
 	$('.company>.item>p').click(function(){
 		for (var i = 0; i < indexes_of_removed.length; i++){
 			myMap.geoObjects.add(points[indexes_of_removed[i]].placemark);
