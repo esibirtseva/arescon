@@ -5576,7 +5576,7 @@ dd {
   .filter_precision .item {
     /*border-left: solid 3px transparent;*/
     /*border-bottom: solid 1px $border-color;*/
-    padding-left: 10px; }
+    /*padding-left: 10px;*/ }
     .filter_precision .item:hover {
       cursor: pointer;
       color: #428bca; }
@@ -5610,5 +5610,16 @@ dd {
     .history_reports h4 span {
       font-size: 14px;
       padding: 0 10px; }
-
+.tszhs>.item>p{
+  padding-left: 10px;
+}
+.houses>.item>p{
+  padding-left: 20px;
+}
+.apartments>.item>p{
+  padding-left: 30px;
+}
+.devices>.item>p{
+  padding-left: 40px;
+}
 /* Responsive: Portrait tablets and up */

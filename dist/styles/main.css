@@ -5584,4 +5584,16 @@ dd {
   .filter_precision .btn {
     margin: 10px; }
 
+.tszhs>.item>p{
+  padding-left: 10px;
+}
+.houses>.item>p{
+  padding-left: 20px;
+}
+.apartments>.item>p{
+  padding-left: 30px;
+}
+.devices>.item>p{
+  padding-left: 40px;
+}
 /* Responsive: Portrait tablets and up */
