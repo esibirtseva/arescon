@@ -475,7 +475,7 @@ $('.service').click(function(){
 });
 var showDevice = function(htmlId){
     console.log(htmlId);
-    $('.data').html(deviceTemplate);
+    // $('.data').html(deviceTemplate);
     var index = -1;
     for (var i = 0; i < data.length; i++){
         if (data[i].htmlId == htmlId) index = i;
