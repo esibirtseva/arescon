@@ -1,0 +1,10 @@
+<a href='/user/${map["deviceID"]}' style="display:block" class='device row${map["active"]}' data-deviceID='${map["deviceID"]}'>
+    <div class="device_info col-xs-9">
+        <h4>${map["name"]}</h4>
+        <#if map["type"] != ""><p>${map["type"]}</p></#if>
+    </div>
+    <div class='device_status col-xs-2 ${map["status"]}'>
+        <p></p>
+        <p class='glyphicon glyphicon-${map["status_icon"]}'></p>
+    </div>
+</a>

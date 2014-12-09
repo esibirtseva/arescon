@@ -1,0 +1,11 @@
+﻿port        : 80
+hostname    : 127.0.0.1
+resources   : data/
+pages       : pages/
+templates   : templates/
+
+db_port     : 3306
+db_hostname : 81.5.91.69
+db_username : soltin
+db_password : viasoft1721
+db_database : strelok
