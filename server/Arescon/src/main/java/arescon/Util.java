@@ -26,6 +26,13 @@ public class Util {
         this.templates = templates;
     }
 
+    void getActiveDevice( String expected, Writer response, HttpServerExchange exchange ) {
+        if (exchange.getRelativePath().equals("/" + expected)) {
+            try { response.append(" active_b"); }
+            catch (IOException ignored) {     }
+        }
+    }
+
     void getDispatcherTree( Writer response, HttpServerExchange exchange ) {
         Map<String, String> dataMap = new HashMap<>(3);
         Map<String, Integer> countMap = new HashMap<>();
@@ -152,7 +159,7 @@ public class Util {
         }
     }
 
-    void getDevices( int type, Writer response, HttpServerExchange exchange ) {
+    void getDevices( int type, Writer response, HttpServerExchange exchange, boolean pickActives ) {
 
         String relPath = exchange.getRelativePath();
         if (relPath.length() <= 1) relPath = "1";
@@ -165,14 +172,14 @@ public class Util {
         try {
             switch (type) {
                 case 0: // water
-                    dataMap.put("active", relPath.equals("1") ? " active" : "");
+                    dataMap.put("active", relPath.equals("1") && pickActives ? " active" : "");
                     dataMap.put("deviceID", "1");
                     dataMap.put("name", "Счетчик Techem AP");
                     dataMap.put("type", "Холодная вода");
                     dataMap.put("status", "good");
                     dataMap.put("status_icon", "ok");
                     templates.getTemplated(root, "user.device.htm", response);
-                    dataMap.put("active", relPath.equals("4") ? " active" : "");
+                    dataMap.put("active", relPath.equals("4") && pickActives ? " active" : "");
                     dataMap.put("deviceID", "4");
                     dataMap.put("name", "Счетчик СВ-15 Х \"МЕТЕР\"");
                     dataMap.put("type", "Горячая вода");
@@ -181,7 +188,7 @@ public class Util {
                     templates.getTemplated(root, "user.device.htm", response);
                     break;
                 case 1: // fire
-                    dataMap.put("active", relPath.equals("3") ? " active" : "");
+                    dataMap.put("active", relPath.equals("3") && pickActives ? " active" : "");
                     dataMap.put("deviceID", "3");
                     dataMap.put("name", "Счетчик ГРАНД-25Т");
                     dataMap.put("type", "");
@@ -190,7 +197,7 @@ public class Util {
                     templates.getTemplated(root, "user.device.htm", response);
                     break;
                 case 2: // earth
-                    dataMap.put("active", relPath.equals("2") ? " active" : "");
+                    dataMap.put("active", relPath.equals("2") && pickActives ? " active" : "");
                     dataMap.put("deviceID", "2");
                     dataMap.put("name", "Счетчик однофазный СОЭ-52");
                     dataMap.put("type", "");

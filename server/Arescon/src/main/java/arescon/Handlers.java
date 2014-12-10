@@ -29,25 +29,25 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getDevices(0, writer, exchange);
+                        util.getDevices(0, writer, exchange, false);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getDevices(1, writer, exchange);
+                        util.getDevices(1, writer, exchange, false);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getDevices(2, writer, exchange);
+                        util.getDevices(2, writer, exchange, false);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getDevices(3, writer, exchange);
+                        util.getDevices(3, writer, exchange, false);
                     }
                 }
         );
@@ -112,25 +112,49 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getDevices(0, writer, exchange);
+                        util.getActiveDevice("water", writer, exchange);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getDevices(1, writer, exchange);
+                        util.getDevices(0, writer, exchange, true);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getDevices(2, writer, exchange);
+                        util.getActiveDevice("gas", writer, exchange);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getDevices(3, writer, exchange);
+                        util.getDevices(1, writer, exchange, true);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getActiveDevice("electricity", writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getDevices(2, writer, exchange, true);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getActiveDevice("heat", writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getDevices(3, writer, exchange, true);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {

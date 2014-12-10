@@ -20,14 +20,17 @@ arescon\Main$3.class
 arescon\Data.class
 arescon\Main$PAGES.class
 arescon\Handlers$13.class
+arescon\Handlers$19.class
 net\avkorneenkov\undertow\CommonHandlers$3.class
 arescon\Handlers$2.class
 net\avkorneenkov\undertow\DatabaseIdentityManager.class
 de\vogella\rss\model\FeedMessage.class
+arescon\Handlers$16.class
 net\avkorneenkov\IOUtil.class
 arescon\Handlers$10.class
 net\avkorneenkov\undertow\CommonActions.class
 net\avkorneenkov\undertow\UndertowUtil.class
+arescon\Handlers$17.class
 net\avkorneenkov\undertow\CommonHandlers$StringWriterHandler.class
 arescon\Main$2.class
 de\vogella\rss\model\Feed.class
@@ -42,6 +45,7 @@ net\avkorneenkov\undertow\CommonHandlers.class
 arescon\Handlers$1.class
 arescon\Handlers$14.class
 de\vogella\rss\read\RSSFeedParser.class
+arescon\Handlers$18.class
 arescon\Handlers$4.class
 net\avkorneenkov\TimeUtil.class
 net\avkorneenkov\SQLUtil.class

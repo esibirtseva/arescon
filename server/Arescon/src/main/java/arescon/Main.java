@@ -151,7 +151,7 @@ public class Main {
                             paths.put("dreports", handlers.dreports(file));
                             break;
                         case odn:
-                            paths.put("odn", handlers.odn(file));
+                            paths.put("user/odn", handlers.odn(file));
                             break;
                     }
                 }
