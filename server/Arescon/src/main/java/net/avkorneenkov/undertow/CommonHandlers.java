@@ -82,7 +82,13 @@ public class CommonHandlers {
         return new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
-                (exchange.getRelativePath().contains(".") ? resourceHandler : toWrap).handleRequest(exchange);
+                if (exchange.getRequestPath().contains(".")) {
+                    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                    resourceHandler.handleRequest(exchange);
+                } else {
+                    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/html");
+                    toWrap.handleRequest(exchange);
+                }
             }
         };
     }
