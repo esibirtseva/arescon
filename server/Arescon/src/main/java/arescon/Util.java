@@ -65,52 +65,86 @@ public class Util {
     }
 
     void getDeviceInfo( Writer response, HttpServerExchange exchange ) {
-        int pageIndex = 1;
+
         String relPath = exchange.getRelativePath();
-        if (relPath != null) {
-            try {
-                pageIndex = Integer.parseInt(relPath.substring(1));
-            } catch (Throwable ignored) { }
-        }
+        if (relPath.length() <= 1) relPath = "1";
+        else relPath = relPath.substring(1);
 
         Map<String, String> dataMap = new HashMap<>(6);
         Map<String, Map<String, String>> root = new HashMap<>();
         root.put("map", dataMap);
 
         try {
-            switch (pageIndex) {
-                case 1: // water
+            switch (relPath) {
+                case "1": // water
                     dataMap.put("deviceID", "1");
-                    dataMap.put("image", "/images/water.jpg");
+                    dataMap.put("image", "background-image:url(/images/water.jpg)");
                     dataMap.put("name", "Счетчик Techem AP");
                     dataMap.put("description", "Водосчетчик Techem серий АР для горячей и холодной воды");
                     templates.getTemplated(root, "user.device_info.htm", response);
                     break;
-                case 2: // fire
+                case "2": // fire
                     dataMap.put("deviceID", "2");
-                    dataMap.put("image", "/images/electro.jpg");
+                    dataMap.put("image", "background-image:url(/images/electro.jpg)");
                     dataMap.put("name", "Счетчик однофазный СОЭ-52");
                     dataMap.put("description", "Электросчётчики СОЭ-52 предназначены для учёта потребления " +
                             "электроэнергии в двухпроводных цепях электрического тока в закрытых помещениях");
                     templates.getTemplated(root, "user.device_info.htm", response);
                     break;
-                case 3: // earth
+                case "3": // earth
                     dataMap.put("deviceID", "3");
-                    dataMap.put("image", "/images/gas.jpg");
+                    dataMap.put("image", "background-image:url(/images/gas.jpg)");
                     dataMap.put("name", "Счетчик ГРАНД-25Т");
                     dataMap.put("description", "Электронные бытовые счетчики газа ГРАНД-25Т предназначены для " +
                             "измерения объема газа, расходуемого газопотребляющим оборудованием с суммарным" +
                             " максимальным расходом до 25 м3/час");
                     templates.getTemplated(root, "user.device_info.htm", response);
                     break;
-                case 4: // air
+                case "4": // air
                     dataMap.put("deviceID", "4");
-                    dataMap.put("image", "/images/water-2.jpeg");
+                    dataMap.put("image", "background-image:url(/images/water-2.jpeg)");
                     dataMap.put("name", "Счетчик СВ-15 Х \"МЕТЕР\"");
                     dataMap.put("description", "Счетчики воды крыльчатые СВ-15Х (одноструйные, сухоходные) " +
                             "предназначены для измерения объема горячей воды, протекающей по трубопроводу при" +
                             " температуре от 5°С до 90°С и рабочем давлении в водопроводной сети не более 1, 0 МПа");
                     templates.getTemplated(root, "user.device_info.htm", response);
+                    break;
+                case "water":
+                    dataMap.put("deviceID", "");
+                    dataMap.put("image", "background-color:rgb(41,128,184)");
+                    dataMap.put("name", "Вода");
+                    dataMap.put("description", "Данные обо всех приборах данной услуги");
+                    templates.getTemplated(root, "user.device_info.htm", response);
+                    break;
+                case "gas":
+                    dataMap.put("deviceID", "");
+                    dataMap.put("image", "background-color:rgb(45,204,112)");
+                    dataMap.put("name", "Газ");
+                    dataMap.put("description", "Данные обо всех приборах данной услуги");
+                    templates.getTemplated(root, "user.device_info.htm", response);
+                    break;
+                case "heat":
+                    dataMap.put("deviceID", "");
+                    dataMap.put("image", "background-color:rgb(231,75,59)");
+                    dataMap.put("name", "Отопление");
+                    dataMap.put("description", "Данные обо всех приборах данной услуги");
+                    templates.getTemplated(root, "user.device_info.htm", response);
+                    break;
+                case "electricity":
+                    dataMap.put("deviceID", "");
+                    dataMap.put("image", "background-color:rgb(243,156,18)");
+                    dataMap.put("name", "Электричество");
+                    dataMap.put("description", "Данные обо всех приборах данной услуги");
+                    templates.getTemplated(root, "user.device_info.htm", response);
+                    break;
+                case "odn":
+
+                    break;
+                case "coldwater":
+
+                    break;
+                case "hotwater":
+
                     break;
             }
         } catch (TemplateException | IOException e) {
