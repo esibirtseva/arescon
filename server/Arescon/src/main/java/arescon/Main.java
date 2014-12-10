@@ -2,6 +2,7 @@ package arescon;
 
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
+import io.undertow.server.HttpServerExchange;
 import io.undertow.server.session.InMemorySessionManager;
 import io.undertow.server.session.SessionManager;
 import net.avkorneenkov.IOUtil;
@@ -50,7 +51,7 @@ public class Main {
     private static Handlers handlers;
     private static DatabaseIdentityManager identityManager;
 
-    private static enum PAGES { index, user, dispatcher, login, registration, dreports }
+    private static enum PAGES { index, user, dispatcher, login, registration, dreports, odn }
 
     private static void readConfig( String filename ) throws IOException {
         Map<String, String> config = new HashMap<>(10);
@@ -149,6 +150,9 @@ public class Main {
                         case dreports:
                             paths.put("dreports", handlers.dreports(file));
                             break;
+                        case odn:
+                            paths.put("odn", handlers.odn(file));
+                            break;
                     }
                 }
             });
@@ -156,6 +160,13 @@ public class Main {
             e.printStackTrace();
             return;
         }
+
+        paths.put("device", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceData(exchange);
+            }
+        });
 
         Undertow server = Undertow.builder()
                 .addHttpListener(PORT, HOSTNAME)

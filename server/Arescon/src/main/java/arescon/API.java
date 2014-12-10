@@ -15,6 +15,8 @@ import net.avkorneenkov.SQLUtil;
 import net.avkorneenkov.undertow.DatabaseIdentityManager;
 import net.avkorneenkov.undertow.UndertowUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.joda.time.DateTime;
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -33,6 +35,74 @@ public class API {
         this.identityManager = identityManager;
         this.util = util;
         this.random = new SecureRandom();
+    }
+
+    public String getDeviceData( int id, long startTime, long endTime, int period ) {
+        if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+        if (endTime > new DateTime().getMillis()) endTime = -1;
+
+        period /= (int)Data.PERIOD;
+        if (period < 1) period = 1;
+        double[] values = Data.VALUES[id - 1];
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"name\":\"");
+        response.append(Data.NAMES[id - 1]).append("\",\"values\":");
+
+        startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+        endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+        if (endTime < 0) endTime = values.length;
+
+        JSONArray list = new JSONArray();
+        for (long j = startTime; j + period < endTime && j + period < values.length; j += period) {
+            double value = 0.0;
+            for (int i = 0; i < period; ++i) {
+                value += values[(int)j + i];
+            }
+            list.put(value);
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
+    public void deviceData( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        FormData.FormValue deviceID = postData.getFirst("deviceID");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+
+        if (deviceID == null || deviceID.getValue().isEmpty() ||
+            start == null || start.getValue().isEmpty() ||
+            end == null || end.getValue().isEmpty() ||
+            period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(deviceID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getDeviceData(id, startTime, endTime, periodTime));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("");
+        }
     }
 
     public void profileUpdate( HttpServerExchange exchange ) throws IOException, SQLException {

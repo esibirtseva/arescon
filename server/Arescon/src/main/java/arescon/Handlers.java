@@ -18,6 +18,43 @@ public class Handlers {
         this.util = util;
     }
 
+    public HttpHandler odn( String file ) {
+        final HttpHandler handler = CommonHandlers.templatedPage(file,
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getUserInfo(writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getDevices(0, writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getDevices(1, writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getDevices(2, writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getDevices(3, writer, exchange);
+                    }
+                }
+        );
+
+        return handler;
+    }
+
     public HttpHandler index( String file ) {
         final HttpHandler handler = CommonHandlers.templatedPage(file,
                 new CommonHandlers.StringWriterHandler() {

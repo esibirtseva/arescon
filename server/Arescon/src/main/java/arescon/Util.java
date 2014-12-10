@@ -154,13 +154,9 @@ public class Util {
 
     void getDevices( int type, Writer response, HttpServerExchange exchange ) {
 
-        int pageIndex = 1;
         String relPath = exchange.getRelativePath();
-        if (relPath != null) {
-            try {
-                pageIndex = Integer.parseInt(relPath.substring(1));
-            } catch (Throwable ignored) { }
-        }
+        if (relPath.length() <= 1) relPath = "1";
+        else relPath = relPath.substring(1);
 
         Map<String, String> dataMap = new HashMap<>(6);
         Map<String, Map<String, String>> root = new HashMap<>();
@@ -169,14 +165,14 @@ public class Util {
         try {
             switch (type) {
                 case 0: // water
-                    dataMap.put("active", pageIndex == 1 ? " active" : "");
+                    dataMap.put("active", relPath.equals("1") ? " active" : "");
                     dataMap.put("deviceID", "1");
                     dataMap.put("name", "Счетчик Techem AP");
                     dataMap.put("type", "Холодная вода");
                     dataMap.put("status", "good");
                     dataMap.put("status_icon", "ok");
                     templates.getTemplated(root, "user.device.htm", response);
-                    dataMap.put("active", pageIndex == 4 ? " active" : "");
+                    dataMap.put("active", relPath.equals("4") ? " active" : "");
                     dataMap.put("deviceID", "4");
                     dataMap.put("name", "Счетчик СВ-15 Х \"МЕТЕР\"");
                     dataMap.put("type", "Горячая вода");
@@ -185,7 +181,7 @@ public class Util {
                     templates.getTemplated(root, "user.device.htm", response);
                     break;
                 case 1: // fire
-                    dataMap.put("active", pageIndex == 3 ? " active" : "");
+                    dataMap.put("active", relPath.equals("3") ? " active" : "");
                     dataMap.put("deviceID", "3");
                     dataMap.put("name", "Счетчик ГРАНД-25Т");
                     dataMap.put("type", "");
@@ -194,7 +190,7 @@ public class Util {
                     templates.getTemplated(root, "user.device.htm", response);
                     break;
                 case 2: // earth
-                    dataMap.put("active", pageIndex == 2 ? " active" : "");
+                    dataMap.put("active", relPath.equals("2") ? " active" : "");
                     dataMap.put("deviceID", "2");
                     dataMap.put("name", "Счетчик однофазный СОЭ-52");
                     dataMap.put("type", "");
