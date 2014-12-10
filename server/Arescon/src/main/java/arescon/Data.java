@@ -7,6 +7,8 @@ public class Data {
 
     public static final long PERIOD = 5;
     public static final long[] START_TIMES = { 1409592882825l, 1409592883717l, 1409592884343l, 1409592884494l, 1409592884612l, 1409592884735l, 1409592884846l, 1409592884962l, 1409592885040l, 1409592885130l, 1409592885209l, 1409592885290l };
+    public static final String[] TYPES = { "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2" };
+    public static final String[] MEASURES = { "", "", "", "", "", "", "", "", "", "", "", "" };
     public static final String[] NAMES = { "", "", "", "", "", "", "", "", "", "", "", "" };
     public static final double[][] VALUES = {
             { },

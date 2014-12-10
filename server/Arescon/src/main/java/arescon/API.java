@@ -47,7 +47,7 @@ public class API {
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"name\":\"");
-        response.append(Data.NAMES[id - 1]).append("\",\"values\":");
+        response.append(Data.NAMES[id - 1]).append("\",\"type\":\"").append(Data.TYPES[id - 1]).append("\",\"values\":");
 
         startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
         endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
