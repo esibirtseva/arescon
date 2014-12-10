@@ -10,6 +10,14 @@ var typeMap = [
     },
     {
         type: 1,
+        measure: "л",
+        colors: {
+            fill: "rgba(231, 75, 59, 0.2)",
+            stroke: "rgba(231, 75, 59, 1)"
+        }      
+    },
+    {
+        type: 2,
         measure: "куб. м.",
         colors: {
             fill: "rgba(75, 231, 59, 0.2)",
@@ -17,19 +25,11 @@ var typeMap = [
         }      
     },
     {
-        type: 2,
+        type: 3,
         measure: "кВт.ч",
         colors: {
             fill: "rgba(243, 156, 18, 0.2)",
             stroke: "rgba(243, 156, 18, 1)"
-        }      
-    },
-    {
-        type: 3,
-        measure: "л",
-        colors: {
-            fill: "rgba(231, 75, 59, 0.2)",
-            stroke: "rgba(231, 75, 59, 1)"
         }      
     },
     {
@@ -42,7 +42,10 @@ var typeMap = [
     },
 ]
 var ctxDailyUsage, dailyUsageChart, dataDailyUsage, optionsDailyUsage, dailyDataSetsStore;
+var deviceID;
 window.onload = function(){
+    //init deviceId
+    deviceID = $('.device.active').data("deviceid");
     //daterange
     initDateRangePicker();
     //daily
@@ -50,7 +53,7 @@ window.onload = function(){
     var date = new Date();
     daterangeStart = date.setDate(date.getDate()-7);
     daterangeEnd = -1;
-    setGraphAjax(1, daterangeStart, -1);
+    setGraphAjax(deviceID, daterangeStart, -1);
     //share
     setDonut();
 
