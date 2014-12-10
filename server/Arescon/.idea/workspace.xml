@@ -74,7 +74,7 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1581" max-vertical-offset="2499">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1938" max-vertical-offset="2550">
               <caret line="137" column="34" selection-start-line="137" selection-start-column="34" selection-end-line="137" selection-end-column="34" />
               <folding>
                 <marker date="1418156952100" expanded="true" signature="5505:5633" placeholder="..." />
@@ -86,7 +86,7 @@
       <file leaf-file-name="SQLUtil.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/avkorneenkov/SQLUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="70" max-vertical-offset="1292">
+            <state vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="1343">
               <caret line="17" column="51" selection-start-line="17" selection-start-column="51" selection-end-line="17" selection-end-column="51" />
               <folding />
             </state>
@@ -106,25 +106,16 @@
       <file leaf-file-name="Handlers.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="2567">
-              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2414">
+              <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
               <folding>
-                <element signature="e#593#856#0" expanded="true" />
                 <element signature="e#855#856#0" expanded="true" />
                 <element signature="e#874#1137#0" expanded="true" />
                 <element signature="e#1136#1137#0" expanded="true" />
-                <element signature="e#1641#1905#0" expanded="true" />
-                <element signature="e#1904#1905#0" expanded="true" />
-                <element signature="e#1923#2189#0" expanded="true" />
-                <element signature="e#2188#2189#0" expanded="true" />
-                <element signature="e#2207#2473#0" expanded="true" />
-                <element signature="e#2472#2473#0" expanded="true" />
-                <element signature="e#2491#2757#0" expanded="true" />
-                <element signature="e#2756#2757#0" expanded="true" />
-                <element signature="e#2775#3041#0" expanded="true" />
-                <element signature="e#3040#3041#0" expanded="true" />
-                <element signature="e#3059#3325#0" expanded="true" />
-                <element signature="e#3324#3325#0" expanded="true" />
+                <element signature="e#1482#1752#0" expanded="true" />
+                <element signature="e#1751#1752#0" expanded="true" />
+                <element signature="e#1770#2040#0" expanded="true" />
+                <element signature="e#2039#2040#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -143,7 +134,7 @@
       <file leaf-file-name="CommonHandlers.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/avkorneenkov/undertow/CommonHandlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="1326">
+            <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1326">
               <caret line="38" column="75" selection-start-line="38" selection-start-column="75" selection-end-line="38" selection-end-column="75" />
               <folding />
             </state>
@@ -153,15 +144,23 @@
       <file leaf-file-name="Util.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.35630253" vertical-offset="9" max-vertical-offset="13175">
-              <caret line="29" column="26" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
+            <state vertical-scroll-proportion="0.36348686" vertical-offset="0" max-vertical-offset="9401">
+              <caret line="29" column="55" selection-start-line="29" selection-start-column="55" selection-end-line="29" selection-end-column="55" />
               <folding>
+                <element signature="method#getDeviceInfo#0;class#Util#0" expanded="false" />
                 <element signature="method#getDevices#0;class#Util#0" expanded="false" />
                 <element signature="method#getNews#0;class#Util#0" expanded="false" />
                 <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
                 <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
                 <element signature="method#getMenu#0;class#Util#0" expanded="false" />
-                <marker date="1418162550009" expanded="true" signature="7504:8933" placeholder="..." />
+                <element signature="method#getPageName#0;class#Util#0" expanded="false" />
+                <element signature="method#getAddPlaceForm#0;class#Util#0" expanded="false" />
+                <element signature="method#getInviteForm#0;class#Util#0" expanded="false" />
+                <element signature="method#getSportsmen#0;class#Util#0" expanded="false" />
+                <element signature="method#getSportsmanInfo#0;class#Util#0" expanded="false" />
+                <element signature="method#getTrainerInfo#0;class#Util#0" expanded="false" />
+                <element signature="method#getProfile#0;class#Util#0" expanded="false" />
+                <marker date="1418218090812" expanded="true" signature="9099:10528" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -179,9 +178,9 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/net/avkorneenkov/undertow/CommonHandlers.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/Handlers.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Util.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/Handlers.java" />
       </list>
     </option>
   </component>
@@ -226,6 +225,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -247,7 +247,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -627,8 +626,8 @@
     <option name="totallyTimeSpent" value="213207000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -640,13 +639,13 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24895833" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24895833" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39978904" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -677,7 +676,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="119" />
+      <option name="time" value="120" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -691,22 +690,13 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="1955">
           <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
           <folding>
-            <element signature="e#593#856#0" expanded="true" />
             <element signature="e#855#856#0" expanded="true" />
             <element signature="e#874#1137#0" expanded="true" />
             <element signature="e#1136#1137#0" expanded="true" />
-            <element signature="e#1641#1905#0" expanded="true" />
-            <element signature="e#1904#1905#0" expanded="true" />
-            <element signature="e#1923#2189#0" expanded="true" />
-            <element signature="e#2188#2189#0" expanded="true" />
-            <element signature="e#2207#2473#0" expanded="true" />
-            <element signature="e#2472#2473#0" expanded="true" />
-            <element signature="e#2491#2757#0" expanded="true" />
-            <element signature="e#2756#2757#0" expanded="true" />
-            <element signature="e#2775#3041#0" expanded="true" />
-            <element signature="e#3040#3041#0" expanded="true" />
-            <element signature="e#3059#3325#0" expanded="true" />
-            <element signature="e#3324#3325#0" expanded="true" />
+            <element signature="e#1482#1752#0" expanded="true" />
+            <element signature="e#1751#1752#0" expanded="true" />
+            <element signature="e#1770#2040#0" expanded="true" />
+            <element signature="e#2039#2040#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1016,22 +1006,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/avkorneenkov/undertow/CommonHandlers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="1326">
-          <caret line="38" column="75" selection-start-line="38" selection-start-column="75" selection-end-line="38" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1188" max-vertical-offset="1836">
-          <caret line="86" column="47" selection-start-line="86" selection-start-column="47" selection-end-line="86" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/avkorneenkov/SQLUtil.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="70" max-vertical-offset="1292">
@@ -1060,40 +1034,55 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="2567">
-          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2414">
+          <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
           <folding>
-            <element signature="e#593#856#0" expanded="true" />
             <element signature="e#855#856#0" expanded="true" />
             <element signature="e#874#1137#0" expanded="true" />
             <element signature="e#1136#1137#0" expanded="true" />
-            <element signature="e#1641#1905#0" expanded="true" />
-            <element signature="e#1904#1905#0" expanded="true" />
-            <element signature="e#1923#2189#0" expanded="true" />
-            <element signature="e#2188#2189#0" expanded="true" />
-            <element signature="e#2207#2473#0" expanded="true" />
-            <element signature="e#2472#2473#0" expanded="true" />
-            <element signature="e#2491#2757#0" expanded="true" />
-            <element signature="e#2756#2757#0" expanded="true" />
-            <element signature="e#2775#3041#0" expanded="true" />
-            <element signature="e#3040#3041#0" expanded="true" />
-            <element signature="e#3059#3325#0" expanded="true" />
-            <element signature="e#3324#3325#0" expanded="true" />
+            <element signature="e#1482#1752#0" expanded="true" />
+            <element signature="e#1751#1752#0" expanded="true" />
+            <element signature="e#1770#2040#0" expanded="true" />
+            <element signature="e#2039#2040#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1188" max-vertical-offset="1836">
+          <caret line="86" column="47" selection-start-line="86" selection-start-column="47" selection-end-line="86" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/avkorneenkov/undertow/CommonHandlers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="1326">
+          <caret line="38" column="75" selection-start-line="38" selection-start-column="75" selection-end-line="38" selection-end-column="75" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35630253" vertical-offset="9" max-vertical-offset="13175">
-          <caret line="29" column="26" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.36348686" vertical-offset="0" max-vertical-offset="9401">
+          <caret line="29" column="55" selection-start-line="29" selection-start-column="55" selection-end-line="29" selection-end-column="55" />
           <folding>
+            <element signature="method#getDeviceInfo#0;class#Util#0" expanded="false" />
             <element signature="method#getDevices#0;class#Util#0" expanded="false" />
             <element signature="method#getNews#0;class#Util#0" expanded="false" />
             <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
             <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
             <element signature="method#getMenu#0;class#Util#0" expanded="false" />
-            <marker date="1418162550009" expanded="true" signature="7504:8933" placeholder="..." />
+            <element signature="method#getPageName#0;class#Util#0" expanded="false" />
+            <element signature="method#getAddPlaceForm#0;class#Util#0" expanded="false" />
+            <element signature="method#getInviteForm#0;class#Util#0" expanded="false" />
+            <element signature="method#getSportsmen#0;class#Util#0" expanded="false" />
+            <element signature="method#getSportsmanInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getTrainerInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getProfile#0;class#Util#0" expanded="false" />
+            <marker date="1418218090812" expanded="true" signature="9099:10528" placeholder="..." />
           </folding>
         </state>
       </provider>

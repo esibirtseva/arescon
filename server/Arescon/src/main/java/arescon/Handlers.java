@@ -46,8 +46,19 @@ public class Handlers {
     }
 
     public HttpHandler dispatcher( String file ) {
-        final HttpHandler handler = CommonHandlers.templatedPage(file
-
+        final HttpHandler handler = CommonHandlers.templatedPage(file,
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getDispatcherInfo(writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getDispatcherTree(writer, exchange);
+                    }
+                }
         );
 
         return handler;

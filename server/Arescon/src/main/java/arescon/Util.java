@@ -26,6 +26,44 @@ public class Util {
         this.templates = templates;
     }
 
+    void getDispatcherTree( Writer response, HttpServerExchange exchange ) {
+        Map<String, String> dataMap = new HashMap<>(3);
+        Map<String, Integer> countMap = new HashMap<>();
+        Map root = new HashMap<>();
+        root.put("map", dataMap);
+        root.put("count", countMap);
+
+        try {
+            // TODO: generate this shit
+            templates.getTemplated(root, "user.dispatcher_tree.htm", response);
+        } catch (IOException | TemplateException e) { e.printStackTrace(); }
+    }
+
+    void getDispatcherInfo( Writer response, HttpServerExchange exchange ) {
+        Map<String, String> dataMap = new HashMap<>(3);
+        Map<String, Map<String, String>> root = new HashMap<>();
+        root.put("map", dataMap);
+
+        try {
+            dataMap.put("name", "Сергей Николаев");
+            dataMap.put("avatar", "/images/av-doge.png");
+            templates.getTemplated(root, "user.dispatcher_info.htm", response);
+        } catch (IOException | TemplateException e) { e.printStackTrace(); }
+    }
+
+    void getUserInfo( Writer response, HttpServerExchange exchange ) {
+        Map<String, String> dataMap = new HashMap<>(3);
+        Map<String, Map<String, String>> root = new HashMap<>();
+        root.put("map", dataMap);
+
+        try {
+            dataMap.put("fname", "Василий Петрович");
+            dataMap.put("sname", "Некифоров");
+            dataMap.put("avatar", "/images/av-doge.png");
+            templates.getTemplated(root, "user.user_info.htm", response);
+        } catch (IOException | TemplateException e) { e.printStackTrace(); }
+    }
+
     void getDeviceInfo( Writer response, HttpServerExchange exchange ) {
         int pageIndex = 1;
         String relPath = exchange.getRelativePath();
@@ -485,25 +523,15 @@ public class Util {
 
     private String getStateColor( int rate ) {
         switch (rate) {
-            case 1: return "red";
-            case 2: return "yellow";
-            case 3: return "green";
-            default: return "grey";
+            case 1:
+                return "red";
+            case 2:
+                return "yellow";
+            case 3:
+                return "green";
+            default:
+                return "grey";
         }
-    }
-
-    void getUserInfo( Writer response, HttpServerExchange exchange ) {
-        //Account account = exchange.getSecurityContext().getAuthenticatedAccount();
-        //String login = account.getPrincipal().getName();
-        try {
-            Map<String, String> dataMap = new HashMap<>(3);
-            Map<String, Map<String, String>> root = new HashMap<>();
-            root.put("map", dataMap);
-            dataMap.put("fname", "Василий Петрович");
-            dataMap.put("sname", "Некифоров");
-            dataMap.put("avatar", "/images/av-doge.png");
-            templates.getTemplated(root, "user.user_info.htm", response);
-        } catch (IOException | TemplateException e) { e.printStackTrace(); }
     }
 
     void getSeries( Writer response, HttpServerExchange exchange ) {
