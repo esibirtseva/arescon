@@ -5379,35 +5379,42 @@ header {
       margin: 0 20px;
       line-height: 2.9; }
 
+.device_blue {
+  color: #2980b8; }
+
+.device_green {
+  color: #2dcc70; }
+
+.device_orange {
+  color: #f39c12; }
+
+.device_red {
+  color: #e74b3b; }
+
+.dblock {
+  display: block !important; }
+
 .devices {
   padding: 0;
   border-right: 1px solid #d8dbdf;
   /*add*/ }
   .devices .device {
     border-left: solid 3px transparent;
-    border-bottom: 1px solid #d8dbdf; }
+    padding-left: 20px;
+    margin-left: -3px; }
     .devices .device .device_info {
       display: inline-block;
       vertical-align: middle;
       float: none;
       padding: 10px 0; }
       .devices .device .device_info h4 {
-        padding-left: 10px;
-        color: #428bca; }
+        padding-left: 10px; }
       .devices .device .device_info p {
         padding-left: 10px;
         color: #9ea1ae; }
         .devices .device .device_info p > span {
           font-size: 20px;
           vertical-align: initial; }
-        .devices .device .device_info p .device_blue {
-          color: #2980b8; }
-        .devices .device .device_info p .device_green {
-          color: #2dcc70; }
-        .devices .device .device_info p .device_orange {
-          color: #f39c12; }
-        .devices .device .device_info p .device_red {
-          color: #e74b3b; }
     .devices .device .device_status {
       padding: 0;
       text-align: center;
@@ -5428,22 +5435,38 @@ header {
     .devices .device:hover {
       cursor: pointer;
       background-color: rgba(66, 139, 202, 0.02); }
-  .devices .device.add .device_status {
-    vertical-align: text-top; }
-    .devices .device.add .device_status .glyphicon {
-      color: #428bca; }
-  .devices .device.add:hover {
-    cursor: default;
-    background-color: rgba(66, 139, 202, 0.02); }
-  .devices .device.add .glyphicon:hover {
+  .devices .device.add {
+    border-bottom: 1px solid #d8dbdf; }
+    .devices .device.add .device_status {
+      vertical-align: text-top; }
+      .devices .device.add .device_status .glyphicon {
+        color: #428bca; }
+    .devices .device.add:hover {
+      cursor: default;
+      background-color: rgba(66, 139, 202, 0.02); }
+    .devices .device.add .glyphicon:hover {
+      cursor: pointer; }
+    .devices .device.add form {
+      display: none; }
+      .devices .device.add form input[type="text"], .devices .device.add form select {
+        width: 80%;
+        max-width: 300px; }
+      .devices .device.add form input, .devices .device.add form select {
+        margin-bottom: 20px; }
+
+.service {
+  border-left: solid 3px transparent;
+  border-bottom: 1px solid #d8dbdf; }
+  .service > h4 {
+    padding-left: 10px;
+    color: #428bca; }
+  .service:hover {
     cursor: pointer; }
-  .devices .device.add form {
-    display: none; }
-    .devices .device.add form input[type="text"], .devices .device.add form select {
-      width: 80%;
-      max-width: 300px; }
-    .devices .device.add form input, .devices .device.add form select {
-      margin-bottom: 20px; }
+  .service.active {
+    background-color: rgba(66, 139, 202, 0.05); }
+  .service.active_b {
+    background-color: rgba(66, 139, 202, 0.05);
+    border-left-color: #428bca; }
 
 .data {
   padding: 0;
@@ -5454,7 +5477,13 @@ header {
     border-bottom: 1px solid #d8dbdf; }
   .data .device_info {
     background-color: #f4f7fb;
-    padding: 40px 0; }
+    padding-bottom: 40px; }
+    .data .device_info > .remove_device {
+      padding: 10px 10px 10px;
+      text-align: right; }
+      .data .device_info > .remove_device:hover {
+        cursor: pointer;
+        color: #E74B3B; }
     .data .device_info > div {
       float: none;
       display: inline-block;
@@ -5464,7 +5493,7 @@ header {
       width: 70%;
       height: 0;
       padding-bottom: 70%;
-      background: url(../images/counter.jpg) no-repeat center center/cover;
+      background: no-repeat center center/cover;
       border-radius: 50%;
       border: 1px solid #d8dbdf; }
     .data .device_info .device_name {
@@ -5567,33 +5596,58 @@ dd {
   margin-left: -1px;
   padding: 0; }
   .filter_precision .item {
-    border-left: solid 3px transparent;
-    border-bottom: solid 1px #d8dbdf;
-    padding: 10px; }
+    /*border-left: solid 3px transparent;*/
+    /*border-bottom: solid 1px $border-color;*/
+    padding-left: 10px; }
     .filter_precision .item:hover {
       cursor: pointer;
       color: #428bca; }
     .filter_precision .item.red {
       background-color: #fff0f0; }
     .filter_precision .item p {
+      padding: 17px 0;
       margin: 0; }
     .filter_precision .item.active {
       color: #428bca;
       border-left-color: #428bca;
       background-color: #f7f7ff; }
+    .filter_precision .item .balance {
+      color: #2dcc70;
+      font-size: 18px;
+      padding-top: 13px; }
+      .filter_precision .item .balance.negative {
+        color: #e74b3b; }
+    .filter_precision .item a {
+      color: gray;
+      padding: 6px; }
   .filter_precision .btn {
     margin: 10px; }
 
-.tszhs>.item>p{
-  padding-left: 10px;
-}
-.houses>.item>p{
-  padding-left: 20px;
-}
-.apartments>.item>p{
-  padding-left: 30px;
-}
-.devices>.item>p{
-  padding-left: 40px;
-}
+.history_reports {
+  border-bottom: solid 1px #d8dbdf; }
+  .history_reports h4 {
+    padding: 10px; }
+    .history_reports h4:hover {
+      cursor: pointer; }
+    .history_reports h4 span {
+      font-size: 14px;
+      padding: 0 10px; }
+
+.form-inline, .navbar-form {
+  margin: 10px 0; }
+
+.legend p > span {
+  font-size: 18px;
+  padding: 0 10px; }
+.legend p:hover {
+  cursor: pointer;
+  color: #428bca; }
+
+canvas {
+  width: 100% !important;
+  height: auto; }
+
+.current_report > h4, .current_report > form, .current_report > .btn {
+  margin-left: 10px; }
+
 /* Responsive: Portrait tablets and up */
