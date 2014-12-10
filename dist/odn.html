@@ -1,0 +1,269 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>arescon</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/6df2b309.favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="styles/06aeb485.vendor.css">
+    <link rel="stylesheet" href="styles/94021f53.main.css">
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+
+    <div class="container-flex page_container">
+      <div class="row">
+        <div class="side_menu col-xs-4 col-sm-3 col-lg-2">
+          <div class="user_info">
+            <div class="user_photo"></div>
+            <div class="user_name"><p>Василий Петрович</p>Некифоров</div>
+          </div>
+          <div class="menu_block">
+            <h4>Данные</h4>
+            <a class="active" href="#">Услуги</a>
+            <a href="#">Отчеты</a>
+          </div>
+          <div class="menu_block">
+            <h4>Аккаунт</h4>
+            <a href="#">Настройки</a>
+            <a href="#">Выйти</a>
+          </div>
+        </div>
+        <div class="content container col-xs-offset-4 col-sm-offset-3 col-lg-offset-2 col-xs-8 col-sm-9 col-lg-10">
+          <div class="header row"><h3>Услуги</h3></div>
+          <div class="row">
+            <div class="devices col-xs-12 col-sm-6 col-md-5">
+              <div class="device add row">
+                <div class="device_info col-xs-9">
+                  <h4>Добавить прибор</h4>
+                </div>
+                <div class="device_status col-xs-2 bad">
+                  <p class="glyphicon glyphicon-plus"></p>
+                </div>
+                <div class="col-xs-12">
+                  <form class="" action="">
+                    <label for="device_name">Название прибора</label>
+                    <input id="device_name" class="form-control" type="text" placeholder="Название прибора">
+                    <label for="device_type">Выберите тип услуги</label>
+                    <select class="form-control" name="" id="device_type">
+                      <option value="water">Вода</option>
+                      <option value="gas">Газ</option>
+                      <option value="electricity">Электричество</option>
+                      <option value="heat">Отопление</option>
+                    </select>
+                    <input type="submit" class="btn btn-info" value="Добавить">
+                  </form>
+                </div>
+              </div>
+              <div id="s1" class="service row">
+                <h4><span class="device_blue">&#9679;</span> Вода</h4>
+                <div class="service_devices">
+                  <div id="d1" class="device row active">
+                    <div class="device_info col-xs-9">
+                      <h4>Название прибора 1</h4>
+                      <p>Холодная вода</p>
+                    </div>
+                    <div class="device_status col-xs-2 good">
+                      <p></p>
+                      <p class="glyphicon glyphicon-ok"></p>
+                    </div>
+                  </div>
+                  <div id="d4" class="device row">
+                    <div class="device_info col-xs-9">
+                      <h4>Название прибора 1</h4>
+                      <p>Горячая вода</p>
+                    </div>
+                    <div class="device_status col-xs-2 good">
+                      <p></p>
+                      <p class="glyphicon glyphicon-ok"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="s2" class="service row">
+                <h4><span class="device_green">&#9679;</span> Газ</h4>
+                <div class="service_devices">
+                  <div id="d3" class="device row">
+                    <div class="device_info col-xs-9">
+                      <h4>Название прибора</h4>
+                    </div>
+                    <div class="device_status col-xs-2 wait">
+                      <p></p>
+                      <p class="glyphicon glyphicon-warning-sign"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="s3" class="service row">
+                <h4><span class="device_orange">&#9679;</span> Электричество</h4>
+                <div class="service_devices">
+                  <div id="d2" class="device row">
+                    <div class="device_info col-xs-9">
+                      <h4>Название прибора</h4>
+                    </div>
+                    <div class="device_status col-xs-2 bad">
+                      <p></p>
+                      <p class="glyphicon glyphicon-remove"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="s4" class="service row">
+                <h4><span class="device_red">&#9679;</span> Отопление</h4>
+                <div class="service_devices">
+                  <h5 style="text-align: center;">Нет подключенных приборов</h5>
+                </div>
+              </div>
+              <div id="s5" class="service row">
+                <h4>Общедомовые нужды</h4>
+              </div>                 
+            </div>
+            <div class="data hidden-xs col-sm-6 col-md-7">
+              <div class="device_info row" style="padding-top: 40px;">
+                <div class="col-xs-5 col-md-4 col-lg-3"><div class="device_image" style="background-image: url(images/odn.png);"></div></div>
+                <div class="device_name col-xs-6">
+                  <h4>Общедомовые нужды</h4>
+                  <p>Описание. Что это такое? Зачем? Какая польза?</p>
+                </div>
+              </div>
+              <div class="data_block">
+                <form>
+                  <div class="rangepicker form-inline">
+                    <label for="date_filter">Интервал времени:</label>
+                    <input type="text" name="daterange" id="date_filter" class="form-control" placeholder="Выберите интервал">
+                  </div>
+                  <div class="frequencypicker form-inline">
+                    <label for="date_filter">Частота съема:</label>
+                    <select class="form-control" name="" id="">
+                      <option value="">5 минут</option>
+                      <option value="">Час</option>
+                      <option value="">День</option>
+                      <option value="">Неделя</option>
+                      <option value="">Месяц</option>
+                    </select>
+                  </div>
+                </form>
+                <div class="data_block">
+                  <h4>Траты на воду</h4>
+                  <!-- tabs right -->
+                  <div class="tabbable tabs-right">
+                  <ul class="nav nav-tabs">
+                    <li id = "graph_tab_money" class="active">
+                      <a href="#1" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
+                    </li>
+                    <li>
+                      <a href="#2" data-toggle="tab">Таблица</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                     <div class="tab-pane active" id="1">
+                      График
+                      <canvas id="odnWater" width="0" height="0"></canvas>  
+                     </div>
+                     <div class="tab-pane" id="2">
+                     <!--put TABLE HERE-->
+                      <div id="table_water">Таблица</div>
+                     </div>
+                    </div>        
+                  </div>
+                </div>
+                <div class="data_block">
+                  <h4>Траты на газ</h4>
+                  <!-- tabs right -->
+                  <div class="tabbable tabs-right">
+                  <ul class="nav nav-tabs">
+                    <li id = "graph_tab_money" class="active">
+                      <a href="#1" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
+                    </li>
+                    <li>
+                      <a href="#2" data-toggle="tab">Таблица</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                     <div class="tab-pane active" id="1">
+                      График
+                      <canvas id="odnWater" width="0" height="0"></canvas>  
+                     </div>
+                     <div class="tab-pane" id="2">
+                     <!--put TABLE HERE-->
+                      <div id="table_water">Таблица</div>
+                     </div>
+                    </div>        
+                  </div>
+                </div>
+                <div class="data_block">
+                  <h4>Траты на электричество</h4>
+                  <!-- tabs right -->
+                  <div class="tabbable tabs-right">
+                  <ul class="nav nav-tabs">
+                    <li id = "graph_tab_money" class="active">
+                      <a href="#1" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
+                    </li>
+                    <li>
+                      <a href="#2" data-toggle="tab">Таблица</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                     <div class="tab-pane active" id="1">
+                      График
+                      <canvas id="odnWater" width="0" height="0"></canvas>  
+                     </div>
+                     <div class="tab-pane" id="2">
+                     <!--put TABLE HERE-->
+                      <div id="table_water">Таблица</div>
+                     </div>
+                    </div>        
+                  </div>
+                </div>
+                <div class="data_block">
+                  <h4>Траты на отопление</h4>
+                  <!-- tabs right -->
+                  <div class="tabbable tabs-right">
+                  <ul class="nav nav-tabs">
+                    <li id = "graph_tab_money" class="active">
+                      <a href="#1" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
+                    </li>
+                    <li>
+                      <a href="#2" data-toggle="tab">Таблица</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                     <div class="tab-pane active" id="1">
+                      График
+                      <canvas id="odnWater" width="0" height="0"></canvas>  
+                     </div>
+                     <div class="tab-pane" id="2">
+                     <!--put TABLE HERE-->
+                      <div id="table_water">Таблица</div>
+                     </div>
+                    </div>        
+                  </div>
+                </div>
+                
+                
+                  
+                
+              </div>        
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer></footer>
+
+
+
+    <script src="scripts/7e34caa3.vendor.js"></script>
+
+        <script src="scripts/6974e078.main.js"></script>
+        <!--<script src="scripts/chart.js"></script>-->
+        
+
+</body>
+</html>

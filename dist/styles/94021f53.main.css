@@ -5493,7 +5493,7 @@ header {
       width: 70%;
       height: 0;
       padding-bottom: 70%;
-      background: url(../images/counter.jpg) no-repeat center center/cover;
+      background: no-repeat center center/cover;
       border-radius: 50%;
       border: 1px solid #d8dbdf; }
     .data .device_info .device_name {
