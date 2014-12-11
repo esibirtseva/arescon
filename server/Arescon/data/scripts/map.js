@@ -87,6 +87,8 @@ window.onload = function(){
 		myMap.controls.remove('typeSelector');
 
 		addAllHouses();
+		addAlert([55.77404807445789, 37.680125122070306]);
+		addAlert([55.66404807445789, 37.720125122070306]);
 	});
 	var addAllHouses = function(){
 		for (var i = 0; i < houses_data.length; i++){
@@ -96,7 +98,7 @@ window.onload = function(){
 		}
 	}
 	var addHouse = function(house){
-		var blue = 'islands#blueCircleDotIcon';
+		var blue = 'islands#blueDotIcon';
 		var myPlacemark = new ymaps.Placemark(searchPointById(house.point).coords,{
 			balloonContentHeader: house.name,
             balloonContentBody: getBaloonStr(["Вода","Газ","Электричество", "Отопление"],[11237,2565,3487,-432])
@@ -105,6 +107,17 @@ window.onload = function(){
 		});
 		myMap.geoObjects.add(myPlacemark);
 		return myPlacemark;
+	}
+	var addAlert = function(coords){
+		var preset = 'islands#redCircleDotIcon';
+		var myPlacemark = new ymaps.Placemark(coords,{
+			// balloonContentHeader: house.name,
+            // balloonContentBody: getBaloonStr(["Вода","Газ","Электричество", "Отопление"],[11237,2565,3487,-432])
+		},{
+			preset: preset
+		});
+		myMap.geoObjects.add(myPlacemark);
+		return myPlacemark
 	}
 	var searchPointById = function(id){
 		var res = {};
@@ -172,6 +185,25 @@ window.onload = function(){
 			
 		}
 	}
+	$("input[name='type_select']").change(function(e){
+		var selected_value = $(this).val();
+	    if(selected_value == 'water') {
+	        console.log('water');
+	    } 
+	    else if(selected_value == 'gas') {
+	      	console.log('gas');  
+	    }
+	    else if(selected_value == 'electricity') {
+	      	console.log('electricity');  
+	    }
+	    else if(selected_value == 'heat') {
+	      	console.log('heat');  
+	    }
+	    else if(selected_value == 'all') {
+	      	console.log('all');  
+	    }
+
+	});
 }
 $(window).resize(function(){
 	var map_container = $('#map');

@@ -62,7 +62,7 @@ window.onload = function(){
         //daily        
         setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);
         //share
-        setDonut();
+        // setDonut();
     }
     else if (getLastParamUrl() === "water"){
         deviceID = 5;
@@ -116,10 +116,12 @@ var setGraphAjax = function(id, start, end, canvasID){//period is global
         setGraph(canvasID, currentData);
         
         if (currentRoute === "odn"){
-            console.log("ODN");
             setOdnTable(currentData, canvasID);
         }
         else setTable();
+        if (deviceID && deviceID > 0){
+            setDonut();
+        }
     });
 };
 var setAllOdnData = function(){
@@ -153,7 +155,6 @@ var removeGraph = function(){
 }
 var setGraph = function(canvasId, data){
     //preset
-    console.log(canvasId);
     if (typeof dailyUsageChart !== 'undefined') dailyUsageChart.destroy();
     $('#graph_tab .measure').html(typeMap[data['type']].measure);
     //DATA
@@ -208,49 +209,40 @@ var setGraph = function(canvasId, data){
     };
     dailyUsageChart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
 };
+var sumCosts = function(){
+    var sum = 0;
+    for (var i = 0; i < currentData.values.length; i++) sum += currentData.values[i];
+    return sum;
+}
 var setDonut = function(){
     var ctxShareUsage = $("#shareUsageChart").get(0).getContext("2d");
     ctxShareUsage.canvas.width = $("#shareUsageChart").parent().width();
+    
+    var personal_costs = Math.round(sumCosts());
+    var all_costs = personal_costs*3;//TODO: change implementation
     var dataShareUsage = [
         {
-            value: 350,
-            color:"rgba(66, 139, 202, 0.1)",
-            highlight: "#FF5A5E",
-            label: "Red"
+            value: all_costs,
+            color:"rgba(66, 139, 202, 0.2)",
+            highlight: "rgba(66, 139, 202, 0.4)",
+            label: "Общие расходы (руб.)"
         },
         {
-            value: 100,
-            color: "rgb(66, 139, 202)",
-            highlight: "#FFC870",
-            label: "Yellow"
+            value: personal_costs,
+            color: "rgba(66, 139, 202, 0.8)",
+            highlight: "rgba(66, 139, 202, 1)",
+            label: "Ваши расходы (руб.)"
         }
     ];
     var optionsShareUsage = {
-        //Boolean - Whether we should show a stroke on each segment
         segmentShowStroke : true,
-
-        //String - The colour of each segment stroke
         segmentStrokeColor : "#fff",
-
-        //Number - The width of each segment stroke
-        segmentStrokeWidth : 2,
-
-        //Number - The percentage of the chart that we cut out of the middle
-        percentageInnerCutout : 50, // This is 0 for Pie charts
-
-        //Number - Amount of animation steps
+        segmentStrokeWidth : 5,
+        percentageInnerCutout : 50,
         animationSteps : 100,
-
-        //String - Animation easing effect
         animationEasing : "easeOutBounce",
-
-        //Boolean - Whether we animate the rotation of the Doughnut
         animateRotate : true,
-
-        //Boolean - Whether we animate scaling the Doughnut from the centre
         animateScale : false,
-
-        //String - A legend template
         legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
     };
     var shareUsageChart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
@@ -293,7 +285,7 @@ var initDateRangePicker = function(){
 $('#period').change(function(e){
     period = $(this).val();
     if (currentRoute === "odn") setAllOdnData();
-    else setGraphAjax(deviceID, start, end, currentCanvasID);
+    else setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);
 });
 var setTable = function(){
     $('tbody').html("");
@@ -310,7 +302,6 @@ var setOdnTable = function(data, canvasID){
     var tableID = "table_" + canvasID.substr(canvasID.lastIndexOf("odn") + 3).toLowerCase();
     var current_tbody = $('#'+tableID+' tbody');
     current_tbody.html("");
-    console.log(current_tbody);
     var data_size = data.values.length;
     for(var i = 0; i < data_size; i++){
         var current_date = new Date(i*data.period*60*1000 + data.start*1);
