@@ -87,7 +87,7 @@
             </div>
             <div class="data hidden-xs col-sm-6 col-md-7">
               <div class="device_info row" style="padding-top: 40px;">
-                <div class="col-xs-5 col-md-4 col-lg-3"><div class="device_image" style="background-image: url(images/odn.png);"></div></div>
+                <div class="col-xs-5 col-md-4 col-lg-3"><div class="device_image" style="background-image: url(/images/odn.png);"></div></div>
                 <div class="device_name col-xs-6">
                   <h4>Общедомовые нужды</h4>
                   <p>Описание. Что это такое? Зачем? Какая польза?</p>
@@ -101,12 +101,12 @@
                   </div>
                   <div class="frequencypicker form-inline">
                     <label for="date_filter">Частота съема:</label>
-                    <select class="form-control" name="" id="">
-                      <option value="">5 минут</option>
-                      <option value="">Час</option>
-                      <option value="" selected="selected">День</option>
-                      <option value="">Неделя</option>
-                      <option value="">Месяц</option>
+                    <select class="form-control" name="" id="period">
+                      <option value="5">5 минут</option>
+                      <option value="60">Час</option>
+                      <option value="1440" selected="selected">День</option>
+                      <option value="10080">Неделя</option>
+                      <option value="302400">Месяц</option>
                     </select>
                   </div>
                 </form>
@@ -115,21 +115,34 @@
                   <!-- tabs right -->
                   <div class="tabbable tabs-right">
                   <ul class="nav nav-tabs">
-                    <li id = "graph_tab_money" class="active">
+                    <li id = "graph_tab_money_1" class="active">
                       <a href="#1" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
                     </li>
-                    <li>
+                    <li id = "table_tab_1">
                       <a href="#2" data-toggle="tab">Таблица</a>
                     </li>
                   </ul>
                   <div class="tab-content">
                      <div class="tab-pane active" id="1">
                       График
-                      <canvas id="odnWater" width="0" height="0"></canvas>  
+                      <canvas id="odnWater" width="370" height="250"></canvas>  
                      </div>
                      <div class="tab-pane" id="2">
                      <!--put TABLE HERE-->
-                      <div id="table_water">Таблица</div>
+                      <div id="table_water">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Дата</th>
+                              <th>Время</th>
+                              <th>Потребление</th>
+                              <th>Расходы (руб.)</th>
+                            </tr>
+                          </thead>
+                          <tbody>                      
+                          </tbody>
+                        </table>
+                      </div>
                      </div>
                     </div>        
                   </div>
@@ -139,21 +152,34 @@
                   <!-- tabs right -->
                   <div class="tabbable tabs-right">
                   <ul class="nav nav-tabs">
-                    <li id = "graph_tab_money" class="active">
-                      <a href="#1" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
+                    <li id = "graph_tab_money_2" class="active">
+                      <a href="#3" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
                     </li>
-                    <li>
-                      <a href="#2" data-toggle="tab">Таблица</a>
+                    <li id = "table_tab_2">
+                      <a href="#4" data-toggle="tab">Таблица</a>
                     </li>
                   </ul>
                   <div class="tab-content">
-                     <div class="tab-pane active" id="1">
+                     <div class="tab-pane active" id="3">
                       График
-                      <canvas id="odnWater" width="0" height="0"></canvas>  
+                      <canvas id="odnGas" width="370" height="250"></canvas>  
                      </div>
-                     <div class="tab-pane" id="2">
+                     <div class="tab-pane" id="4">
                      <!--put TABLE HERE-->
-                      <div id="table_water">Таблица</div>
+                      <div id="table_gas">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Дата</th>
+                              <th>Время</th>
+                              <th>расходы</th>
+                              <th>Расходы (общ.)</th>
+                            </tr>
+                          </thead>
+                          <tbody>                      
+                          </tbody>
+                        </table>
+                      </div>
                      </div>
                     </div>        
                   </div>
@@ -163,21 +189,34 @@
                   <!-- tabs right -->
                   <div class="tabbable tabs-right">
                   <ul class="nav nav-tabs">
-                    <li id = "graph_tab_money" class="active">
-                      <a href="#1" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
+                    <li id = "graph_tab_money_3" class="active">
+                      <a href="#5" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
                     </li>
-                    <li>
-                      <a href="#2" data-toggle="tab">Таблица</a>
+                    <li id = "table_tab_3">
+                      <a href="#6" data-toggle="tab">Таблица</a>
                     </li>
                   </ul>
                   <div class="tab-content">
-                     <div class="tab-pane active" id="1">
+                     <div class="tab-pane active" id="5">
                       График
-                      <canvas id="odnWater" width="0" height="0"></canvas>  
+                      <canvas id="odnElectricity" width="370" height="250"></canvas>  
                      </div>
-                     <div class="tab-pane" id="2">
+                     <div class="tab-pane" id="6">
                      <!--put TABLE HERE-->
-                      <div id="table_water">Таблица</div>
+                      <div id="table_electricity">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Дата</th>
+                              <th>Время</th>
+                              <th>Потребление</th>
+                              <th>Расходы (руб.)</th>
+                            </tr>
+                          </thead>
+                          <tbody>                      
+                          </tbody>
+                        </table>
+                      </div>
                      </div>
                     </div>        
                   </div>
@@ -187,21 +226,34 @@
                   <!-- tabs right -->
                   <div class="tabbable tabs-right">
                   <ul class="nav nav-tabs">
-                    <li id = "graph_tab_money" class="active">
-                      <a href="#1" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
+                    <li id = "graph_tab_money_4" class="active">
+                      <a href="#7" data-toggle="tab">График (<span class="measure">руб.</span>)</a>
                     </li>
-                    <li>
-                      <a href="#2" data-toggle="tab">Таблица</a>
+                    <li id = "table_tab_4">
+                      <a href="#8" data-toggle="tab">Таблица</a>
                     </li>
                   </ul>
                   <div class="tab-content">
-                     <div class="tab-pane active" id="1">
+                     <div class="tab-pane active" id="7">
                       График
-                      <canvas id="odnWater" width="0" height="0"></canvas>  
+                      <canvas id="odnHeat" width="370" height="250"></canvas>  
                      </div>
-                     <div class="tab-pane" id="2">
+                     <div class="tab-pane" id="8">
                      <!--put TABLE HERE-->
-                      <div id="table_water">Таблица</div>
+                      <div id="table_heat">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Дата</th>
+                              <th>Время</th>
+                              <th>Потребление</th>
+                              <th>Расходы (руб.)</th>
+                            </tr>
+                          </thead>
+                          <tbody>                      
+                          </tbody>
+                        </table>
+                      </div>
                      </div>
                     </div>        
                   </div>
@@ -216,6 +268,6 @@
 
     <script src="/scripts/vendor.js"></script>
     <script src="/scripts/main.js"></script>
-        <!--<script src="/scripts/chart.js"></script>-->
+    <script src="/scripts/chart.js"></script>
 </body>
 </html>
