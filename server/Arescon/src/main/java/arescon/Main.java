@@ -5,6 +5,8 @@ import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.session.InMemorySessionManager;
 import io.undertow.server.session.SessionManager;
+import io.undertow.util.Headers;
+import io.undertow.util.StatusCodes;
 import net.avkorneenkov.IOUtil;
 import net.avkorneenkov.SQLUtil;
 import net.avkorneenkov.freemarker.TemplatesWorker;
@@ -51,6 +53,8 @@ public class Main {
     private static Handlers handlers;
     private static DatabaseIdentityManager identityManager;
 
+    static Undertow server = null;
+
     private static enum PAGES { index, user, dispatcher, login, registration, dreports, odn }
 
     private static void readConfig( String filename ) throws IOException {
@@ -86,7 +90,10 @@ public class Main {
     }
 
     public static void main( String[] args ) {
+        launch();
+    }
 
+    private static void launch( ) {
         try { readConfig(CONFIG_PATH); }
         catch (IOException e) { e.printStackTrace(); }
 
@@ -173,10 +180,23 @@ public class Main {
                 api.deleteDevice(exchange);
             }
         });
+        paths.put("reboot", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                launch();
+                exchange.getResponseHeaders().put(Headers.LOCATION, "/");
+                exchange.setResponseCode(StatusCodes.TEMPORARY_REDIRECT);
+            }
+        });
 
-        Undertow server = Undertow.builder()
+        if (server != null) {
+            server.stop();
+            server = null;
+        }
+
+        server = Undertow.builder()
                 .addHttpListener(PORT, HOSTNAME)
-                    .setHandler(UndertowUtil.buildPathHandler(paths))
+                .setHandler(UndertowUtil.buildPathHandler(paths))
                 .build();
 
         server.start();
