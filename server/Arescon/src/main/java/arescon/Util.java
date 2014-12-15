@@ -203,6 +203,8 @@ public class Util {
                         dataMap.put("status_icon", "ok");
                         templates.getTemplated(root, "user.device.htm", response);
                     }
+                    break;
+                case 1:
                     if (!Data.DELETED[3]) {
                         dataMap.put("active", relPath.equals("4") && pickActives ? " active" : "");
                         dataMap.put("deviceID", "4");
@@ -213,7 +215,7 @@ public class Util {
                         templates.getTemplated(root, "user.device.htm", response);
                     }
                     break;
-                case 1: // fire
+                case 2: // fire
                     if (!Data.DELETED[2]) {
                         dataMap.put("active", relPath.equals("3") && pickActives ? " active" : "");
                         dataMap.put("deviceID", "3");
@@ -224,7 +226,7 @@ public class Util {
                         templates.getTemplated(root, "user.device.htm", response);
                     }
                     break;
-                case 2: // earth
+                case 3: // earth
                     if (!Data.DELETED[1]) {
                         dataMap.put("active", relPath.equals("2") && pickActives ? " active" : "");
                         dataMap.put("deviceID", "2");
@@ -235,7 +237,7 @@ public class Util {
                         templates.getTemplated(root, "user.device.htm", response);
                     }
                     break;
-                case 3: // air
+                case 4: // air
                     response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
                     break;
             }

@@ -23,12 +23,14 @@ arescon\Main$PAGES.class
 arescon\Handlers$13.class
 arescon\Handlers$19.class
 net\avkorneenkov\undertow\CommonHandlers$3.class
+arescon\Handlers$21.class
 arescon\Handlers$2.class
 net\avkorneenkov\undertow\DatabaseIdentityManager.class
 de\vogella\rss\model\FeedMessage.class
 arescon\Handlers$16.class
 net\avkorneenkov\IOUtil.class
 arescon\Handlers$10.class
+arescon\Handlers$20.class
 net\avkorneenkov\undertow\CommonActions.class
 net\avkorneenkov\undertow\UndertowUtil.class
 arescon\Handlers$17.class
