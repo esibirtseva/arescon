@@ -155,14 +155,19 @@ public class Util {
                     dataMap.put("description", "Данные обо всех приборах данной услуги");
                     templates.getTemplated(root, "user.device_info.htm", response);
                     break;
-                case "odn":
-
-                    break;
                 case "coldwater":
-
+                    dataMap.put("deviceID", "");
+                    dataMap.put("image", "background-color:rgb(41,128,184)");
+                    dataMap.put("name", "Холодная вода");
+                    dataMap.put("description", "Данные обо всех приборах данной услуги");
+                    templates.getTemplated(root, "user.device_info.htm", response);
                     break;
                 case "hotwater":
-
+                    dataMap.put("deviceID", "");
+                    dataMap.put("image", "background-color:rgb(41,128,184)");
+                    dataMap.put("name", "Горячая вода");
+                    dataMap.put("description", "Данные обо всех приборах данной услуги");
+                    templates.getTemplated(root, "user.device_info.htm", response);
                     break;
             }
         } catch (TemplateException | IOException e) {
