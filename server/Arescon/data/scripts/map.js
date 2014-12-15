@@ -59,11 +59,14 @@ var houses_data = [
 getBaloonStr = function(keys, labels, values){
     var res=[];
     res.push("<table>");
+    res.push("<tbody>");
     for (var i=0; i < labels.length; ++i) {
-        res.push("<tr class='"+keys[i]+"'><td class='b_label' style='display: inline-block;'>"+labels[i]+": </td>");
-        res.push("<td class='b_value' style='display: inline-block;'>"+values[i]+"</td><tr>");
+        res.push("<tr class='"+keys[i]+"'><td class='b_label'>"+labels[i]+": </td>");
+        res.push("<td class='b_value'>"+values[i]+"</td></tr>");
     }
+    res.push("</tbody>");
     res.push("</table>");
+    res.push("<a href='/dreports' style='margin: 5px 10px;'>Получить отчет</a>");//TODO: change link
     return res.join("");
 };
 window.onload = function(){
@@ -120,7 +123,9 @@ window.onload = function(){
         myPlacemark.events.add('mouseenter', function(e) {
             // open balloon on hover
             myPlacemark.balloon.open();
-
+            myPlacemark.balloon.events.add('mouseleave', function() {
+	            if(myPlacemark.balloon.isOpen()) myPlacemark.balloon.close();
+	        });
         });
 
         myPlacemark.balloon.events.add('open', function (e) {

@@ -5623,7 +5623,7 @@ dd {
   padding-left: 40px;
 }
 td.b_label{
-  margin: 5px 10px;  
+  padding: 4px 10px;
   color: #2D2D2D; 
 }
 td.b_value{

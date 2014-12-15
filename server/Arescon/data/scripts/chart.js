@@ -53,8 +53,9 @@ window.onload = function(){
     //daterange
     initDateRangePicker();
     var date = new Date();
+
     daterangeStart = date.setDate(date.getDate()-7);
-    daterangeEnd = -1;
+    daterangeEnd = date.setDate(date.getDate()+7);
     if ($('.device.active').length > 0){//device
         //init deviceId
         deviceID = $('.device.active').data("deviceid");
@@ -109,7 +110,7 @@ var setGraphAjax = function(id, start, end, canvasID){//period is global
     $.post('/device',{
         'deviceID' : id,
         'start' : start+"",
-        'end' : end+"",
+        'end' : end+"",//(end+1000000)+"",
         'period' : period
     }, function(data){
         currentData = JSON.parse(data);
@@ -130,7 +131,44 @@ var setAllOdnData = function(){
     setGraphAjax(2, daterangeStart, daterangeEnd, "#odnElectricity");
     setGraphAjax(4, daterangeStart, daterangeEnd, "#odnHeat");
 }
+//returns array of data_point = {value: Val, label: Label}
+var filter_dataset = function(data){
+    var result = {};
+    result.labels = [];
+    result.values = [];
+    var max_number_of_datapoints = 30;
+    var max_labels = 6;
+    var data_size = data.values.length;
+    var segment_step = data_size < 15 ? 1 : data_size/max_labels;
+    var current_segment = -1;
+    var point_segment_step = data_size < max_number_of_datapoints ? 1 : data_size/max_number_of_datapoints;
+    var current_point_segment = -1;
+
+    var temp_sum = 0;
+    var temp_counter = 0;
+    for (var i = 0; i < data_size; i++){
+        if (Math.floor(i/point_segment_step) > current_point_segment){
+            current_point_segment++;
+            var label = " ";
+            var value = (temp_sum + data.values[i]) / (temp_counter + 1);//data.values[i];
+            // if (Math.floor(i/segment_step) > current_segment){
+            //     current_segment++;
+                label = getStrDate(new Date(i*data.period*60*1000 + data.start*1));
+            // }
+            result.values.push(value);
+            result.labels.push(label);
+            temp_sum = 0;
+            temp_counter = 0;
+        }else{
+            temp_sum += data.values[i];
+            temp_counter++;
+        }
+    }
+    console.log(data);
+    return result;
+}
 var getLabels = function(data){
+    console.log(data);
     var initial_time = new Date(data['start']);
     var labels = [];
     var max_labels = 6;
@@ -148,7 +186,7 @@ var getLabels = function(data){
 }
 var months = ['янв.','фев.','мрт.','апр.','мая','июня','июля','авг.','сент.','окт.','ноя.','дек.'];
 var getStrDate = function(date){            
-    return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
+    return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 };
 var removeGraph = function(){
 
@@ -160,14 +198,15 @@ var setGraph = function(canvasId, data){
     //DATA
     data['period'] = period;
     //
-    var labels = getLabels(data);
+    //var labels = getLabels(data);
+    var data_points = filter_dataset(data);
     //daily
     $(canvasId).attr("height", "250");
     ctxDailyUsage = $(canvasId).get(0).getContext("2d");
     ctxDailyUsage.clearRect(0, 0, 1000, 10000);
     ctxDailyUsage.canvas.width = $(canvasId).parent().width();
     dataDailyUsage = {
-        labels: labels,
+        labels: data_points.labels,//labels,
         datasets: [
             {
                 label: typeMap[data['type']].label,
@@ -177,7 +216,7 @@ var setGraph = function(canvasId, data){
                 pointStrokeColor: "#fff",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(220,220,220,1)",
-                data: data['values']
+                data: data_points.values//data['values']
             }
         ]   
     };
@@ -288,14 +327,14 @@ $('#period').change(function(e){
     else setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);
 });
 var setTable = function(){
-    $('tbody').html("");
+    $('.tab-content tbody').html("");
     var data_size = currentData.values.length;
     for(var i = 0; i < data_size; i++){
         var current_date = new Date(i*currentData.period*60*1000 + currentData.start*1);
         var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
         var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
         // console.log(date_str + "\t" + time_str + "\t" + currentData.values[i].toFixed(2) + "\t" + (currentData.values[i]/3).toFixed(2));//TODO: change cost
-        $('tbody').append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+currentData.values[i].toFixed(2)+"</td><td>"+(currentData.values[i]/3).toFixed(2)+"</td></tr>")
+        $('.tab-content tbody').append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+currentData.values[i].toFixed(2)+"</td><td>"+(currentData.values[i]/3).toFixed(2)+"</td></tr>")
     }
 }
 var setOdnTable = function(data, canvasID){
@@ -310,3 +349,28 @@ var setOdnTable = function(data, canvasID){
         current_tbody.append("<tr><td>"+time_str+"</td><td>"+time_str+"</td><td>"+currentData.values[i].toFixed(2)+"</td><td>"+(currentData.values[i]/3).toFixed(2)+"</td></tr>")
     }
 }
+$('.remove_device').click(function(e){
+    bootbox.dialog({
+        message: "Вы действительно хотите удалить прибор? Это может привести к потере данных, для восстановления которых Вам придется обратиться в службу технической поддержки.",
+        title: "Удалить прибор?",
+        buttons: {
+            success: {
+              label: "Нет",
+              className: "btn-success",
+              callback: function() {
+                console.log("Not deleted");
+              }
+            },
+            danger: {
+              label: "Да",
+              className: "btn-danger",
+              callback: function() {
+                console.log("Deleted");
+                document.location.href = $('.remove_device').attr('href');
+              }
+            }            
+        }
+    });   
+    e.preventDefault();
+});
+ 
