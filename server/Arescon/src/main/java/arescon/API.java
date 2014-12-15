@@ -50,10 +50,9 @@ public class API {
 
         startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
         endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
-        if (endTime < 0) endTime = values.length;
 
         JSONArray list = new JSONArray();
-        for (long j = startTime; j + period < endTime && j + period < values.length; j += period) {
+        for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
             double value = 0.0;
             for (int i = 0; i < period; ++i) {
                 value += values[(int)j + i];
