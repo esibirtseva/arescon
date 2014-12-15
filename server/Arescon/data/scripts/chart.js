@@ -310,3 +310,28 @@ var setOdnTable = function(data, canvasID){
         current_tbody.append("<tr><td>"+time_str+"</td><td>"+time_str+"</td><td>"+currentData.values[i].toFixed(2)+"</td><td>"+(currentData.values[i]/3).toFixed(2)+"</td></tr>")
     }
 }
+$('.remove_device').click(function(e){
+    bootbox.dialog({
+        message: "Вы действительно хотите удалить прибор? Это может привести к потере данных, для восстановления которых Вам придется обратиться в службу технической поддержки.",
+        title: "Удалить прибор?",
+        buttons: {
+            success: {
+              label: "Нет",
+              className: "btn-success",
+              callback: function() {
+                console.log("Not deleted");
+              }
+            },
+            danger: {
+              label: "Да",
+              className: "btn-danger",
+              callback: function() {
+                console.log("Deleted");
+                document.location.href = $('.remove_device').attr('href');
+              }
+            }            
+        }
+    });   
+    e.preventDefault();
+});
+ 

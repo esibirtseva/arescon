@@ -5477,7 +5477,8 @@ header {
     border-bottom: 1px solid #d8dbdf; }
   .data .device_info {
     background-color: #f4f7fb;
-    padding-bottom: 40px; }
+    padding-bottom: 40px; 
+    padding-top: 20px;}
     .data .device_info > .remove_device {
       padding: 10px 10px 10px;
       text-align: right; }
@@ -5650,4 +5651,16 @@ canvas {
 .current_report > h4, .current_report > form, .current_report > .btn {
   margin-left: 10px; }
 
+.data .device_info.row>p{
+  text-align: right;
+}
+.data .device_info.row>p>a{
+  padding: 10px;
+}
+.data .device_info.row>p>a:hover{
+  text-align: right;
+}
+a:hover{
+  text-decoration: none!important;
+}
 /* Responsive: Portrait tablets and up */
