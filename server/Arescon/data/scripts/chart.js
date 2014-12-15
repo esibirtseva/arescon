@@ -288,14 +288,14 @@ $('#period').change(function(e){
     else setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);
 });
 var setTable = function(){
-    $('tbody').html("");
+    $('.tab-content tbody').html("");
     var data_size = currentData.values.length;
     for(var i = 0; i < data_size; i++){
         var current_date = new Date(i*currentData.period*60*1000 + currentData.start*1);
         var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
         var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
         // console.log(date_str + "\t" + time_str + "\t" + currentData.values[i].toFixed(2) + "\t" + (currentData.values[i]/3).toFixed(2));//TODO: change cost
-        $('tbody').append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+currentData.values[i].toFixed(2)+"</td><td>"+(currentData.values[i]/3).toFixed(2)+"</td></tr>")
+        $('.tab-content tbody').append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+currentData.values[i].toFixed(2)+"</td><td>"+(currentData.values[i]/3).toFixed(2)+"</td></tr>")
     }
 }
 var setOdnTable = function(data, canvasID){
