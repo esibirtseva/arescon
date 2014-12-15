@@ -167,6 +167,12 @@ public class Main {
                 api.deviceData(exchange);
             }
         });
+        paths.put("deleteDevice", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deleteDevice(exchange);
+            }
+        });
 
         Undertow server = Undertow.builder()
                 .addHttpListener(PORT, HOSTNAME)

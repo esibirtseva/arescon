@@ -70,6 +70,7 @@ window.onload = function(){
     setGraph("#dailyUsageChart2", 1, [green]);
     setGraph("#dailyUsageChart3", 1, [blue]);
     setGraph("#dailyUsageChart4", 1, [red]);
+    setGraph("#dailyUsageChart5", 1, [orange]);
 
 };
 $(window).resize(function(){

@@ -37,9 +37,8 @@ public class API {
         this.random = new SecureRandom();
     }
 
-    public String getDeviceData( int id, long startTime, long endTime, int period ) {
+    private String getDeviceData( int id, long startTime, long endTime, int period ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
-        if (endTime > new DateTime().getMillis()) endTime = -1;
 
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
@@ -103,6 +102,21 @@ public class API {
             e.printStackTrace();
             exchange.getResponseSender().send("");
         }
+    }
+
+    public void deleteDevice( HttpServerExchange exchange ) throws IOException {
+
+        String relPath = exchange.getRelativePath();
+        int id = 0;
+        try {
+            id = Integer.parseInt(relPath.substring(1));
+        } catch (Throwable ignored) { }
+
+        if (id > 0 && id <= Data.DELETED.length) {
+            Data.DELETED[id - 1] = true;
+        }
+
+        redirect(exchange, "/user");
     }
 
     public void profileUpdate( HttpServerExchange exchange ) throws IOException, SQLException {

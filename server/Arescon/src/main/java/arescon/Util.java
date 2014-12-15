@@ -82,6 +82,17 @@ public class Util {
         root.put("map", dataMap);
 
         try {
+            int id = Integer.parseInt(relPath);
+            for (; id < 5; id++) {
+                if (!Data.DELETED[id - 1]) {
+                    relPath = Integer.toString(id);
+                    break;
+                }
+            }
+            if (id == 5) return;
+        } catch (Throwable ignored) { }
+
+        try {
             switch (relPath) {
                 case "1": // water
                     dataMap.put("deviceID", "1");
@@ -170,40 +181,59 @@ public class Util {
         root.put("map", dataMap);
 
         try {
+            int id = Integer.parseInt(relPath);
+            for (; id < 5; id++) {
+                if (!Data.DELETED[id - 1]) {
+                    relPath = Integer.toString(id);
+                    break;
+                }
+            }
+            if (id == 5) return;
+        } catch (Throwable ignored) { }
+
+        try {
             switch (type) {
                 case 0: // water
-                    dataMap.put("active", relPath.equals("1") && pickActives ? " active" : "");
-                    dataMap.put("deviceID", "1");
-                    dataMap.put("name", "Счетчик Techem AP");
-                    dataMap.put("type", "Холодная вода");
-                    dataMap.put("status", "good");
-                    dataMap.put("status_icon", "ok");
-                    templates.getTemplated(root, "user.device.htm", response);
-                    dataMap.put("active", relPath.equals("4") && pickActives ? " active" : "");
-                    dataMap.put("deviceID", "4");
-                    dataMap.put("name", "Счетчик СВ-15 Х \"МЕТЕР\"");
-                    dataMap.put("type", "Горячая вода");
-                    dataMap.put("status", "good");
-                    dataMap.put("status_icon", "ok");
-                    templates.getTemplated(root, "user.device.htm", response);
+                    if (!Data.DELETED[0]) {
+                        dataMap.put("active", relPath.equals("1") && pickActives ? " active" : "");
+                        dataMap.put("deviceID", "1");
+                        dataMap.put("name", "Счетчик Techem AP");
+                        dataMap.put("type", "Холодная вода");
+                        dataMap.put("status", "good");
+                        dataMap.put("status_icon", "ok");
+                        templates.getTemplated(root, "user.device.htm", response);
+                    }
+                    if (!Data.DELETED[3]) {
+                        dataMap.put("active", relPath.equals("4") && pickActives ? " active" : "");
+                        dataMap.put("deviceID", "4");
+                        dataMap.put("name", "Счетчик СВ-15 Х \"МЕТЕР\"");
+                        dataMap.put("type", "Горячая вода");
+                        dataMap.put("status", "good");
+                        dataMap.put("status_icon", "ok");
+                        templates.getTemplated(root, "user.device.htm", response);
+                    }
                     break;
                 case 1: // fire
-                    dataMap.put("active", relPath.equals("3") && pickActives ? " active" : "");
-                    dataMap.put("deviceID", "3");
-                    dataMap.put("name", "Счетчик ГРАНД-25Т");
-                    dataMap.put("type", "");
-                    dataMap.put("status", "wait");
-                    dataMap.put("status_icon", "warning-sign");
-                    templates.getTemplated(root, "user.device.htm", response);
+                    if (!Data.DELETED[2]) {
+                        dataMap.put("active", relPath.equals("3") && pickActives ? " active" : "");
+                        dataMap.put("deviceID", "3");
+                        dataMap.put("name", "Счетчик ГРАНД-25Т");
+                        dataMap.put("type", "");
+                        dataMap.put("status", "wait");
+                        dataMap.put("status_icon", "warning-sign");
+                        templates.getTemplated(root, "user.device.htm", response);
+                    }
                     break;
                 case 2: // earth
-                    dataMap.put("active", relPath.equals("2") && pickActives ? " active" : "");
-                    dataMap.put("deviceID", "2");
-                    dataMap.put("name", "Счетчик однофазный СОЭ-52");
-                    dataMap.put("type", "");
-                    dataMap.put("status", "bad");
-                    dataMap.put("status_icon", "remove");
-                    templates.getTemplated(root, "user.device.htm", response);
+                    if (!Data.DELETED[1]) {
+                        dataMap.put("active", relPath.equals("2") && pickActives ? " active" : "");
+                        dataMap.put("deviceID", "2");
+                        dataMap.put("name", "Счетчик однофазный СОЭ-52");
+                        dataMap.put("type", "");
+                        dataMap.put("status", "bad");
+                        dataMap.put("status_icon", "remove");
+                        templates.getTemplated(root, "user.device.htm", response);
+                    }
                     break;
                 case 3: // air
                     response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
