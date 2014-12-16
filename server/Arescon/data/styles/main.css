@@ -5663,4 +5663,17 @@ canvas {
 a:hover{
   text-decoration: none!important;
 }
+a.water_type{
+  padding-left: 20px;
+}
+.type_container{
+  border-left: solid 3px transparent;
+  margin-left: -3px;
+  margin: 5px 0 5px -3px;
+  padding: 5px 0;
+}
+.type_container.active{
+  background-color: rgba(66, 139, 202, 0.05);
+  border-left-color: #428bca;
+}
 /* Responsive: Portrait tablets and up */

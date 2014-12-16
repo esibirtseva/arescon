@@ -107,6 +107,7 @@ $('#table_tab').click(function(){
 });
 var period = 1440;
 var setGraphAjax = function(id, start, end, canvasID){//period is global
+    console.log(start + " " + new Date(end));
     $.post('/device',{
         'deviceID' : id,
         'start' : start+"",
