@@ -168,10 +168,28 @@ public class Main {
             return;
         }
 
-        paths.put("device", new HttpHandler() {
+        paths.put("device/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
-                api.deviceData(exchange);
+                api.deviceData(exchange, 1);
+            }
+        });
+        paths.put("type/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.typeData(exchange, 1);
+            }
+        });
+        paths.put("device/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceData(exchange, 20);
+            }
+        });
+        paths.put("type/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.typeData(exchange, 20);
             }
         });
         paths.put("deleteDevice", new HttpHandler() {

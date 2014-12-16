@@ -23,6 +23,8 @@ import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class API {
@@ -37,7 +39,7 @@ public class API {
         this.random = new SecureRandom();
     }
 
-    private String getDeviceData( int id, long startTime, long endTime, int period ) {
+    private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
         period /= (int)Data.PERIOD;
@@ -45,8 +47,9 @@ public class API {
         double[] values = Data.VALUES[id - 1];
 
         StringBuilder response = new StringBuilder("{\"start\":");
-        response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"name\":\"");
-        response.append(Data.NAMES[id - 1]).append("\",\"type\":\"").append(Data.TYPES[id - 1]).append("\",\"values\":");
+        response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
+        response.append(period).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
+        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
 
         startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
         endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
@@ -57,13 +60,57 @@ public class API {
             for (int i = 0; i < period; ++i) {
                 value += values[(int)j + i];
             }
-            list.put(value);
+            list.put(value * multiplier);
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    public void deviceData( HttpServerExchange exchange ) throws IOException {
+    private String getTypeData( int id, long startTime, long endTime, int period, double multiplier ) {
+        period /= (int)Data.PERIOD;
+        if (period < 1) period = 1;
+        List<double[]> values = new ArrayList<>();
+        List<Long> dataStartTimes = new ArrayList<>();
+        long dataStartTime = Long.MAX_VALUE;
+        int topLength = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (Data.TYPES[i].equals(Integer.toString(id))) {
+                if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
+                if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
+                dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
+                values.add(Data.VALUES[i]);
+            }
+        }
+
+        if (startTime < dataStartTime) startTime = dataStartTime;
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"period\":\"");
+        response.append(period).append("\",\"type\":\"");
+        response.append(id).append("\",\"values\":");
+
+        startTime = (startTime) / 60000 / Data.PERIOD;
+        endTime = (endTime) / 60000 / Data.PERIOD;
+        dataStartTime = dataStartTime / 60000 / Data.PERIOD;
+
+        JSONArray list = new JSONArray();
+        for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+            double value = 0.0;
+            for (int i = 0; i < period; ++i) {
+                for (int k = 0; k < values.size(); ++k) {
+                    int index = (int)j - (int)(long)dataStartTimes.get(k) + i;
+                    if (index < values.get(k).length && index >= 0) {
+                        value += values.get(k)[index];
+                    }
+                }
+            }
+            list.put(value * multiplier);
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
+    public void deviceData( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("");
             return;
@@ -95,7 +142,47 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDeviceData(id, startTime, endTime, periodTime));
+            exchange.getResponseSender().send(getDeviceData(id, startTime, endTime, periodTime, multiplier));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("");
+        }
+    }
+
+    public void typeData( HttpServerExchange exchange, double multiplier ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        FormData.FormValue typeID = postData.getFirst("typeID");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+
+        if (typeID == null || typeID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(typeID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypeData(id, startTime, endTime, periodTime, multiplier));
 
         } catch (Throwable e) {
             e.printStackTrace();
