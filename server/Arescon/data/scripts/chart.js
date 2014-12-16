@@ -77,6 +77,14 @@ window.onload = function(){
         deviceID = 6;
         setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
     }
+    else if (getLastParamUrl() === "coldwater"){
+        deviceID = 1;
+        setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
+    }
+    else if (getLastParamUrl() === "hotwater"){
+        deviceID = 4;
+        setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
+    }
     else if (getLastParamUrl() === "heat"){
         window.location.href = "/404";//TODO: change request
     }
@@ -111,7 +119,7 @@ var setGraphAjax = function(id, start, end, canvasID){//period is global
     $.post('/device',{
         'deviceID' : id,
         'start' : start+"",
-        'end' : end+"",//(end+1000000)+"",
+        'end' : end+"",
         'period' : period
     }, function(data){
         currentData = JSON.parse(data);
@@ -151,12 +159,9 @@ var filter_dataset = function(data){
         if (Math.floor(i/point_segment_step) > current_point_segment){
             current_point_segment++;
             var label = " ";
-            var value = (temp_sum + data.values[i]) / (temp_counter + 1);//data.values[i];
-            // if (Math.floor(i/segment_step) > current_segment){
-            //     current_segment++;
-                label = getStrDate(new Date(i*data.period*60*1000 + data.start*1));
-            // }
-            result.values.push(value);
+            var value = (temp_sum + data.values[i]) / (temp_counter + 1);
+            label = getStrDate(new Date(i*data.period*60*1000 + data.start*1));
+            result.values.push(value.toFixed(2));
             result.labels.push(label);
             temp_sum = 0;
             temp_counter = 0;
