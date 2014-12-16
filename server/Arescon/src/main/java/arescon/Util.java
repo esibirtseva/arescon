@@ -26,9 +26,9 @@ public class Util {
         this.templates = templates;
     }
 
-    void getActiveDevice( String expected, Writer response, HttpServerExchange exchange ) {
+    void getActiveDevice( String expected, String activeMarker, Writer response, HttpServerExchange exchange ) {
         if (exchange.getRelativePath().equals("/" + expected)) {
-            try { response.append(" active_b"); }
+            try { response.append(" " + activeMarker); }
             catch (IOException ignored) {     }
         }
     }

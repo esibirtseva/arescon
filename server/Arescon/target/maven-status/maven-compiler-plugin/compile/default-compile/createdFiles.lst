@@ -9,6 +9,7 @@ arescon\Util.class
 net\avkorneenkov\IOUtil$1.class
 arescon\Main$1.class
 net\avkorneenkov\undertow\FormAuth$CredMapper.class
+arescon\Handlers$22.class
 net\avkorneenkov\undertow\DatabaseIdentityManager$1$1.class
 arescon\Handlers$15.class
 arescon\Handlers$12.class
@@ -51,6 +52,7 @@ de\vogella\rss\read\RSSFeedParser.class
 arescon\Handlers$18.class
 arescon\Handlers$4.class
 net\avkorneenkov\TimeUtil.class
+arescon\Handlers$23.class
 net\avkorneenkov\SQLUtil.class
 arescon\Main$5.class
 arescon\Handlers$11.class

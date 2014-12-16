@@ -118,7 +118,13 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getActiveDevice("water", writer, exchange);
+                        util.getActiveDevice("water", "active_b", writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getActiveDevice("coldwater", "active", writer, exchange);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
@@ -130,13 +136,19 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getActiveDevice("hotwater", "active", writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getDevices(1, writer, exchange, true);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getActiveDevice("gas", writer, exchange);
+                        util.getActiveDevice("gas", "active_b", writer, exchange);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
@@ -148,7 +160,7 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getActiveDevice("electricity", writer, exchange);
+                        util.getActiveDevice("electricity", "active_b", writer, exchange);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
@@ -160,7 +172,7 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getActiveDevice("heat", writer, exchange);
+                        util.getActiveDevice("heat", "active_b", writer, exchange);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
