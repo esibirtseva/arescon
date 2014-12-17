@@ -41,50 +41,56 @@ var typeMap = [
         }      
     },
 ]
-
-var currentData;//odn
-var currentRoute;//odn
+var ctxDailyUsage, dailyUsageChart, dataDailyUsage, optionsDailyUsage, dailyDataSetsStore;
+var deviceID;
+var currentCanvasID;
+var currentData;
+var currentRoute;
 var odnDataSet = [];
 var period = 1440;//default
-var currentPageData;//new meta!
+var currentDevice;
 window.onload = function(){
+    //canvasID
+    currentCanvasID = "#dailyUsageChart";
     //daterange
     initDateRangePicker();
     var date = new Date();
 
     daterangeStart = date.setDate(date.getDate()-7);
     daterangeEnd = date.setDate(date.getDate()+7);
-
-    var currentRoute = getLastParamUrl();
-    if ($('.device.active').length > 0){
-        var deviceID = $('.device.active').data("deviceid");
-        currentPageData = new Device(deviceID, daterangeStart, daterangeEnd, period);
-        currentPageData.updateData(true);
+    if ($('.device.active').length > 0){//device
+        //init deviceId
+        deviceID = $('.device.active').data("deviceid");
+        //set graphs    
+        // setDeviceGraphs(deviceID, daterangeStart, daterangeEnd, currentCanvasID);
+        currentDevice = new Device(deviceID, daterangeStart, daterangeEnd, period);
+        currentDevice.updateData(true);
     }
-    else if (currentRoute === "water"){
-        currentPageData = new Type(0, daterangeStart, daterangeEnd, period);
-        currentPageData.updateData(true);
+    else if (getLastParamUrl() === "water"){
+        deviceID = 5;
+        setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
     }
-    else if (currentRoute === "gas"){
-        currentPageData = new Type(2, daterangeStart, daterangeEnd, period);
-        currentPageData.updateData(true);
+    else if (getLastParamUrl() === "gas"){
+        deviceID = 7;
+        setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
     }
-    else if (currentRoute === "electricity"){
-        currentPageData = new Type(3, daterangeStart, daterangeEnd, period);
-        currentPageData.updateData(true);
+    else if (getLastParamUrl() === "electricity"){
+        deviceID = 6;
+        setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
     }
-    else if (currentRoute === "coldwater"){
-        currentPageData = new Type(0, daterangeStart, daterangeEnd, period);
-        currentPageData.updateData(true);
+    else if (getLastParamUrl() === "coldwater"){
+        deviceID = 1;
+        setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
     }
-    else if (currentRoute === "hotwater"){
-        currentPageData = new Type(1, daterangeStart, daterangeEnd, period);
-        currentPageData.updateData(true);
+    else if (getLastParamUrl() === "hotwater"){
+        deviceID = 4;
+        setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
     }
-    else if (currentRoute === "heat"){
+    else if (getLastParamUrl() === "heat"){
         window.location.href = "/404";//TODO: change request
     }
-    else if (currentRoute === "odn"){
+    else if (getLastParamUrl() === "odn"){
+        currentRoute = "odn";
         setAllOdnData();
     }
 
@@ -96,10 +102,65 @@ var getLastParamUrl = function(){
 }
 $('.nav-tabs>li').click(function(){
     setTimeout(function(){
-        currentPageData.updateRepresentation();
+        currentDevice.updateRepresentation();
     }, 100);
 });
+// $(window).resize(function(){
+//     // dailyUsageChart.resize();
+// });
+// $('#graph_tab').click(function(){   
+//     currentCanvasID = "#dailyUsageChart";
+//     setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);
+// });
+// $('#graph_tab_money').click(function(){   
+//     currentCanvasID = "#dailyUsageChartMoney";
+//     setGraphAjax(deviceID+1, daterangeStart, daterangeEnd, currentCanvasID);//TODO: change request
+// });
+// $('#table_tab').click(function(){   
+//     // setTable(currentData);
+// });
 
+
+//first implementation
+// var setGraphAjax = function(id, start, end, canvasID){//period is global
+//     $.post('/device/values',{
+//         'deviceID' : id,
+//         'start' : start+"",
+//         'end' : end+"",
+//         'period' : period
+//     }, function(data){
+//         currentData = JSON.parse(data);
+//         setGraph(canvasID, currentData);
+        
+//         if (currentRoute === "odn"){
+//             setOdnTable(currentData, canvasID);
+//         }
+//         else setTable();
+//         if (deviceID && deviceID > 0){
+//             setDonut();
+//         }
+//     });
+// };
+// var setDeviceGraphs = function(id, start, end, canvasID){//period is global
+//     $.post('/device/values',{
+//         'deviceID' : id,
+//         'start' : start+"",
+//         'end' : end+"",
+//         'period' : period
+//     }, function(data){
+//         currentData = JSON.parse(data);
+//         setGraph(canvasID, currentData);
+//         setTable(currentData);
+//         setDonut(currentData);
+//     });
+// };
+// var setAllOdnData = function(){
+//     setGraphAjax(1, daterangeStart, daterangeEnd, "#odnWater");
+//     setGraphAjax(3, daterangeStart, daterangeEnd, "#odnGas");
+//     setGraphAjax(2, daterangeStart, daterangeEnd, "#odnElectricity");
+//     setGraphAjax(4, daterangeStart, daterangeEnd, "#odnHeat");
+// }
+//returns array of data_point = {value: Val, label: Label}
 var filter_dataset = function(data){
     var result = {};
     result.labels = [];
@@ -115,7 +176,6 @@ var filter_dataset = function(data){
     var temp_sum = 0;
     var temp_counter = 0;
     for (var i = 0; i < data_size; i++){
-        // console.log(getStrDate(new Date(i*data.period*60*1000 + data.start*1)) + " " + data.period);
         if (Math.floor(i/point_segment_step) > current_point_segment){
             current_point_segment++;
             var label = " ";
@@ -152,13 +212,101 @@ var months = ['янв.','фев.','мрт.','апр.','мая','июня','ию�
 var getStrDate = function(date){            
     return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 };
+// var setGraph = function(canvasId, data){
+//     //preset
+//     if (typeof dailyUsageChart !== 'undefined') dailyUsageChart.destroy();
+//     $('#graph_tab .measure').html(typeMap[data['type']].measure);
+//     //DATA
+//     data['period'] = period;
+//     //
+//     //var labels = getLabels(data);
+//     var data_points = filter_dataset(data);
+//     //daily
+//     $(canvasId).attr("height", "250");
+//     ctxDailyUsage = $(canvasId).get(0).getContext("2d");
+//     ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+//     ctxDailyUsage.canvas.width = $(canvasId).parent().width();
+//     dataDailyUsage = {
+//         labels: data_points.labels,//labels,
+//         datasets: [
+//             {
+//                 label: typeMap[data['type']].label,
+//                 fillColor: typeMap[data['type']].colors.fill,
+//                 strokeColor: typeMap[data['type']].colors.stroke,
+//                 pointColor: typeMap[data['type']].colors.stroke,
+//                 pointStrokeColor: "#fff",
+//                 pointHighlightFill: "#fff",
+//                 pointHighlightStroke: "rgba(220,220,220,1)",
+//                 data: data_points.values//data['values']
+//             }
+//         ]   
+//     };
 
+//     //TODO: change implementation
+//     if (currentRoute == "odn"){
+//         var new_data = [];
+//         for (var i = 0; i < data.values.length; i++) new_data[i] = data.values[i]*3;
+//         dataDailyUsage.datasets.push(
+//             {
+//                 label: typeMap[data['type']].label,
+//                 fillColor: typeMap[data['type']].colors.fill,
+//                 strokeColor: typeMap[data['type']].colors.stroke,
+//                 pointColor: typeMap[data['type']].colors.stroke,
+//                 pointStrokeColor: "#fff",
+//                 pointHighlightFill: "#fff",
+//                 pointHighlightStroke: "rgba(220,220,220,1)",
+//                 data: new_data
+//             }
+//         );
+//     }
+//     //END TODO
+
+//     optionsDailyUsage = {
+//         scaleShowGridLines : false,
+//         showTooltips: true,
+//         responsive: true,
+//         legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+//     };
+//     dailyUsageChart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+// };
 var sumCosts = function(data){
     var sum = 0;
     for (var i = 0; i < data.values.length; i++) sum += data.values[i];
     return sum;
 }
-
+// var setDonut = function(data){
+//     var ctxShareUsage = $("#shareUsageChart").get(0).getContext("2d");
+//     ctxShareUsage.canvas.width = $("#shareUsageChart").parent().width();
+    
+//     var personal_costs = Math.round(sumCosts(data));
+//     var all_costs = personal_costs*3;//TODO: change implementation
+//     var dataShareUsage = [
+//         {
+//             value: all_costs,
+//             color:"rgba(66, 139, 202, 0.2)",
+//             highlight: "rgba(66, 139, 202, 0.4)",
+//             label: "Общие расходы (руб.)"
+//         },
+//         {
+//             value: personal_costs,
+//             color: "rgba(66, 139, 202, 0.8)",
+//             highlight: "rgba(66, 139, 202, 1)",
+//             label: "Ваши расходы (руб.)"
+//         }
+//     ];
+//     var optionsShareUsage = {
+//         segmentShowStroke : true,
+//         segmentStrokeColor : "#fff",
+//         segmentStrokeWidth : 5,
+//         percentageInnerCutout : 50,
+//         animationSteps : 100,
+//         animationEasing : "easeOutBounce",
+//         animateRotate : true,
+//         animateScale : false,
+//         legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+//     };
+//     var shareUsageChart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
+// }
 var daterangeStart, daterangeEnd;
 var dataBank; //TODO change implementation
 var initDateRangePicker = function(){
@@ -190,22 +338,25 @@ var initDateRangePicker = function(){
             daterangeStart = start;
             daterangeEnd = end;
             if (currentRoute === "odn") setAllOdnData();
-            else {
-                currentPageData.start = start;
-                currentPageData.end = end;
-                currentPageData.updateData(true);
-            } 
+            else setGraphAjax(deviceID, start, end, currentCanvasID);
         }
     );
 }
 $('#period').change(function(e){
     period = $(this).val();
     if (currentRoute === "odn") setAllOdnData();
-    else {
-        currentPageData.period = period;
-        currentPageData.updateData(true);
-    } 
+    else setGraphAjax(deviceID, daterangeStart, daterangeEnd, currentCanvasID);
 });
+// var setTable = function(data){
+//     $('.tab-content tbody').html("");
+//     var data_size = data.values.length;
+//     for(var i = 0; i < data_size; i++){
+//         var current_date = new Date(i*data.period*60*1000 + data.start*1);
+//         var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
+//         var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
+//         $('.tab-content tbody').append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+data.values[i].toFixed(2)+"</td><td>"+(data.values[i]/3).toFixed(2)+"</td></tr>")
+//     }
+// }
 var setOdnTable = function(data, canvasID){
     var tableID = "table_" + canvasID.substr(canvasID.lastIndexOf("odn") + 3).toLowerCase();
     var current_tbody = $('#'+tableID+' tbody');
@@ -244,14 +395,18 @@ $('.remove_device').click(function(e){
 });
  
 
+ //deviceID
+ /*
+ id -> get values -> get money -> set graphValues, set graphMoney, set table.
 
-function Device(id, start, end, _period){
+ */
+function Device(id, start, end, period){
     var self = this;
 
     self.id = id;
     self.start = start;
     self.end = end;
-    self.period = _period;
+    self.period = period;
     self.valuesData = {};
     self.moneyData = {};
 
@@ -297,7 +452,12 @@ function Device(id, start, end, _period){
         self.graphs.push(self.setShareGraph());
     };
 
-    self.setLinearGraph = function(selector, data){        
+    self.setLinearGraph = function(selector, data){
+        console.log(selector);
+        console.log(data);
+        //preset
+        // if (typeof dailyUsageChart !== 'undefined') dailyUsageChart.destroy();//TODO: destroy all
+
         var data_points = filter_dataset(data);
         //daily
         var canvas = $(selector);
@@ -389,36 +549,4 @@ function Device(id, start, end, _period){
             self.graphs[i].destroy();
         }
     };
-};
-
-function Type(typeID, start, end, _period){    
-    var self = this;
-
-    Device.call(this, typeID, start, end, _period);
-
-    self.updateData = function(updateRepresentation){
-        console.log(self.id + " " + self.start+" " + self.end+" "+self.period);
-        $.post('/type/values',{
-            'typeID' : self.id,
-            'start' : self.start+"",
-            'end' : self.end+"",
-            'period' : self.period
-        }, function(data){
-            var currentData = JSON.parse(data);
-            self.valuesData = currentData;
-            $.post('/type/money',{
-                'typeID' : self.id,
-                'start' : self.start+"",
-                'end' : self.end+"",
-                'period' : self.period
-            }, function(data){
-                var currentData = JSON.parse(data);
-                self.moneyData = currentData;
-                if (updateRepresentation){
-                    self.updateRepresentation();
-                }
-                $('#graph_tab .measure').html(typeMap[currentData.type].measure);
-            });
-        });
-    };    
 };

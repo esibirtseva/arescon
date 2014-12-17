@@ -5456,8 +5456,9 @@ header {
 
 .service {
   border-left: solid 3px transparent;
-  border-bottom: 1px solid #d8dbdf; }
-  .service > h4 {
+  border-bottom: 1px solid #d8dbdf; 
+  padding: 10px 0;}
+  .service > a > h4 {
     padding-left: 10px;
     color: #428bca; }
   .service:hover {
