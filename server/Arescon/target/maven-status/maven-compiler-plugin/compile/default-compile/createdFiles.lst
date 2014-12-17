@@ -15,6 +15,7 @@ net\avkorneenkov\undertow\DatabaseIdentityManager$1$1.class
 arescon\Handlers$15.class
 arescon\Handlers$12.class
 net\avkorneenkov\NetUtil.class
+arescon\Main$12.class
 net\avkorneenkov\freemarker\TemplatesWorker.class
 arescon\Handlers$6.class
 net\avkorneenkov\SQLUtil$1.class
@@ -37,12 +38,15 @@ net\avkorneenkov\undertow\CommonActions.class
 net\avkorneenkov\undertow\UndertowUtil.class
 arescon\Handlers$17.class
 net\avkorneenkov\undertow\CommonHandlers$StringWriterHandler.class
+arescon\Main$11.class
 arescon\Main$2.class
 de\vogella\rss\model\Feed.class
 de\vogella\rss\tests\ReadTest.class
 net\avkorneenkov\NetUtil$StringHandler.class
+arescon\Main$15.class
 net\avkorneenkov\undertow\CommonHandlers$2.class
 arescon\Main$6.class
+arescon\Main$14.class
 net\avkorneenkov\undertow\CommonHandlers$1.class
 net\avkorneenkov\undertow\DatabaseIdentityManager$1.class
 net\avkorneenkov\DebugUtil.class
@@ -58,8 +62,10 @@ arescon\Handlers$4.class
 net\avkorneenkov\TimeUtil.class
 arescon\Handlers$23.class
 arescon\Main$8.class
+arescon\Main$16.class
 net\avkorneenkov\SQLUtil.class
 arescon\Main$5.class
 arescon\Handlers$11.class
+arescon\Main$13.class
 net\avkorneenkov\util\Pair.class
 arescon\Handlers$7.class

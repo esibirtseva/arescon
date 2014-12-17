@@ -180,10 +180,28 @@ public class Main {
                 api.typeData(exchange, 1);
             }
         });
-        paths.put("house/values", new HttpHandler() {
+        paths.put("flat/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
                 api.houseData(exchange, 1);
+            }
+        });
+        paths.put("house/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 3);
+            }
+        });
+        paths.put("tszh/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 6);
+            }
+        });
+        paths.put("uk/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 12);
             }
         });
         paths.put("device/money", new HttpHandler() {
@@ -198,10 +216,28 @@ public class Main {
                 api.typeData(exchange, 20);
             }
         });
-        paths.put("house/money", new HttpHandler() {
+        paths.put("flat/money", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
                 api.houseData(exchange, 20);
+            }
+        });
+        paths.put("house/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 60);
+            }
+        });
+        paths.put("tszh/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 120);
+            }
+        });
+        paths.put("uk/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 240);
             }
         });
         paths.put("deleteDevice", new HttpHandler() {
