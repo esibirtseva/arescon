@@ -10,6 +10,7 @@ var typeMap = [
     },
     {
         type: 1,
+        label: 'Горячая вода',
         measure: "л",
         colors: {
             fill: "rgba(231, 75, 59, 0.2)",
@@ -62,7 +63,10 @@ window.onload = function(){
         currentPageData.updateData(true);
     }
     else if (currentRoute === "water"){
-        currentPageData = new Type(0, daterangeStart, daterangeEnd, period);
+        var arr_types = [];
+        arr_types.push(new Type(0, daterangeStart, daterangeEnd, period));
+        arr_types.push(new Type(1, daterangeStart, daterangeEnd, period));
+        currentPageData = new MultTypes(arr_types);
         currentPageData.updateData(true);
     }
     else if (currentRoute === "gas"){
@@ -91,8 +95,7 @@ window.onload = function(){
 };
 var getLastParamUrl = function(){
     var url      = window.location.href; 
-    return (url.substr(url.lastIndexOf('/')+1));
-     
+    return (url.substr(url.lastIndexOf('/')+1));    
 }
 $('.nav-tabs>li').click(function(){
     setTimeout(function(){
@@ -191,8 +194,7 @@ var initDateRangePicker = function(){
             daterangeEnd = end;
             if (currentRoute === "odn") setAllOdnData();
             else {
-                currentPageData.start = start;
-                currentPageData.end = end;
+                currentPageData.updateDateRange(start, end);
                 currentPageData.updateData(true);
             } 
         }
@@ -202,7 +204,7 @@ $('#period').change(function(e){
     period = $(this).val();
     if (currentRoute === "odn") setAllOdnData();
     else {
-        currentPageData.period = period;
+        currentPageData.updPeriod(period);
         currentPageData.updateData(true);
     } 
 });
@@ -263,6 +265,13 @@ function Device(id, start, end, _period){
 
     self.graphs = [];
 
+    self.updPeriod = function(_period){
+        self.period = _period;
+    };
+    self.updDateRange = function(start, end){
+        self.start = start;
+        self.end = end;
+    };
     self.updateData = function(updateRepresentation){
 
         $.post('/device/values',{
@@ -305,7 +314,7 @@ function Device(id, start, end, _period){
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
-        dataDailyUsage = {
+        var dataDailyUsage = {
             labels: data_points.labels,//labels,
             datasets: [
                 {
@@ -350,6 +359,7 @@ function Device(id, start, end, _period){
         
         var personal_costs = Math.round(sumCosts(self.moneyData));
         var all_costs = personal_costs*3;//TODO: change implementation
+        var type = typeMap[self.moneyData.type];
         var dataShareUsage = [
             {
                 value: all_costs,
@@ -358,10 +368,10 @@ function Device(id, start, end, _period){
                 label: "Общие расходы (руб.)"
             },
             {
-                value: personal_costs,
-                color: "rgba(66, 139, 202, 0.8)",
-                highlight: "rgba(66, 139, 202, 1)",
-                label: "Ваши расходы (руб.)"
+                value: Math.round(personal_costs),
+                color: type.colors.stroke,
+                highlight: type.colors.fill,
+                label: type.label + " (руб.)"
             }
         ];
         var optionsShareUsage = {
@@ -396,8 +406,9 @@ function Type(typeID, start, end, _period){
 
     Device.call(this, typeID, start, end, _period);
 
+    self.isUpdated = false;
     self.updateData = function(updateRepresentation){
-        console.log(self.id + " " + self.start+" " + self.end+" "+self.period);
+        self.isUpdated = false;
         $.post('/type/values',{
             'typeID' : self.id,
             'start' : self.start+"",
@@ -418,7 +429,154 @@ function Type(typeID, start, end, _period){
                     self.updateRepresentation();
                 }
                 $('#graph_tab .measure').html(typeMap[currentData.type].measure);
+                self.isUpdated = true;
             });
         });
     };    
 };
+
+//2 lines, 3 sectors, table in sum values
+function MultTypes(arr_types){
+    var self = this;
+    self.types = arr_types;
+    self.graphs = [];
+
+    self.updateData = function(updateRepresentation){
+        for (var i = 0; i < self.types.length; i++){
+            self.types[i].updateData(false);
+        }
+        var shouldContinue = true;
+        var periodicFunction = setInterval(function(){
+            if (!shouldContinue) clearInterval(periodicFunction);
+            shouldContinue = false;
+            for (var i = 0; i < self.types.length; i++){
+                if (self.types[i].isUpdated){
+                    self.updateRepresentation();
+                }else{
+                    shouldContinue = true;
+                }
+            }   
+        },10);
+    };
+
+    self.updateRepresentation = function(){
+        self.destroyAllGraphs();
+        self.graphs.push(self.setLinearGraph(self.types[0].canvasValuesSelector));
+        self.graphs.push(self.setLinearGraph(self.types[0].canvasMoneySelector));
+        self.setTable();
+        self.graphs.push(self.setShareGraph());
+    };
+    self.setLinearGraph = function(selector){   
+        //daily
+        var canvas = $(selector);
+        ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+        var dataDailyUsage = {
+            labels: [],
+            datasets: [
+            ]   
+        };
+        for (var i = 0; i < self.types.length; i++){
+            var data_points = filter_dataset(self.types[i].valuesData);
+            var type = self.types[i].valuesData.type;
+            var dataset = {
+                label: typeMap[type].label,
+                fillColor: typeMap[type].colors.fill,
+                strokeColor: typeMap[type].colors.stroke,
+                pointColor: typeMap[type].colors.stroke,
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: data_points.values
+            }
+            dataDailyUsage.datasets.push(dataset);
+            dataDailyUsage.labels = data_points.labels;
+        }
+        optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        return chart;
+    };
+
+    self.setTable = function(){
+        var tbody = $(self.types[0].tableSelector);
+        tbody.html("");
+        var data_size = self.types[0].valuesData.values.length;
+        var period = self.types[0].period,
+            start = self.types[0].start;
+        for(var i = 0; i < data_size; i++){
+            var current_date = new Date(i*period*60*1000 + start*1);
+            var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
+            var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
+            var volume = 0,
+                money = 0;
+            for (var j = 0; j < self.types.length; j++){
+                volume += self.types[j].valuesData.values[i];
+                money += self.types[j].moneyData.values[i];
+            }
+            tbody.append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+volume.toFixed(2)+"</td><td>"+money.toFixed(2)+"</td></tr>")
+        }
+    };
+
+    self.setShareGraph = function(){
+        var canvas = $(self.types[0].canvasShareSelector);
+        var ctxShareUsage = canvas.get(0).getContext("2d");
+        ctxShareUsage.canvas.width = canvas.parent().width();
+
+        var dataShareUsage = [];
+        for (var i = 0; i < self.types.length; i++){
+            var costs = sumCosts(self.types[i].moneyData);
+            var type = typeMap[self.types[i].moneyData.type];
+            dataShareUsage.push({
+                value: Math.round(costs),
+                color: type.colors.stroke,
+                highlight: type.colors.fill,
+                label: type.label + " (руб.)"
+            });
+        }
+        var all_costs = sumCosts(self.types[0].moneyData) * 5;//TODO: change implementation
+        dataShareUsage.push({
+            value: Math.round(all_costs),
+            color:"rgba(66, 139, 202, 0.1)",
+            highlight: "rgba(66, 139, 202, 0.2)",
+            label: "Общие расходы (руб.)"
+        });
+        var optionsShareUsage = {
+            segmentShowStroke : true,
+            segmentStrokeColor : "#fff",
+            segmentStrokeWidth : 5,
+            percentageInnerCutout : 50,
+            animationSteps : 100,
+            animationEasing : "easeOutBounce",
+            animateRotate : true,
+            animateScale : false,
+            legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+        };
+        var chart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
+        return chart;
+    };
+
+    self.resizeAllGraphs = function(){
+        for (var i = 0; i < self.graphs.length; i++){
+            self.graphs[i].resize();
+        }
+    };
+    self.destroyAllGraphs = function(){
+        for (var i = 0; i < self.graphs.length; i++){
+            self.graphs[i].destroy();
+        }
+    }; 
+    self.updPeriod = function(_period){
+        for (var i = 0; i < self.types.length; i++) self.types[i].updPeriod(_period);
+    };
+    
+    self.updateDateRange = function(start, end){
+        for (var i = 0; i < self.types.length; i++) self.types[i].updDateRange(start, end);  
+    };
+}
