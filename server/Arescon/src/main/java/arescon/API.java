@@ -10,6 +10,7 @@ import io.undertow.server.handlers.form.FormData;
 import io.undertow.util.Headers;
 import io.undertow.util.Methods;
 import io.undertow.util.StatusCodes;
+import jdk.nashorn.internal.parser.JSONParser;
 import net.avkorneenkov.NetUtil;
 import net.avkorneenkov.SQLUtil;
 import net.avkorneenkov.undertow.DatabaseIdentityManager;
@@ -23,9 +24,7 @@ import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class API {
 
@@ -48,7 +47,7 @@ public class API {
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
-        response.append(period).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
+        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
         response.append(Data.TYPES[id - 1]).append("\",\"values\":");
 
         startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
@@ -86,7 +85,7 @@ public class API {
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"period\":\"");
-        response.append(period).append("\",\"type\":\"");
+        response.append(period * Data.PERIOD).append("\",\"type\":\"");
         response.append(id).append("\",\"values\":");
 
         startTime = (startTime) / 60000 / Data.PERIOD;
@@ -108,6 +107,59 @@ public class API {
         }
 
         return response.append(list.toString()).append("}").toString();
+    }
+
+    private String getHouseData( Set<Integer> types, long startTime, long endTime, int period, double multiplier ) {
+        period /= (int)Data.PERIOD;
+        if (period < 1) period = 1;
+        List<double[]> values = new ArrayList<>();
+        List<Long> dataStartTimes = new ArrayList<>();
+        List<Integer> dataTypes = new ArrayList<>();
+        long dataStartTime = Long.MAX_VALUE;
+        int topLength = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
+            if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
+            dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
+            values.add(Data.VALUES[i]);
+            dataTypes.add(Integer.parseInt(Data.TYPES[i]));
+        }
+
+        if (startTime < dataStartTime) startTime = dataStartTime;
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"types\":");
+        JSONArray list = new JSONArray();
+        for (int type : types) {
+            list.put(type);
+        }
+        response.append(list.toString()).append(",\"values\":");
+
+        startTime = (startTime) / 60000 / Data.PERIOD;
+        endTime = (endTime) / 60000 / Data.PERIOD;
+        dataStartTime = dataStartTime / 60000 / Data.PERIOD;
+
+        JSONArray arrays = new JSONArray();
+        for (int type : types) {
+            list = new JSONArray();
+            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    for (int k = 0; k < values.size(); ++k) {
+                        if (dataTypes.get(k) != type) continue;
+                        int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                        if (index < values.get(k).length && index >= 0) {
+                            value += values.get(k)[index];
+                        }
+                    }
+                }
+                list.put(value * multiplier);
+            }
+            arrays.put(list);
+        }
+
+        return response.append(arrays.toString()).append("}").toString();
     }
 
     public void deviceData( HttpServerExchange exchange, double multiplier ) throws IOException {
@@ -183,6 +235,49 @@ public class API {
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
             exchange.getResponseSender().send(getTypeData(id, startTime, endTime, periodTime, multiplier));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("");
+        }
+    }
+
+    public void houseData( HttpServerExchange exchange, double multiplier ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+        Deque<FormData.FormValue> types = postData.get("types[]");
+
+        if (types == null || types.isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        try {
+            Set<Integer> dataTypes = new LinkedHashSet<>();
+            for (FormData.FormValue type : types) {
+                dataTypes.add(Integer.parseInt(type.getValue()));
+            }
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getHouseData(dataTypes, startTime, endTime, periodTime, multiplier));
 
         } catch (Throwable e) {
             e.printStackTrace();

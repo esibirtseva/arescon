@@ -180,6 +180,12 @@ public class Main {
                 api.typeData(exchange, 1);
             }
         });
+        paths.put("house/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 1);
+            }
+        });
         paths.put("device/money", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -190,6 +196,12 @@ public class Main {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
                 api.typeData(exchange, 20);
+            }
+        });
+        paths.put("house/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 20);
             }
         });
         paths.put("deleteDevice", new HttpHandler() {

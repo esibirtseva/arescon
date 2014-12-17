@@ -47,8 +47,10 @@ net\avkorneenkov\undertow\CommonHandlers$1.class
 net\avkorneenkov\undertow\DatabaseIdentityManager$1.class
 net\avkorneenkov\DebugUtil.class
 arescon\Handlers$3.class
+arescon\Main$9.class
 net\avkorneenkov\undertow\CommonHandlers.class
 arescon\Handlers$1.class
+arescon\Main$10.class
 arescon\Handlers$14.class
 de\vogella\rss\read\RSSFeedParser.class
 arescon\Handlers$18.class
