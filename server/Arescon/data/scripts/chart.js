@@ -6,7 +6,8 @@ var typeMap = [
         colors: {
             fill: "rgba(151,187,205,0.2)",
             stroke: "rgba(151,187,205,1)"
-        }      
+        },
+        odnSelector: "#odnWater"
     },
     {
         type: 1,
@@ -15,7 +16,8 @@ var typeMap = [
         colors: {
             fill: "rgba(231, 75, 59, 0.2)",
             stroke: "rgba(231, 75, 59, 1)"
-        }      
+        } ,
+        odnSelector: "#odnWater"     
     },
     {
         type: 2,
@@ -23,7 +25,8 @@ var typeMap = [
         colors: {
             fill: "rgba(75, 231, 59, 0.2)",
             stroke: "rgba(75, 231, 59, 1)"
-        }      
+        },
+        odnSelector: "#odnGas"      
     },
     {
         type: 3,
@@ -31,7 +34,8 @@ var typeMap = [
         colors: {
             fill: "rgba(243, 156, 18, 0.2)",
             stroke: "rgba(243, 156, 18, 1)"
-        }      
+        }  ,
+        odnSelector: "#odnElectricity"    
     },
     {
         type: 4,
@@ -39,7 +43,8 @@ var typeMap = [
         colors: {
             fill: "rgba(231, 75, 59, 0.2)",
             stroke: "rgba(231, 75, 59, 1)"
-        }      
+        } ,
+        odnSelector: "#odnHeat"     
     },
 ]
 
@@ -89,7 +94,13 @@ window.onload = function(){
         window.location.href = "/404";//TODO: change request
     }
     else if (currentRoute === "odn"){
-        setAllOdnData();
+        currentPageData = new ODN([
+                new odnItem(0, daterangeStart, daterangeEnd, period),
+                new odnItem(2, daterangeStart, daterangeEnd, period),
+                new odnItem(3, daterangeStart, daterangeEnd, period),
+                new odnItem(4, daterangeStart, daterangeEnd, period),
+            ]);
+        currentPageData.updateData(true);
     }
 
 };
@@ -109,6 +120,7 @@ var filter_dataset = function(data){
     result.values = [];
     var max_number_of_datapoints = 30;
     var max_labels = 6;
+    console.log(data);
     var data_size = data.values.length;
     var segment_step = data_size < 15 ? 1 : data_size/max_labels;
     var current_segment = -1;
@@ -208,18 +220,7 @@ $('#period').change(function(e){
         currentPageData.updateData(true);
     } 
 });
-var setOdnTable = function(data, canvasID){
-    var tableID = "table_" + canvasID.substr(canvasID.lastIndexOf("odn") + 3).toLowerCase();
-    var current_tbody = $('#'+tableID+' tbody');
-    current_tbody.html("");
-    var data_size = data.values.length;
-    for(var i = 0; i < data_size; i++){
-        var current_date = new Date(i*data.period*60*1000 + data.start*1);
-        var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
-        var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
-        current_tbody.append("<tr><td>"+time_str+"</td><td>"+time_str+"</td><td>"+currentData.values[i].toFixed(2)+"</td><td>"+(currentData.values[i]/3).toFixed(2)+"</td></tr>")
-    }
-}
+
 $('.remove_device').click(function(e){
     bootbox.dialog({
         message: "Вы действительно хотите удалить прибор? Это может привести к потере данных, для восстановления которых Вам придется обратиться в службу технической поддержки.",
@@ -579,4 +580,133 @@ function MultTypes(arr_types){
     self.updateDateRange = function(start, end){
         for (var i = 0; i < self.types.length; i++) self.types[i].updDateRange(start, end);  
     };
+}
+
+
+//obj type+wholedata of type
+function odnItem(type, start, end, _period){
+    var self = this;
+    
+    Type.call(this, type, start, end, _period);
+
+    self.odnData = {};
+    self.selector = typeMap[type].odnSelector;
+
+    self.updateData = function(updateRepresentation){
+        self.isUpdated = false;
+        $.post('/type/money',{
+            'typeID' : self.id,
+            'start' : self.start+"",
+            'end' : self.end+"",
+            'period' : self.period
+        }, function(data){
+            var currentData = JSON.parse(data);
+            self.moneyData = currentData;
+            $.post('/house/money',{
+                'types' : [self.id],
+                'start' : self.start+"",
+                'end' : self.end+"",
+                'period' : self.period
+            }, function(data){
+                var currentData = JSON.parse(data);
+                console.log(currentData);
+                self.odnData = currentData;
+                self.odnData.values = currentData.values[0];
+                for (var i = self.odnData.values.length - 1; i >= 0; i--) {
+                    self.odnData.values[i] *= 5;
+                };
+                if (updateRepresentation){
+                    self.updateRepresentation();
+                }
+                // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
+                self.isUpdated = true;
+            });
+        });
+    };
+    self.updateRepresentation = function(){
+        self.destroyAllGraphs();
+        self.graphs.push(self.setLinearGraph());
+        self.setTable();
+    };
+
+    self.setLinearGraph = function(){
+        //daily
+        var canvas = $(self.selector);
+        ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+        var dataDailyUsage = {
+            labels: [],
+            datasets: [
+            ]   
+        };
+       
+        var data_points = filter_dataset(self.moneyData);
+        var type = self.id;
+        var dataset = {
+            label: typeMap[type].label,
+            fillColor: typeMap[type].colors.stroke,
+            strokeColor: typeMap[type].colors.stroke,
+            pointColor: typeMap[type].colors.stroke,
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: data_points.values
+        }
+        dataDailyUsage.datasets.push(dataset);
+        dataDailyUsage.labels = data_points.labels;
+
+        data_points = filter_dataset(self.odnData);
+        var datasetOdn = {
+            label: typeMap[type].label,
+            fillColor: typeMap[type].colors.fill,
+            strokeColor: typeMap[type].colors.stroke,
+            pointColor: typeMap[type].colors.stroke,
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: data_points.values
+        }
+        dataDailyUsage.datasets.push(datasetOdn);
+
+
+        optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        return chart;
+    };
+    self.setTable = function(){
+        var data = self.moneyData;
+        var tableID = "table_" + self.selector.substr(self.selector.lastIndexOf("odn") + 3).toLowerCase();
+        var current_tbody = $('#'+tableID+' tbody');
+        current_tbody.html("");
+        var data_size = data.values.length;
+        for(var i = 0; i < data_size; i++){
+            var current_date = new Date(i*data.period*60*1000 + data.start*1);
+            var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
+            var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
+            current_tbody.append("<tr><td>"+time_str+"</td><td>"+time_str+"</td><td>"+(data.values[i]).toFixed(2)+"</td><td>"+(self.odnData.values[i]).toFixed(2)+"</td></tr>")
+        }
+    };
+}
+function ODN(arr_odnitems){
+    var self = this;
+
+    self.odnItems = arr_odnitems;
+
+    self.updateData = function(updateRepresentation){
+        self.destroyAllGraphs();
+        for (var i = 0; i < self.odnItems.length; i++) self.odnItems[i].updateData(updateRepresentation);
+    };
+    self.updateRepresentation = function(){
+        for (var i = 0; i < self.odnItems.length; i++) self.odnItems[i].updateRepresentation();
+    };
+    self.destroyAllGraphs = function(){
+        for (var i = 0; i < self.odnItems.length; i++) self.odnItems[i].destroyAllGraphs();
+    }
 }
