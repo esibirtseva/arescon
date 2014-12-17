@@ -71,11 +71,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1957" max-vertical-offset="2907">
-              <caret line="203" column="44" selection-start-line="203" selection-start-column="44" selection-end-line="203" selection-end-column="44" />
+            <state vertical-scroll-proportion="0.34750462" vertical-offset="2362" max-vertical-offset="3009">
+              <caret line="236" column="30" selection-start-line="236" selection-start-column="30" selection-end-line="236" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -101,11 +101,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="API.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="API.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.29759705" vertical-offset="281" max-vertical-offset="935">
-              <caret line="244" column="95" selection-start-line="244" selection-start-column="95" selection-end-line="244" selection-end-column="95" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="935">
+              <caret line="242" column="5" selection-start-line="242" selection-start-column="5" selection-end-line="242" selection-end-column="5" />
               <folding>
                 <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
                 <element signature="method#getTypeData#0;class#API#0" expanded="false" />
@@ -184,8 +184,8 @@
         <option value="$PROJECT_DIR$/templates/user.device_info.htm" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Util.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Handlers.java" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
       </list>
     </option>
   </component>
@@ -1050,14 +1050,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1957" max-vertical-offset="2907">
-          <caret line="203" column="44" selection-start-line="203" selection-start-column="44" selection-end-line="203" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/avkorneenkov/undertow/CommonHandlers.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="283" max-vertical-offset="1428">
@@ -1076,8 +1068,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29759705" vertical-offset="281" max-vertical-offset="935">
-          <caret line="244" column="95" selection-start-line="244" selection-start-column="95" selection-end-line="244" selection-end-column="95" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="935">
+          <caret line="242" column="5" selection-start-line="242" selection-start-column="5" selection-end-line="242" selection-end-column="5" />
           <folding>
             <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
             <element signature="method#getTypeData#0;class#API#0" expanded="false" />
@@ -1096,6 +1088,14 @@
             <element signature="method#deleteUser#0;class#API#0" expanded="false" />
             <element signature="method#redirect#0;class#API#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34750462" vertical-offset="2362" max-vertical-offset="3009">
+          <caret line="236" column="30" selection-start-line="236" selection-start-column="30" selection-end-line="236" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
