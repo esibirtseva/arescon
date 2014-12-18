@@ -49,7 +49,7 @@ public class API {
                     value += data[k * len + j + i];
                 }
             }
-            profile[j / period] += value / iterations;
+            profile[j / period] = value / iterations;
         }
         return profile;
     }
@@ -64,7 +64,7 @@ public class API {
                     value += data[k * len + j + i];
                 }
             }
-            profile[j / period] = value / iterations;
+            profile[j / period] += value / iterations;
         }
     }
 
