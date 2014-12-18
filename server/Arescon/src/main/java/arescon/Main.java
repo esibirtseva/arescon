@@ -168,6 +168,30 @@ public class Main {
             return;
         }
 
+        paths.put("type/profile/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.typeProfile(exchange, 20);
+            }
+        });
+        paths.put("device/profile/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceProfile(exchange, 20);
+            }
+        });
+        paths.put("type/profile/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.typeProfile(exchange, 1);
+            }
+        });
+        paths.put("device/profile/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceProfile(exchange, 1);
+            }
+        });
         paths.put("device/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {

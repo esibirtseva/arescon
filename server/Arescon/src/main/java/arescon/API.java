@@ -38,6 +38,109 @@ public class API {
         this.random = new SecureRandom();
     }
 
+    double[] getProfile( double[] data, int period, int count ) {
+        double[] profile = new double[count];
+        int len = count * period;
+        int iterations = data.length / len;
+        for (int j = 0; j + period <= len; j += period) {
+            double value = 0.0;
+            for (int k = 0; k < iterations; ++k) {
+                for (int i = 0; i < period; ++i) {
+                    value += data[k * len + j + i];
+                }
+            }
+            profile[j / period] += value / iterations;
+        }
+        return profile;
+    }
+
+    void getProfile( double[] data, int period, int count, double[] profile ) {
+        int len = count * period;
+        int iterations = data.length / len;
+        for (int j = 0; j + period <= len; j += period) {
+            double value = 0.0;
+            for (int k = 0; k < iterations; ++k) {
+                for (int i = 0; i < period; ++i) {
+                    value += data[k * len + j + i];
+                }
+            }
+            profile[j / period] = value / iterations;
+        }
+    }
+
+    private String getTypeProfile( int id, long startTime, long endTime, int period, int count, double multiplier ) {
+        period /= (int)Data.PERIOD;
+        if (period < 1) period = 1;
+        List<double[]> values = new ArrayList<>();
+        List<Long> dataStartTimes = new ArrayList<>();
+        long dataStartTime = Long.MAX_VALUE;
+        int topLength = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (Data.TYPES[i].equals(Integer.toString(id))) {
+                if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
+                if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
+                dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
+                values.add(Data.VALUES[i]);
+            }
+        }
+
+        if (startTime < dataStartTime) startTime = dataStartTime;
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"type\":\"");
+        response.append(id).append("\",\"values\":");
+
+        startTime = (startTime) / 60000 / Data.PERIOD;
+        endTime = (endTime) / 60000 / Data.PERIOD;
+        dataStartTime = dataStartTime / 60000 / Data.PERIOD;
+
+        JSONArray list = new JSONArray();
+
+        double[] profile = new double[count];
+        Arrays.fill(profile, 0.0);
+
+        for (int i = 0; i < values.size(); ++i) {
+            getProfile(Arrays.copyOfRange(
+                    values.get(i),
+                    (int)Math.max(0, startTime - dataStartTimes.get(i)),
+                    (int)Math.min(values.get(i).length, endTime - dataStartTimes.get(i))),
+                period, count, profile);
+        }
+
+        for (double value : profile) {
+            list.put(value * multiplier / values.size());
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
+    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, double multiplier ) {
+        if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+
+        period /= (int) Data.PERIOD;
+        if (period < 1) period = 1;
+        double[] values = Data.VALUES[id - 1];
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
+        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
+
+        startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+        endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+
+        JSONArray list = new JSONArray();
+
+        for (double value : getProfile(
+                Arrays.copyOfRange(values, (int) startTime, (int) Math.min(endTime, values.length)),
+                period, count)) {
+            list.put(value * multiplier);
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
     private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
@@ -160,6 +263,92 @@ public class API {
         }
 
         return response.append(arrays.toString()).append("}").toString();
+    }
+
+    public void deviceProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        FormData.FormValue deviceID = postData.getFirst("deviceID");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+        FormData.FormValue count = postData.getFirst("count");
+
+        if (count == null || count.getValue().isEmpty() ||
+                deviceID == null || deviceID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(deviceID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+            int countNumber = Integer.parseInt(count.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getDeviceProfile(id, startTime, endTime, periodTime, countNumber, multiplier));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("");
+        }
+    }
+
+    public void typeProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        FormData.FormValue typeID = postData.getFirst("typeID");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+        FormData.FormValue count = postData.getFirst("count");
+
+        if (count == null || count.getValue().isEmpty() ||
+                typeID == null || typeID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(typeID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+            int countNumber = Integer.parseInt(count.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, multiplier));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("");
+        }
     }
 
     public void deviceData( HttpServerExchange exchange, double multiplier ) throws IOException {
