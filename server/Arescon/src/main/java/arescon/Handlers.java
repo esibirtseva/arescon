@@ -88,6 +88,14 @@ public class Handlers {
         return handler;
     }
 
+    public HttpHandler ureports( String file ) {
+        final HttpHandler handler = CommonHandlers.templatedPage(file
+
+        );
+
+        return handler;
+    }
+
     public HttpHandler dispatcher( String file ) {
         final HttpHandler handler = CommonHandlers.templatedPage(file,
                 new CommonHandlers.StringWriterHandler() {
