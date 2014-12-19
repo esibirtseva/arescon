@@ -183,6 +183,31 @@ public class Main {
                 api.deviceProfile(exchange, 20);
             }
         });
+        paths.put("flat/profile/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseProfile(exchange, 20);
+            }
+        });
+        paths.put("house/profile/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseProfile(exchange, 60);
+            }
+        });
+        paths.put("tszh/profile/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseProfile(exchange, 120);
+            }
+        });
+        paths.put("uk/profile/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseProfile(exchange, 240);
+            }
+        });
+
         paths.put("type/profile/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -195,42 +220,31 @@ public class Main {
                 api.deviceProfile(exchange, 1);
             }
         });
-        paths.put("device/values", new HttpHandler() {
+        paths.put("flat/profile/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
-                api.deviceData(exchange, 1);
+                api.houseProfile(exchange, 1);
             }
         });
-        paths.put("type/values", new HttpHandler() {
+        paths.put("house/profile/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
-                api.typeData(exchange, 1);
+                api.houseProfile(exchange, 3);
             }
         });
-        paths.put("flat/values", new HttpHandler() {
+        paths.put("tszh/profile/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
-                api.houseData(exchange, 1);
+                api.houseProfile(exchange, 6);
             }
         });
-        paths.put("house/values", new HttpHandler() {
+        paths.put("uk/profile/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
-                api.houseData(exchange, 3);
+                api.houseProfile(exchange, 12);
             }
         });
-        paths.put("tszh/values", new HttpHandler() {
-            @Override
-            public void handleRequest(HttpServerExchange exchange) throws Exception {
-                api.houseData(exchange, 6);
-            }
-        });
-        paths.put("uk/values", new HttpHandler() {
-            @Override
-            public void handleRequest(HttpServerExchange exchange) throws Exception {
-                api.houseData(exchange, 12);
-            }
-        });
+
         paths.put("device/money", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -267,6 +281,44 @@ public class Main {
                 api.houseData(exchange, 240);
             }
         });
+
+        paths.put("device/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceData(exchange, 1);
+            }
+        });
+        paths.put("type/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.typeData(exchange, 1);
+            }
+        });
+        paths.put("flat/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 1);
+            }
+        });
+        paths.put("house/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 3);
+            }
+        });
+        paths.put("tszh/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 6);
+            }
+        });
+        paths.put("uk/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.houseData(exchange, 12);
+            }
+        });
+
         paths.put("deleteDevice", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
