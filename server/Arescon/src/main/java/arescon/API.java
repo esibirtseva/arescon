@@ -325,16 +325,16 @@ public class API {
 
     public void deviceProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
         FormData postData = UndertowUtil.parsePostData(exchange);
         if (postData == null) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
-        FormData.FormValue deviceID = postData.getFirst("deviceID");
+        FormData.FormValue deviceID = postData.getFirst("id");
         FormData.FormValue start = postData.getFirst("start");
         FormData.FormValue end = postData.getFirst("end");
         FormData.FormValue period = postData.getFirst("period");
@@ -346,7 +346,7 @@ public class API {
                 end == null || end.getValue().isEmpty() ||
                 period == null || period.getValue().isEmpty())
         {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
@@ -362,7 +362,7 @@ public class API {
             } else if (periodTime == 1440) {
                 countNumber = 30;
             } else {
-                exchange.getResponseSender().send("");
+                exchange.getResponseSender().send("error");
                 return;
             }
 
@@ -371,22 +371,22 @@ public class API {
 
         } catch (Throwable e) {
             e.printStackTrace();
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
         }
     }
 
     public void typeProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
         FormData postData = UndertowUtil.parsePostData(exchange);
         if (postData == null) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
-        FormData.FormValue typeID = postData.getFirst("typeID");
+        FormData.FormValue typeID = postData.getFirst("id");
         FormData.FormValue start = postData.getFirst("start");
         FormData.FormValue end = postData.getFirst("end");
         FormData.FormValue period = postData.getFirst("period");
@@ -398,7 +398,7 @@ public class API {
                 end == null || end.getValue().isEmpty() ||
                 period == null || period.getValue().isEmpty())
         {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
@@ -414,7 +414,7 @@ public class API {
             } else if (periodTime == 1440) {
                 countNumber = 30;
             } else {
-                exchange.getResponseSender().send("");
+                exchange.getResponseSender().send("error");
                 return;
             }
 
@@ -423,18 +423,18 @@ public class API {
 
         } catch (Throwable e) {
             e.printStackTrace();
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
         }
     }
 
     public void houseProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
         FormData postData = UndertowUtil.parsePostData(exchange);
         if (postData == null) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
@@ -450,7 +450,7 @@ public class API {
                 end == null || end.getValue().isEmpty() ||
                 period == null || period.getValue().isEmpty())
         {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
@@ -469,7 +469,7 @@ public class API {
             } else if (periodTime == 1440) {
                 countNumber = 30;
             } else {
-                exchange.getResponseSender().send("");
+                exchange.getResponseSender().send("error");
                 return;
             }
 
@@ -478,22 +478,22 @@ public class API {
 
         } catch (Throwable e) {
             e.printStackTrace();
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
         }
     }
 
     public void deviceData( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
         FormData postData = UndertowUtil.parsePostData(exchange);
         if (postData == null) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
-        FormData.FormValue deviceID = postData.getFirst("deviceID");
+        FormData.FormValue deviceID = postData.getFirst("id");
         FormData.FormValue start = postData.getFirst("start");
         FormData.FormValue end = postData.getFirst("end");
         FormData.FormValue period = postData.getFirst("period");
@@ -503,7 +503,7 @@ public class API {
             end == null || end.getValue().isEmpty() ||
             period == null || period.getValue().isEmpty())
         {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
@@ -518,22 +518,22 @@ public class API {
 
         } catch (Throwable e) {
             e.printStackTrace();
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
         }
     }
 
     public void typeData( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
         FormData postData = UndertowUtil.parsePostData(exchange);
         if (postData == null) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
-        FormData.FormValue typeID = postData.getFirst("typeID");
+        FormData.FormValue typeID = postData.getFirst("id");
         FormData.FormValue start = postData.getFirst("start");
         FormData.FormValue end = postData.getFirst("end");
         FormData.FormValue period = postData.getFirst("period");
@@ -543,7 +543,7 @@ public class API {
                 end == null || end.getValue().isEmpty() ||
                 period == null || period.getValue().isEmpty())
         {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
@@ -558,18 +558,18 @@ public class API {
 
         } catch (Throwable e) {
             e.printStackTrace();
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
         }
     }
 
     public void houseData( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
         FormData postData = UndertowUtil.parsePostData(exchange);
         if (postData == null) {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
@@ -583,7 +583,7 @@ public class API {
                 end == null || end.getValue().isEmpty() ||
                 period == null || period.getValue().isEmpty())
         {
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
             return;
         }
 
@@ -601,7 +601,7 @@ public class API {
 
         } catch (Throwable e) {
             e.printStackTrace();
-            exchange.getResponseSender().send("");
+            exchange.getResponseSender().send("error");
         }
     }
 
