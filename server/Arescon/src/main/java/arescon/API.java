@@ -18,6 +18,7 @@ import net.avkorneenkov.undertow.UndertowUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -135,8 +136,10 @@ public class API {
                     period, count, profile);
         }
 
-        for (int i = 0; i < expected; ++i) {
-            list.put(profile[i % profile.length] * multiplier / values.size());
+        if (values.size() > 0) {
+            for (int i = 0; i < expected; ++i) {
+                list.put(profile[i % profile.length] * multiplier / values.size());
+            }
         }
 
         return response.append(list.toString()).append("}").toString();
@@ -189,8 +192,10 @@ public class API {
                 ++typeCount;
             }
 
-            for (int i = 0; i < expected; ++i) {
-                list.put(profile[i % profile.length] * multiplier / typeCount);
+            if (typeCount > 0) {
+                for (int i = 0; i < expected; ++i) {
+                    list.put(profile[i % profile.length] * multiplier / typeCount);
+                }
             }
 
             arrays.put(list);
