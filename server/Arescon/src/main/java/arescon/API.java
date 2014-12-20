@@ -68,7 +68,7 @@ public class API {
         }
     }
 
-    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, double multiplier ) {
+    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
         period /= (int) Data.PERIOD;
@@ -85,16 +85,18 @@ public class API {
 
         JSONArray list = new JSONArray();
 
-        for (double value : getProfile(
+        double[] profile = getProfile(
                 Arrays.copyOfRange(values, (int) startTime, (int) Math.min(endTime, values.length)),
-                period, count)) {
-            list.put(value * multiplier);
+                period, count);
+
+        for (int i = 0; i < expected; ++i) {
+            list.put(profile[i % profile.length] * multiplier);
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getTypeProfile( int id, long startTime, long endTime, int period, int count, double multiplier ) {
+    private String getTypeProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier ) {
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -133,14 +135,14 @@ public class API {
                     period, count, profile);
         }
 
-        for (double value : profile) {
-            list.put(value * multiplier / values.size());
+        for (int i = 0; i < expected; ++i) {
+            list.put(profile[i % profile.length] * multiplier / values.size());
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getHouseProfile( Set<Integer> types, long startTime, long endTime, int period, int count, double multiplier ) {
+    private String getHouseProfile( Set<Integer> types, long startTime, long endTime, int period, int count, int expected, double multiplier ) {
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -187,9 +189,10 @@ public class API {
                 ++typeCount;
             }
 
-            for (double value : profile) {
-                list.put(value * multiplier / typeCount);
+            for (int i = 0; i < expected; ++i) {
+                list.put(profile[i % profile.length] * multiplier / typeCount);
             }
+
             arrays.put(list);
         }
 
@@ -352,10 +355,19 @@ public class API {
             long startTime = Long.parseLong(start.getValue());
             long endTime = Long.parseLong(end.getValue());
             int periodTime = Integer.parseInt(period.getValue());
-            int countNumber = Integer.parseInt(count.getValue());
+            int countExpected = Integer.parseInt(count.getValue());
+            int countNumber;
+            if (periodTime == 60) {
+                countNumber = 24;
+            } else if (periodTime == 1440) {
+                countNumber = 30;
+            } else {
+                exchange.getResponseSender().send("");
+                return;
+            }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDeviceProfile(id, startTime, endTime, periodTime, countNumber, multiplier));
+            exchange.getResponseSender().send(getDeviceProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -395,10 +407,19 @@ public class API {
             long startTime = Long.parseLong(start.getValue());
             long endTime = Long.parseLong(end.getValue());
             int periodTime = Integer.parseInt(period.getValue());
-            int countNumber = Integer.parseInt(count.getValue());
+            int countExpected = Integer.parseInt(count.getValue());
+            int countNumber;
+            if (periodTime == 60) {
+                countNumber = 24;
+            } else if (periodTime == 1440) {
+                countNumber = 30;
+            } else {
+                exchange.getResponseSender().send("");
+                return;
+            }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, multiplier));
+            exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -441,10 +462,19 @@ public class API {
             long startTime = Long.parseLong(start.getValue());
             long endTime = Long.parseLong(end.getValue());
             int periodTime = Integer.parseInt(period.getValue());
-            int countNumber = Integer.parseInt(count.getValue());
+            int countExpected = Integer.parseInt(count.getValue());
+            int countNumber;
+            if (periodTime == 60) {
+                countNumber = 24;
+            } else if (periodTime == 1440) {
+                countNumber = 30;
+            } else {
+                exchange.getResponseSender().send("");
+                return;
+            }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getHouseProfile(dataTypes, startTime, endTime, periodTime, countNumber, multiplier));
+            exchange.getResponseSender().send(getHouseProfile(dataTypes, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
 
         } catch (Throwable e) {
             e.printStackTrace();
