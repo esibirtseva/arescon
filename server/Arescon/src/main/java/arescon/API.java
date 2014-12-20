@@ -68,6 +68,32 @@ public class API {
         }
     }
 
+    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, double multiplier ) {
+        if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+
+        period /= (int) Data.PERIOD;
+        if (period < 1) period = 1;
+        double[] values = Data.VALUES[id - 1];
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
+        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
+
+        startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+        endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+
+        JSONArray list = new JSONArray();
+
+        for (double value : getProfile(
+                Arrays.copyOfRange(values, (int) startTime, (int) Math.min(endTime, values.length)),
+                period, count)) {
+            list.put(value * multiplier);
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
     private String getTypeProfile( int id, long startTime, long endTime, int period, int count, double multiplier ) {
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
@@ -93,7 +119,6 @@ public class API {
 
         startTime = (startTime) / 60000 / Data.PERIOD;
         endTime = (endTime) / 60000 / Data.PERIOD;
-        dataStartTime = dataStartTime / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
 
@@ -102,10 +127,10 @@ public class API {
 
         for (int i = 0; i < values.size(); ++i) {
             getProfile(Arrays.copyOfRange(
-                    values.get(i),
-                    (int)Math.max(0, startTime - dataStartTimes.get(i)),
-                    (int)Math.min(values.get(i).length, endTime - dataStartTimes.get(i))),
-                period, count, profile);
+                            values.get(i),
+                            (int)Math.max(0, startTime - dataStartTimes.get(i)),
+                            (int)Math.min(values.get(i).length, endTime - dataStartTimes.get(i))),
+                    period, count, profile);
         }
 
         for (double value : profile) {
@@ -115,30 +140,60 @@ public class API {
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, double multiplier ) {
-        if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
-
-        period /= (int) Data.PERIOD;
+    private String getHouseProfile( Set<Integer> types, long startTime, long endTime, int period, int count, double multiplier ) {
+        period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
-        double[] values = Data.VALUES[id - 1];
-
-        StringBuilder response = new StringBuilder("{\"start\":");
-        response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
-        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
-        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
-
-        startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
-        endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
-
-        JSONArray list = new JSONArray();
-
-        for (double value : getProfile(
-                Arrays.copyOfRange(values, (int) startTime, (int) Math.min(endTime, values.length)),
-                period, count)) {
-            list.put(value * multiplier);
+        List<double[]> values = new ArrayList<>();
+        List<Long> dataStartTimes = new ArrayList<>();
+        List<Integer> dataTypes = new ArrayList<>();
+        long dataStartTime = Long.MAX_VALUE;
+        int topLength = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
+            if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
+            dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
+            values.add(Data.VALUES[i]);
+            dataTypes.add(Integer.parseInt(Data.TYPES[i]));
         }
 
-        return response.append(list.toString()).append("}").toString();
+        if (startTime < dataStartTime) startTime = dataStartTime;
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"types\":");
+        JSONArray list = new JSONArray();
+        for (int type : types) {
+            list.put(type);
+        }
+        response.append(list.toString()).append(",\"values\":");
+
+        startTime = (startTime) / 60000 / Data.PERIOD;
+        endTime = (endTime) / 60000 / Data.PERIOD;
+
+        JSONArray arrays = new JSONArray();
+        for (int type : types) {
+            list = new JSONArray();
+            double[] profile = new double[count];
+            int typeCount = 0;
+            Arrays.fill(profile, 0.0);
+
+            for (int i = 0; i < values.size(); ++i) {
+                if (dataTypes.get(i) != type) continue;
+                getProfile(Arrays.copyOfRange(
+                                values.get(i),
+                                (int)Math.max(0, startTime - dataStartTimes.get(i)),
+                                (int)Math.min(values.get(i).length, endTime - dataStartTimes.get(i))),
+                        period, count, profile);
+                ++typeCount;
+            }
+
+            for (double value : profile) {
+                list.put(value * multiplier / typeCount);
+            }
+            arrays.put(list);
+        }
+
+        return response.append(arrays.toString()).append("}").toString();
     }
 
     private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier ) {
@@ -344,6 +399,52 @@ public class API {
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
             exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, multiplier));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("");
+        }
+    }
+
+    public void houseProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+        Deque<FormData.FormValue> types = postData.get("types[]");
+        FormData.FormValue count = postData.getFirst("count");
+
+        if (count == null || count.getValue().isEmpty() ||
+                types == null || types.isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("");
+            return;
+        }
+
+        try {
+            Set<Integer> dataTypes = new LinkedHashSet<>();
+            for (FormData.FormValue type : types) {
+                dataTypes.add(Integer.parseInt(type.getValue()));
+            }
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+            int countNumber = Integer.parseInt(count.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getHouseProfile(dataTypes, startTime, endTime, periodTime, countNumber, multiplier));
 
         } catch (Throwable e) {
             e.printStackTrace();
