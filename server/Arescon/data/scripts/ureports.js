@@ -182,37 +182,35 @@ function Profile(id, start, end, period, selectiontype){
             selectiontype_str = 'uk';
         }
         $.post('/' + selectiontype_str + '/values',{
-                'deviceID' : self.id,
-                'start' : self.start+"",
-                'end' : self.end+"",
-                'period' : self.period
+            'id' : self.id,
+            'start' : self.start+"",
+            'end' : self.end+"",
+            'period' : self.period
+        }, function(data){
+            var currentData = JSON.parse(data);
+            self.valuesData = currentData;
+
+            $.post('/' + selectiontype_str + '/profile/values',{
+                'id' : self.id,
+                'start' : '0',
+                'end' : '999999999999999999',
+                'period' : self.period,
+                'count' : self.valuesData.values.length
             }, function(data){
                 var currentData = JSON.parse(data);
-                self.valuesData = currentData;
-
-                $.post('/' + selectiontype_str + '/profile/values',{
-                    'deviceID' : self.id,
-                    'start' : '0',
-                    'end' : '999999999999999999',
-                    'period' : self.period,
-                    'count' : self.valuesData.values.length
-                }, function(data){
-                    var currentData = JSON.parse(data);
-                    self.profileData = currentData;
-                    
-                    if (updateRepresentation){
-                        self.updateRepresentation();
-                    }
-                    // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
-                    self.isUpdated = true;
-                });    
+                self.profileData = currentData;
                 
+                if (updateRepresentation){
+                    self.updateRepresentation();
+                }
+                // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
+                self.isUpdated = true;
             });
-
+        });
     };
     self.updateRepresentation = function(){        
         self.destroyAllData();
-        //show neede blocks        
+        //show needed blocks        
         $(typeMap[self.profileData.type].selector).show();
 
         self.graphs.push(self.setLinearGraph());

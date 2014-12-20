@@ -410,7 +410,7 @@ function Type(typeID, start, end, _period){
     self.updateData = function(updateRepresentation){
         self.isUpdated = false;
         $.post('/type/values',{
-            'typeID' : self.id,
+            'id' : self.id,
             'start' : self.start+"",
             'end' : self.end+"",
             'period' : self.period
@@ -418,7 +418,7 @@ function Type(typeID, start, end, _period){
             var currentData = JSON.parse(data);
             self.valuesData = currentData;
             $.post('/type/money',{
-                'typeID' : self.id,
+                'id' : self.id,
                 'start' : self.start+"",
                 'end' : self.end+"",
                 'period' : self.period
@@ -594,7 +594,7 @@ function odnItem(type, start, end, _period){
     self.updateData = function(updateRepresentation){
         self.isUpdated = false;
         $.post('/type/money',{
-            'typeID' : self.id,
+            'id' : self.id,
             'start' : self.start+"",
             'end' : self.end+"",
             'period' : self.period
@@ -608,7 +608,6 @@ function odnItem(type, start, end, _period){
                 'period' : self.period
             }, function(data){
                 var currentData = JSON.parse(data);
-                console.log(currentData);
                 self.odnData = currentData;
                 self.odnData.values = currentData.values[0];
                 if (updateRepresentation){
