@@ -121,23 +121,19 @@ var buildPageData = function(reporttype, period, start, end){
 
     var selectiontype = getParameterByName('selectiontype');
 
-    if (reporttype === '1'){      
-        if (selectiontype === '5'){//device lvl
-            var id = getParameterByName('deviceid');
-            currentPageData = new Profile(id, start, end, period);      
-        }
-        else{
-            console.log('not implemented yet');//TODO implement
-        }      
+    if (reporttype === '1'){
+        var id = getParameterByName('id');
+        currentPageData = new Profile(id, start, end, period, selectiontype);     
     }else{//no PageData
         //let user watch previous reports
         return;
     }
     currentPageData.updateData(true);
 }
-function PageData(id, start, end, period){//root class
+function PageData(id, start, end, period, selectiontype){//root class
     var self = this;
 
+    self.selectiontype = selectiontype;
     self.id = id; //could be value and array both
     self.period = period;
     self.start = start;
@@ -161,47 +157,64 @@ function PageData(id, start, end, period){//root class
     };
 }
 
-function Profile(id, start, end, period){
+function Profile(id, start, end, period, selectiontype){
     var self = this;
 
-    PageData.call(this, id, start, end, period);  
+    PageData.call(this, id, start, end, period, selectiontype);  
 
     
 
     self.updateData = function(updateRepresentation){
         self.isUpdated = false;
-        $.post('/device/values',{
-            'deviceID' : self.id,
-            'start' : self.start+"",
-            'end' : self.end+"",
-            'period' : self.period
-        }, function(data){
-            var currentData = JSON.parse(data);
-            self.valuesData = currentData;
 
-            $.post('/device/profile/values',{
+        var selectiontype_str = '';
+        if(selectiontype === '5'){//device
+            selectiontype_str = 'device';
+        }else if (selectiontype === '4'){//type
+            selectiontype_str = 'type';
+        }else if (selectiontype === '3'){//flat
+            selectiontype_str = 'flat';
+        }else if (selectiontype === '2'){//house
+            selectiontype_str = 'house';
+        }else if (selectiontype === '1'){//tszh
+            selectiontype_str = 'tszh';
+        }else if (selectiontype === '0'){//uk
+            selectiontype_str = 'uk';
+        }
+        $.post('/' + selectiontype_str + '/values',{
                 'deviceID' : self.id,
-                'start' : '0',
-                'end' : '999999999999999999',
-                'period' : self.period,
-                'count' : self.valuesData.values.length
+                'start' : self.start+"",
+                'end' : self.end+"",
+                'period' : self.period
             }, function(data){
                 var currentData = JSON.parse(data);
-                self.profileData = currentData;
+                self.valuesData = currentData;
+
+                $.post('/' + selectiontype_str + '/profile/values',{
+                    'deviceID' : self.id,
+                    'start' : '0',
+                    'end' : '999999999999999999',
+                    'period' : self.period,
+                    'count' : self.valuesData.values.length
+                }, function(data){
+                    var currentData = JSON.parse(data);
+                    self.profileData = currentData;
+                    
+                    if (updateRepresentation){
+                        self.updateRepresentation();
+                    }
+                    // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
+                    self.isUpdated = true;
+                });    
                 
-                if (updateRepresentation){
-                    self.updateRepresentation();
-                }
-                // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
-                self.isUpdated = true;
-            });    
-            
-        });
+            });
 
     };
     self.updateRepresentation = function(){        
-        self.destroyAllData();        
+        self.destroyAllData();
+        //show neede blocks        
         $(typeMap[self.profileData.type].selector).show();
+
         self.graphs.push(self.setLinearGraph());
     };
     self.setLinearGraph = function(){        
@@ -214,7 +227,6 @@ function Profile(id, start, end, period){
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
         var dataDailyUsage = {
-            labels: data_points.labels,//labels,
             datasets: [
                 {
                     label: typeMap[self.profileData.type].label,
@@ -241,7 +253,7 @@ function Profile(id, start, end, period){
             data: data_points.values
 
         });
-
+        dataDailyUsage.labels = data_points.labels;
         optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
