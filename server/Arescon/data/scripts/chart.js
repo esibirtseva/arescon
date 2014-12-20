@@ -275,7 +275,7 @@ function Device(id, start, end, _period){
     self.updateData = function(updateRepresentation){
 
         $.post('/device/values',{
-            'deviceID' : self.id,
+            'id' : self.id,
             'start' : self.start+"",
             'end' : self.end+"",
             'period' : self.period
@@ -283,7 +283,7 @@ function Device(id, start, end, _period){
             var currentData = JSON.parse(data);
             self.valuesData = currentData;
             $.post('/device/money',{
-                'deviceID' : self.id,
+                'id' : self.id,
                 'start' : self.start+"",
                 'end' : self.end+"",
                 'period' : self.period
