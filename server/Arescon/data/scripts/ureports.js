@@ -121,11 +121,9 @@ var buildPageData = function(reporttype, period, start, end){
 
     var selectiontype = getParameterByName('selectiontype');
 
-    if (reporttype === '1'){
-        console.log("PROFILE");        
+    if (reporttype === '1'){      
         if (selectiontype === '5'){//device lvl
             var id = getParameterByName('deviceid');
-            console.log(id);
             currentPageData = new Profile(id, start, end, period);      
         }
         else{
@@ -166,30 +164,43 @@ function PageData(id, start, end, period){//root class
 function Profile(id, start, end, period){
     var self = this;
 
-    PageData.call(this, id, start, end, period);    
+    PageData.call(this, id, start, end, period);  
+
+    
 
     self.updateData = function(updateRepresentation){
         self.isUpdated = false;
-        $.post('/device/profile/values',{
+        $.post('/device/values',{
             'deviceID' : self.id,
             'start' : self.start+"",
             'end' : self.end+"",
-            'period' : self.period,
-            'count' : '24'
+            'period' : self.period
         }, function(data){
             var currentData = JSON.parse(data);
-            console.log(currentData);
-            self.profileData = currentData;
+            self.valuesData = currentData;
 
-            if (updateRepresentation){
-                self.updateRepresentation();
-            }
-            // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
-            self.isUpdated = true;
+            $.post('/device/profile/values',{
+                'deviceID' : self.id,
+                'start' : '0',
+                'end' : '999999999999999999',
+                'period' : self.period,
+                'count' : self.valuesData.values.length
+            }, function(data){
+                var currentData = JSON.parse(data);
+                self.profileData = currentData;
+                
+                if (updateRepresentation){
+                    self.updateRepresentation();
+                }
+                // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
+                self.isUpdated = true;
+            });    
+            
         });
+
     };
     self.updateRepresentation = function(){        
-        self.destroyAllData();
+        self.destroyAllData();        
         $(typeMap[self.profileData.type].selector).show();
         self.graphs.push(self.setLinearGraph());
     };
@@ -197,7 +208,6 @@ function Profile(id, start, end, period){
         var data_points = filter_dataset(self.profileData);
         //daily
         var selector = typeMap[self.profileData.type].selector + ' .linear';
-        console.log(selector);
         var canvas = $(selector);
         ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
@@ -208,9 +218,9 @@ function Profile(id, start, end, period){
             datasets: [
                 {
                     label: typeMap[self.profileData.type].label,
-                    fillColor: typeMap[self.profileData.type].colors.fill,
-                    strokeColor: typeMap[self.profileData.type].colors.stroke,
-                    pointColor: typeMap[self.profileData.type].colors.stroke,
+                    fillColor: 'rgb(244, 247, 251)',
+                    strokeColor: 'rgb(216, 219, 223)',
+                    pointColor: 'rgb(216, 219, 223)',
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(220,220,220,1)",
@@ -218,6 +228,19 @@ function Profile(id, start, end, period){
                 }
             ]   
         };
+        //values
+        data_points = filter_dataset(self.valuesData);
+        dataDailyUsage.datasets.push({
+            label: typeMap[self.valuesData.type].label,
+            fillColor: typeMap[self.valuesData.type].colors.fill,
+            strokeColor: typeMap[self.valuesData.type].colors.stroke,
+            pointColor: typeMap[self.valuesData.type].colors.stroke,
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: data_points.values
+
+        });
 
         optionsDailyUsage = {
             scaleShowGridLines : false,
@@ -228,6 +251,14 @@ function Profile(id, start, end, period){
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
         return chart;
     };
+
+    self.updateControls = function(){
+        $('#period option').hide()
+                           .removeAttr('selected');
+        $('#period .report_profile').show();
+        $('#period .report_profile').first().attr('selected','selected');
+    };
+    self.updateControls();
 }
 var filter_dataset = function(data){
     var result = {};
@@ -235,7 +266,6 @@ var filter_dataset = function(data){
     result.values = [];
     var max_number_of_datapoints = 30;
     var max_labels = 6;
-    console.log(data);
     var data_size = data.values.length;
     var segment_step = data_size < 15 ? 1 : data_size/max_labels;
     var current_segment = -1;
@@ -245,7 +275,6 @@ var filter_dataset = function(data){
     var temp_sum = 0;
     var temp_counter = 0;
     for (var i = 0; i < data_size; i++){
-        // console.log(getStrDate(new Date(i*data.period*60*1000 + data.start*1)) + " " + data.period);
         if (Math.floor(i/point_segment_step) > current_point_segment){
             current_point_segment++;
             var label = " ";
