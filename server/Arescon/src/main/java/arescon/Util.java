@@ -96,6 +96,7 @@ public class Util {
             switch (relPath) {
                 case "1": // water
                     dataMap.put("deviceID", "1");
+                    dataMap.put("typeID", "");
                     dataMap.put("image", "background-image:url(/images/water.jpg)");
                     dataMap.put("name", "Счетчик Techem AP");
                     dataMap.put("description", "Водосчетчик Techem серий АР для горячей и холодной воды");
@@ -103,6 +104,7 @@ public class Util {
                     break;
                 case "2": // fire
                     dataMap.put("deviceID", "2");
+                    dataMap.put("typeID", "");
                     dataMap.put("image", "background-image:url(/images/electro.jpg)");
                     dataMap.put("name", "Счетчик однофазный СОЭ-52");
                     dataMap.put("description", "Электросчётчики СОЭ-52 предназначены для учёта потребления " +
@@ -111,6 +113,7 @@ public class Util {
                     break;
                 case "3": // earth
                     dataMap.put("deviceID", "3");
+                    dataMap.put("typeID", "");
                     dataMap.put("image", "background-image:url(/images/gas.jpg)");
                     dataMap.put("name", "Счетчик ГРАНД-25Т");
                     dataMap.put("description", "Электронные бытовые счетчики газа ГРАНД-25Т предназначены для " +
@@ -120,6 +123,7 @@ public class Util {
                     break;
                 case "4": // air
                     dataMap.put("deviceID", "4");
+                    dataMap.put("typeID", "");
                     dataMap.put("image", "background-image:url(/images/water-2.jpeg)");
                     dataMap.put("name", "Счетчик СВ-15 Х \"МЕТЕР\"");
                     dataMap.put("description", "Счетчики воды крыльчатые СВ-15Х (одноструйные, сухоходные) " +
@@ -129,6 +133,7 @@ public class Util {
                     break;
                 case "water":
                     dataMap.put("deviceID", "");
+                    dataMap.put("typeID", "01");
                     dataMap.put("image", "background-color:rgb(41,128,184)");
                     dataMap.put("name", "Вода");
                     dataMap.put("description", "Данные обо всех приборах данной услуги");
@@ -136,6 +141,7 @@ public class Util {
                     break;
                 case "gas":
                     dataMap.put("deviceID", "");
+                    dataMap.put("typeID", "2");
                     dataMap.put("image", "background-color:rgb(45,204,112)");
                     dataMap.put("name", "Газ");
                     dataMap.put("description", "Данные обо всех приборах данной услуги");
@@ -143,6 +149,7 @@ public class Util {
                     break;
                 case "heat":
                     dataMap.put("deviceID", "");
+                    dataMap.put("typeID", "4");
                     dataMap.put("image", "background-color:rgb(231,75,59)");
                     dataMap.put("name", "Отопление");
                     dataMap.put("description", "Данные обо всех приборах данной услуги");
@@ -150,6 +157,7 @@ public class Util {
                     break;
                 case "electricity":
                     dataMap.put("deviceID", "");
+                    dataMap.put("typeID", "3");
                     dataMap.put("image", "background-color:rgb(243,156,18)");
                     dataMap.put("name", "Электричество");
                     dataMap.put("description", "Данные обо всех приборах данной услуги");
@@ -157,6 +165,7 @@ public class Util {
                     break;
                 case "coldwater":
                     dataMap.put("deviceID", "");
+                    dataMap.put("typeID", "0");
                     dataMap.put("image", "background-color:rgb(41,128,184)");
                     dataMap.put("name", "Холодная вода");
                     dataMap.put("description", "Данные обо всех приборах данной услуги");
@@ -164,6 +173,7 @@ public class Util {
                     break;
                 case "hotwater":
                     dataMap.put("deviceID", "");
+                    dataMap.put("typeID", "1");
                     dataMap.put("image", "background-color:rgb(41,128,184)");
                     dataMap.put("name", "Горячая вода");
                     dataMap.put("description", "Данные обо всех приборах данной услуги");
