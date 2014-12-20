@@ -89,8 +89,13 @@ public class Handlers {
     }
 
     public HttpHandler ureports( String file ) {
-        final HttpHandler handler = CommonHandlers.templatedPage(file
-
+        final HttpHandler handler = CommonHandlers.templatedPage(file,
+            new CommonHandlers.StringWriterHandler() {
+                @Override
+                public void execute(StringWriter writer, HttpServerExchange exchange) {
+                    util.getUserInfo(writer, exchange);
+                }
+            }
         );
 
         return handler;
@@ -121,12 +126,6 @@ public class Handlers {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getUserInfo(writer, exchange);
-                    }
-                },
-                new CommonHandlers.StringWriterHandler() {
-                    @Override
-                    public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getActiveDevice("water", "active_b", writer, exchange);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
