@@ -9,4 +9,9 @@
         <h4>${map["name"]}</h4>
         <p>${map["description"]}</p>
     </div>
+    <p>
+        <#if map["deviceID"] != "">
+            <a href='/ureports?selectiontype=5&deviceid=${map["deviceID"]}'>Получить подробный отчёт</a>
+        </#if>
+    </p>
 </div>

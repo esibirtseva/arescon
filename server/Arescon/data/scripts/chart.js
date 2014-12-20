@@ -48,7 +48,6 @@ var typeMap = [
     },
 ]
 
-var currentData;//odn
 var currentRoute;//odn
 var odnDataSet = [];
 var period = 1440;//default
@@ -612,9 +611,6 @@ function odnItem(type, start, end, _period){
                 console.log(currentData);
                 self.odnData = currentData;
                 self.odnData.values = currentData.values[0];
-                for (var i = self.odnData.values.length - 1; i >= 0; i--) {
-                    self.odnData.values[i] *= 5;
-                };
                 if (updateRepresentation){
                     self.updateRepresentation();
                 }
