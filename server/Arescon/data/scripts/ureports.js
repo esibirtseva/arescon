@@ -120,6 +120,7 @@ $('#period').change(function(e){
 var buildPageData = function(reporttype, period, start, end){
 
     var selectiontype = getParameterByName('selectiontype');
+    
 
     if (reporttype === '1'){
         var id = getParameterByName('id');
@@ -167,6 +168,7 @@ function Profile(id, start, end, period, selectiontype){
     self.updateData = function(updateRepresentation){
         self.isUpdated = false;
 
+        
         var selectiontype_str = '';
         if(selectiontype === '5'){//device
             selectiontype_str = 'device';
@@ -174,26 +176,36 @@ function Profile(id, start, end, period, selectiontype){
             selectiontype_str = 'type';
         }else if (selectiontype === '3'){//flat
             selectiontype_str = 'flat';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
         }else if (selectiontype === '2'){//house
             selectiontype_str = 'house';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
         }else if (selectiontype === '1'){//tszh
             selectiontype_str = 'tszh';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
         }else if (selectiontype === '0'){//uk
             selectiontype_str = 'uk';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
         }
+
         $.post('/' + selectiontype_str + '/values',{
             'id' : self.id,
             'start' : self.start+"",
             'end' : self.end+"",
             'period' : self.period
         }, function(data){
+            console.log(data);
             var currentData = JSON.parse(data);
             self.valuesData = currentData;
 
             $.post('/' + selectiontype_str + '/profile/values',{
                 'id' : self.id,
                 'start' : '0',
-                'end' : '999999999999999999',
+                'end' : '99999999999999',
                 'period' : self.period,
                 'count' : self.valuesData.values.length
             }, function(data){
@@ -208,17 +220,65 @@ function Profile(id, start, end, period, selectiontype){
             });
         });
     };
+
+    self.multipleDataFetch = function(selectiontype_str, updateRepresentation){
+        $.post('/' + selectiontype_str + '/values',{
+            'types' : [0,1,2,3,4],
+            'start' : self.start+"",
+            'end' : self.end+"",
+            'period' : self.period
+        }, function(data){
+            // console.log(data);
+            var currentData = JSON.parse(data);
+            self.valuesData = currentData;
+            $.post('/' + selectiontype_str + '/profile/values',{
+                'types' : [0,1,2,3,4],
+                'start' : '0',
+                'end' : '99999999999999',
+                'period' : self.period,
+                'count' : self.valuesData.values[0].length
+            }, function(data){
+                console.log(data);
+                var currentData = JSON.parse(data);
+                self.profileData = currentData;
+                
+                if (updateRepresentation){
+                    self.updateRepresentation();
+                }
+                self.isUpdated = true;
+            });
+        });
+    };
     self.updateRepresentation = function(){        
         self.destroyAllData();
-        //show needed blocks        
-        $(typeMap[self.profileData.type].selector).show();
-
-        self.graphs.push(self.setLinearGraph());
+        if(selectiontype === '5' || selectiontype === '4'){//one
+            $(typeMap[self.profileData.type].selector).show();
+            $('.table,.share').hide();
+            self.graphs.push(self.setLinearGraph(self.profileData, self.valuesData));
+        }else{//multiple
+            $('.data_block').show();
+            $('.table,.share').hide();
+            for (var i = 0; i < self.profileData.values.length; i++){
+                self.graphs.push(self.setLinearGraph({
+                    type : i,
+                    start : self.profileData.start,
+                    period : self.profileData.period,
+                    values : self.profileData.values[i]
+                }, {
+                    type : i,
+                    start : self.valuesData.start,
+                    period : self.valuesData.period,
+                    values : self.valuesData.values[i]
+                }));
+            }
+            
+        } 
     };
-    self.setLinearGraph = function(){        
-        var data_points = filter_dataset(self.profileData);
+    self.setLinearGraph = function(profileData, valuesData){        
+        var data_points = filter_dataset(profileData);
         //daily
-        var selector = typeMap[self.profileData.type].selector + ' .linear';
+        var selector = typeMap[profileData.type].selector + ' .linear';
+        console.log(selector);
         var canvas = $(selector);
         ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
@@ -227,7 +287,7 @@ function Profile(id, start, end, period, selectiontype){
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: typeMap[self.profileData.type].label,
+                    label: typeMap[profileData.type].label,
                     fillColor: 'rgb(244, 247, 251)',
                     strokeColor: 'rgb(216, 219, 223)',
                     pointColor: 'rgb(216, 219, 223)',
@@ -239,12 +299,12 @@ function Profile(id, start, end, period, selectiontype){
             ]   
         };
         //values
-        data_points = filter_dataset(self.valuesData);
+        data_points = filter_dataset(valuesData);
         dataDailyUsage.datasets.push({
-            label: typeMap[self.valuesData.type].label,
-            fillColor: typeMap[self.valuesData.type].colors.fill,
-            strokeColor: typeMap[self.valuesData.type].colors.stroke,
-            pointColor: typeMap[self.valuesData.type].colors.stroke,
+            label: typeMap[valuesData.type].label,
+            fillColor: typeMap[valuesData.type].colors.fill,
+            strokeColor: typeMap[valuesData.type].colors.stroke,
+            pointColor: typeMap[valuesData.type].colors.stroke,
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(220,220,220,1)",
