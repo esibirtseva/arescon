@@ -186,6 +186,9 @@ var buildPageData = function(reporttype, period, start, end){
         var id = getParameterByName('id');
         $('.frequencypicker').hide();
         currentPageData = new Share(id, start, end, period, selectiontype); 
+    }else if (reporttype === '5'){
+        var id = getParameterByName('id');
+        currentPageData = new ODN(id, start, end, period, selectiontype); 
     }else{//no PageData
         //let user watch previous reports
         console.log("nothing to do here");
@@ -867,6 +870,277 @@ function Share(id, start, end, period, selectiontype){
         var chart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
         return chart;
     };
+}
+function ODN(id, start, end, period, selectiontype){
+    var self = this;
+
+    PageData.call(this, id, start, end, period, selectiontype); 
+
+    self.valuesData = [];
+    self.dates = [];
+    self.requstStatus = [];
+  
+    self.updateData = function(updateRepresentation){
+        self.isUpdated = false;
+        self.valuesData = [];
+        self.requstStatus = [];
+        //post for each data (separately) and push result to vdata[]
+        //on end upd repr
+        var selectiontype_str = '';
+        if(selectiontype === '5'){//device
+            selectiontype_str = 'device';
+        }else if (selectiontype === '4'){//type
+            selectiontype_str = 'type';
+        }else if (selectiontype === '3'){//flat
+            selectiontype_str = 'flat';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
+        }else {
+            return;
+        }
+        //single graph multiple data fetch
+        $.post('/' + selectiontype_str + '/money',{
+            'id' : self.id,
+            'start' : self.start+"",
+            'end' : self.end+"",
+            'period' : self.period
+        }, function(data){
+            console.log(data);
+            var currentData = JSON.parse(data);
+            self.valuesData = currentData;
+            self.requstStatus.push(true);
+
+            $.post('/house/money',{
+                'types' : [self.id],
+                'start' : self.start+"",
+                'end' : self.end+"",
+                'period' : self.period
+            }, function(data){
+                console.log(data);
+                var currentData = JSON.parse(data);
+                self.profileData = currentData;
+                self.requstStatus.push(true);
+            });
+        });
+        var shouldContinue = true;
+        var periodicFunction = setInterval(function(){
+            if (!shouldContinue) clearInterval(periodicFunction);
+            shouldContinue = false;
+            if(self.requstStatus.length === self.dates.length + 2){
+                self.updateRepresentation();
+            } else{
+                shouldContinue = true;
+            }
+        },10);        
+    };
+
+    self.multipleDataFetch = function(selectiontype_str, updateRepresentation){
+        //multiple graph multiple data fetch
+        $.post('/' + selectiontype_str + '/money',{
+            'types' : [0,1,2,3,4],
+            'start' : self.start+"",
+            'end' : self.end+"",
+            'period' : self.period
+        }, function(data){
+            var currentData = JSON.parse(data);
+            self.valuesData = currentData;
+            self.requstStatus.push(true);
+
+            $.post('/house/money',{
+                'types' : [0,1,2,3,4],
+                'start' : self.start+"",
+                'end' : self.end+"",
+                'period' : self.period
+            }, function(data){
+                var currentData = JSON.parse(data);
+                self.profileData = currentData;
+                self.requstStatus.push(true);
+            });
+        });
+        var shouldContinue = true;
+        var periodicFunction = setInterval(function(){
+            if (!shouldContinue) clearInterval(periodicFunction);
+            shouldContinue = false;
+            if(self.requstStatus.length === self.dates.length + 2){
+                // console.log("RETRIEVED");
+                self.updateRepresentation();
+            } else{
+                shouldContinue = true;
+            }
+        },10); 
+    };
+    self.updateRepresentation = function(){        
+        self.destroyAllData();
+        if(selectiontype === '5' || selectiontype === '4'){//one
+            
+            $(typeMap[self.profileData.types[0]].selector).show();
+
+            $('.table,.share').show();
+
+            self.graphs.push(self.setLinearGraph(self.profileData, self.valuesData, -1));
+            var selector = typeMap[self.profileData.types[0]].selector + ' table';
+            self.setTable(selector, self.profileData.values[0], self.valuesData.values);
+            selector = typeMap[self.profileData.types[0]].selector + ' .share';
+            self.graphs.push(self.setShareGraph(selector, self.profileData.values[0], self.valuesData.values, self.profileData.types[0]));
+        }else{//multiple
+            $('.data_block').show();
+            $('#type_share').hide();
+
+            $('.table,.share').show();
+            for(var i = 0; i < self.profileData.types.length; i++)
+                $(typeMap[self.profileData.types[i]].selector).show();
+
+            for (var i = 0; i < self.profileData.values.length; i++){
+                self.graphs.push(self.setLinearGraph(self.profileData, self.valuesData, i));
+                var selector = typeMap[self.profileData.types[i]].selector + ' table';
+                self.setTable(selector, self.profileData.values[i], self.valuesData.values[i]);
+                selector = typeMap[self.profileData.types[i]].selector + ' .share';
+            self.graphs.push(self.setShareGraph(selector, self.profileData.values[i], self.valuesData.values[i], self.profileData.types[i]));
+            }
+            
+        } 
+    };
+    self.setLinearGraph = function(profileData, valuesData, type){  
+        console.log(profileData);
+        console.log(valuesData);
+        console.log(type);
+        var data_points = filter_dataset({
+            type: type == -1 ? profileData.type : type,
+            start: profileData.start,
+            period: profileData.period,
+            values: type == -1 ? profileData.values[0] : profileData.values[type]
+        });
+        //daily
+        var selector = typeMap[type == -1 ? profileData.types[0] : type].selector + ' .linear';
+        var canvas = $(selector);
+        ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+        var dataDailyUsage = {
+            datasets: [
+                {
+                    label: typeMap[type == -1 ? profileData.types[0] : type].label,
+                    fillColor: 'rgb(244, 247, 251)',
+                    strokeColor: 'rgb(216, 219, 223)',
+                    pointColor: 'rgb(216, 219, 223)',
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+                }
+            ]   
+        };
+        //values
+        if (type == -1){
+            type = profileData.types[0];
+                data_points = filter_dataset(valuesData);
+                dataDailyUsage.datasets.push({
+                    label: typeMap[type].label,
+                    fillColor: typeMap[type].colors.fill,
+                    strokeColor: typeMap[type].colors.stroke,
+                    pointColor: typeMap[type].colors.stroke,
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+
+                });
+            
+        }else{
+            data_points = filter_dataset({
+                type: type,
+                start: self.valuesData.start,
+                period: profileData.period,
+                values: valuesData.values[type]
+            });
+            dataDailyUsage.datasets.push({
+                label: typeMap[type].label,
+                fillColor: typeMap[type].colors.fill,
+                strokeColor: typeMap[type].colors.stroke,
+                pointColor: typeMap[type].colors.stroke,
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: data_points.values
+
+            });
+        }
+        
+        dataDailyUsage.labels = data_points.labels;
+        optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        return chart;
+    };
+
+    self.updateControls = function(){
+        $('#period option').hide()
+                           .removeAttr('selected');
+        $('#period .report_profile').show();
+        $('#period .report_profile').first().attr('selected','selected');
+    };
+    self.updateControls();
+
+    self.setTable = function(selector, dataODN, dataMoney){//arrs with values
+        var current_tbody = $(selector+' tbody');
+        console.log(selector);
+        current_tbody.html("");
+        var data_size = dataODN.length;
+        for(var i = 0; i < data_size; i++){
+            var current_date = new Date(i*self.period*60*1000 + self.start*1);
+            var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
+            var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
+            console.log(i + " " + data_size);
+            current_tbody.append("<tr><td>"+time_str+"</td><td>"+time_str+"</td><td>"+(dataMoney[i]).toFixed(2)+"</td><td>"+(dataODN[i]).toFixed(2)+"</td></tr>")
+        }
+    };
+    self.setShareGraph = function(selector, dataODN, dataMoney, type){
+        var canvas = $(selector);
+        var ctxShareUsage = canvas.get(0).getContext("2d");
+        ctxShareUsage.canvas.width = canvas.parent().width();
+        
+        var dataShareUsage = [];
+        
+        var sum = 0;
+        for(var j = 0; j < dataODN.length; j++){
+            sum += dataODN[j];
+        }
+        dataShareUsage.push({
+            value: toFixed(sum, 2),
+            color: typeMap[type].colors.fill,
+            highlight: typeMap[type].colors.stroke,
+            label: "Общедомовые расходы"
+        });
+        sum = 0;
+        for(var j = 0; j < dataMoney.length; j++){
+            sum += dataMoney[j];
+        }
+        dataShareUsage.push({
+            value: toFixed(sum, 2),
+            color: typeMap[type].colors.fillDarken,
+            highlight: typeMap[type].colors.stroke,
+            label: "Ваши расходы"
+        });
+        var optionsShareUsage = {
+            segmentShowStroke : true,
+            segmentStrokeColor : "#fff",
+            segmentStrokeWidth : 5,
+            percentageInnerCutout : 50,
+            animationSteps : 100,
+            animationEasing : "easeOutBounce",
+            animateRotate : true,
+            animateScale : false,
+            legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+        };
+        var chart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
+        return chart;
+    };
+
 }
 var filter_dataset = function(data){
     var result = {};
