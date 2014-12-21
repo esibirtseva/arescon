@@ -56,8 +56,9 @@ var houses_data = [
         waste: 13784
     }
 ];
-getBaloonStr = function(keys, labels, values, href){
+getBaloonStr = function(keys, labels, values, href, alertText){
     var res=[];
+    res.push("<p><strong>"+alertText+"</strong></p>");
     res.push("<table>");
     res.push("<tbody>");
     for (var i=0; i < labels.length; ++i) {
@@ -92,9 +93,14 @@ function Dataset(){
                     income = $(this).children('div').eq(0).data('income'),
                     outcome = $(this).children('div').eq(1).data('outcome'),
                     balance = $(this).children('div').eq(2).data('balance');
-                    coords = [$(this).data('x'), $(this).data('y')];
+                    coords = [$(this).data('x'), $(this).data('y')],
+                    alert = $(this).data('alert');
                 // console.log(id + " " + name + " " + income + " " + outcome + " " + balance);    
                 var house = new House(id, income, outcome, balance, coords, name);
+                if (alert){
+                    house.alert = true;
+                    house.alertText = alert;
+                }
                 tszh.children.push(house);
             });
         });
@@ -183,7 +189,7 @@ function House(id, income, outcome, balance, coords, name){
     self.name = name;
     self.placemark = null;
     self.defaultColor;
-    self.alert = null;
+    self.alert = false;
     self.alertText = "Текст алерта";
     console.log(id + " " + coords + " " + name + " " + income + " " + outcome + " " + balance);   
 
@@ -200,17 +206,19 @@ function House(id, income, outcome, balance, coords, name){
         var color;
 
         if(self.balance > 0) {
-            color = 'islands#greenDotIcon';
+            color = 'islands#greenIcon';
         } else if(self.balance < 0) {
-            color = 'islands#redDotIcon';
+            color = 'islands#redIcon';
         } else if(self.balance == 0) {
-            color = 'islands#yellowDotIcon';
+            color = 'islands#yellowIcon';
         }
+        
+        if(self.alert) color = 'islands#orangeDotIcon';
         self.defaultColor = color;
 
         var myPlacemark = new ymaps.Placemark(self.coords,{
             balloonContentHeader: self.name,
-            balloonContentBody: getBaloonStr(["water","gas","electricity", "heat"],["Вода","Газ","Электричество", "Отопление"],[11237,2565,3487,-432], "/dreports?selectiontype=2&id="+self.id)//TODO: change implementation
+            balloonContentBody: getBaloonStr(["water","gas","electricity", "heat"],["Вода","Газ","Электричество", "Отопление"],[11237,2565,3487,-432], "/dreports?selectiontype=2&id="+self.id, self.alert?self.alertText:"")//TODO: change implementation
         },{
             preset: color
         });
@@ -254,7 +262,6 @@ function House(id, income, outcome, balance, coords, name){
         // });
 
         self.placemark =  myPlacemark;
-        myMap.geoObjects.add(self.placemark);
     };
 
     self.setAlert = function(){
@@ -329,11 +336,11 @@ window.onload = function(){
             color;
 
         if(balance > 0) {
-            color = 'islands#greenDotIcon';
+            color = 'islands#greenIcon';
         } else if(balance < 0) {
-            color = 'islands#redDotIcon';
+            color = 'islands#redIcon';
         } else if(balance == 0) {
-            color = 'islands#yellowDotIcon';
+            color = 'islands#yellowIcon';
         }
 
         var myPlacemark = new ymaps.Placemark(searchPointById(house.point).coords,{
@@ -392,7 +399,7 @@ window.onload = function(){
         return myPlacemark;
     }
     /*var addAlert = function(coords){
-        var preset = 'islands#redCircleDotIcon';
+        var preset = 'islands#redCircleIcon';
         var myPlacemark = new ymaps.Placemark(coords,{
             // balloonContentHeader: house.name,
             // balloonContentBody: getBaloonStr(["Вода","Газ","Электричество", "Отопление"],[11237,2565,3487,-432])
@@ -415,9 +422,7 @@ window.onload = function(){
 
 
     $('.company>.item>p').click(function(){
-        for (var i = 0; i < indexes_of_removed.length; i++){
-            myMap.geoObjects.add(points[indexes_of_removed[i]].placemark);
-        }
+        dataset.removeHighlight();
     });
     $('.tszhs>.item>p').click(function(){
         console.log('tszh click');
@@ -437,7 +442,7 @@ window.onload = function(){
     var highlight_points = function(arr_of_ids){
         for(var i = 0; i < points.length; i++){
             if(arr_of_ids.indexOf(points[i].id) > -1){
-                points[i].placemark.options.set('preset', 'islands#redCircleDotIcon');
+                points[i].placemark.options.set('preset', 'islands#redCircleIcon');
                 console.log(points[i].placemark.options.set('zIndex', -1));
             }
         }
@@ -453,7 +458,7 @@ window.onload = function(){
     }
     var points_to_default = function(){
         for(var i = 0; i < points.length; i++){
-            points[i].placemark.options.set('preset', 'islands#blueCircleDotIcon');
+            points[i].placemark.options.set('preset', 'islands#blueCircleIcon');
 
         }
     }
