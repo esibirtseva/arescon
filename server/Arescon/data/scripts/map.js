@@ -195,7 +195,7 @@ function House(id, income, outcome, balance, coords, name){
 
     self.highlight = function(){
         console.log("house highlight");
-        self.placemark.options.set('preset', 'islands#blueIcon');
+        self.placemark.options.set('preset', 'islands#blueDotIcon');
     };
     self.removeHighlight = function(){
         self.placemark.options.set('preset', self.defaultColor);  
