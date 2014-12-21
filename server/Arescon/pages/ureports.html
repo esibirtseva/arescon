@@ -71,7 +71,27 @@
                   <option value="302400">Месяц</option>
                 </select>
               </div>
+              <div id="add_interval" class="btn btn-success" style="display: none;">Добавить интервал</div>
+              <div class="datepicker form-inline" style="display: none;">
+                <label for="date_filter">Дополнительный интервал:</label>
+                <input type="text" name="datepicker1" class="form-control" placeholder="Выберите интервал">
+                <div class="btn btn-danger">удалить</div>
+              </div>
+              <div class="datepicker form-inline" style="display: none;">
+                <label for="date_filter">Дополнительный интервал:</label>
+                <input type="text" name="datepicker2" class="form-control" placeholder="Выберите интервал">
+                <div class="btn btn-danger">удалить</div>
+              </div>
+              <div class="datepicker form-inline" style="display: none;">
+                <label for="date_filter">Дополнительный интервал:</label>
+                <input type="text" name="datepicker3" class="form-control" placeholder="Выберите интервал">
+                <div class="btn btn-danger">удалить</div>
+              </div>
             </form>
+            <div id="type_share" class="data_block col-sm-6" style="display: none;">
+              <h4>Доли затрат на услуги</h4>
+              <canvas class="share" width="370" height="250"></canvas>   
+            </div>
             <div id="type_coldwater" class="data_block col-sm-6" style="display: none;">
               <h4>Холодная вода</h4>
               <canvas class="linear" width="370" height="250"></canvas> 
