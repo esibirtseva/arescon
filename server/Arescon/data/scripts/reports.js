@@ -162,6 +162,7 @@ $('#period').change(function(e){
 var buildPageData = function(reporttype, period, start, end){
 
     var selectiontype = getParameterByName('selectiontype');
+    $('#add_interval,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
     if (typeof currentPageData !== 'undefined') currentPageData.destroyAllData();
@@ -473,6 +474,7 @@ function Forecast(id, start, end, period, selectiontype){
     };
     self.updateRepresentation = function(){        
         self.destroyAllData();
+
         if(selectiontype === '5' || selectiontype === '4'){//one
             $(typeMap[self.profileData.type].selector).show();
             $('.table,.share').hide();
@@ -487,9 +489,9 @@ function Forecast(id, start, end, period, selectiontype){
                     period : self.profileData.period,
                     values : self.profileData.values[i]
                 }));
-            }
-            
+            }            
         } 
+        $('#type_share').hide();
     };
     self.setLinearGraph = function(profileData){ 
         profileData.start = new Date();       

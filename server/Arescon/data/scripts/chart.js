@@ -399,6 +399,10 @@ function Device(id, start, end, _period){
             self.graphs[i].destroy();
         }
     };
+    self.updateDateRange = function(start, end){
+        self.start = start;
+        self.end = end;
+    };
 };
 
 function Type(typeID, start, end, _period){    

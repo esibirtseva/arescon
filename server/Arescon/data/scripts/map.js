@@ -56,7 +56,7 @@ var houses_data = [
         waste: 13784
     }
 ];
-getBaloonStr = function(keys, labels, values){
+getBaloonStr = function(keys, labels, values, href){
     var res=[];
     res.push("<table>");
     res.push("<tbody>");
@@ -66,19 +66,227 @@ getBaloonStr = function(keys, labels, values){
     }
     res.push("</tbody>");
     res.push("</table>");
-    res.push("<a href='/dreports' style='margin: 5px 10px;'>Получить отчет</a>");//TODO: change link
+    res.push("<a href="+href+" style='margin: 5px 10px;'>Получить отчет</a>");//TODO: change link
     return res.join("");
 };
+function Dataset(){
+    var self = this;
+
+    self.data = [];
+
+    self.parseData = function(){
+        $('.tszhs>div').each(function(){
+            var id = $(this).data('id'),
+                name = $(this).children('p').html(),
+                income = $(this).children('div').eq(0).data('income'),
+                outcome = $(this).children('div').eq(1).data('outcome'),
+                balance = $(this).children('div').eq(2).data('balance');
+            // console.log(id + " " + name + " " + income + " " + outcome + " " + balance);
+            
+            var tszh = new Tszh(id, name, income, outcome, balance);
+            self.data.push(tszh);
+
+            $(this).find('.houses>div').each(function(){
+                var id = $(this).data('id'),
+                    name = $(this).children('p').html(),
+                    income = $(this).children('div').eq(0).data('income'),
+                    outcome = $(this).children('div').eq(1).data('outcome'),
+                    balance = $(this).children('div').eq(2).data('balance');
+                    coords = [$(this).data('x'), $(this).data('y')];
+                // console.log(id + " " + name + " " + income + " " + outcome + " " + balance);    
+                var house = new House(id, income, outcome, balance, coords, name);
+                tszh.children.push(house);
+            });
+        });
+    };
+
+    self.removeHighlight = function(){
+        self.data.forEach(function(entry){
+            entry.removeHighlight();
+        });
+    };
+    self.init = function(){
+        self.data.forEach(function(entry){
+            entry.addToMap();
+        });
+    };
+
+    self.find = function(type, id){
+        console.log("find " + type + " " + id);
+        if(type === 1){
+            for (var i = 0; i < self.data.length; i ++){
+                var entry = self.data[i];
+                console.log(entry.name + " " + entry.id);
+                if(entry.id == id) return entry;
+            }
+        }
+        if (type === 2){
+            for (var i = 0; i < self.data.length; i ++){
+                var entry = self.data[i];
+                // console.log(entry.name + " " + entry.id);
+                // if(entry.id == id) return entry;
+                for (var j = 0; j < entry.children.length; j++){
+                    if (entry.children[j].id === id) return entry.children[j];
+                }
+            }
+        }
+        return null;
+    };
+};
+function DataNode(id, income, outcome, balance){//parent class
+    var self = this;
+
+    self.id = id;
+    self.income = income;
+    self.outcome = outcome;
+    self.balance = balance;
+    self.children = [];
+
+    self.addChild = function(item) {
+        self.children.push(item);
+    };
+    self.highlight = function(){
+    };
+};
+function Tszh(id, name, income, outcome, balance){
+    var self = this;
+
+    DataNode.call(this, id, income, outcome, balance); 
+
+    self.name = name;
+    console.log(id + " " + name + " " + income + " " + outcome + " " + balance);
+    self.highlight = function(){
+        console.log("tszh highlight");
+        self.children.forEach(function(entry){
+            entry.highlight();
+        });
+    };
+    self.removeHighlight = function(){
+        console.log("tszh highlight");
+        self.children.forEach(function(entry){
+            entry.removeHighlight();
+        });
+    };
+    self.addToMap = function(){
+        self.children.forEach(function(entry){
+            console.log(entry);
+            entry.setPlacemark();
+        });
+    };
+};
+function House(id, income, outcome, balance, coords, name){
+    var self = this;
+
+    DataNode.call(this, id, income, outcome, balance, coords, name); 
+
+    self.coords = coords;
+    self.name = name;
+    self.placemark = null;
+    self.defaultColor;
+    self.alert = null;
+    self.alertText = "Текст алерта";
+    console.log(id + " " + coords + " " + name + " " + income + " " + outcome + " " + balance);   
+
+    self.highlight = function(){
+        console.log("house highlight");
+        self.placemark.options.set('preset', 'islands#blueIcon');
+    };
+    self.removeHighlight = function(){
+        self.placemark.options.set('preset', self.defaultColor);  
+    };
+
+    self.setPlacemark = function(){
+
+        var color;
+
+        if(self.balance > 0) {
+            color = 'islands#greenDotIcon';
+        } else if(self.balance < 0) {
+            color = 'islands#redDotIcon';
+        } else if(self.balance == 0) {
+            color = 'islands#yellowDotIcon';
+        }
+        self.defaultColor = color;
+
+        var myPlacemark = new ymaps.Placemark(self.coords,{
+            balloonContentHeader: self.name,
+            balloonContentBody: getBaloonStr(["water","gas","electricity", "heat"],["Вода","Газ","Электричество", "Отопление"],[11237,2565,3487,-432], "/dreports?selectiontype=2&id="+self.id)//TODO: change implementation
+        },{
+            preset: color
+        });
+        myMap.geoObjects.add(myPlacemark);
+
+        myPlacemark.events.add('mouseenter', function(e) {
+            myPlacemark.balloon.open();
+            myPlacemark.balloon.events.add('mouseleave', function() {
+                if(myPlacemark.balloon.isOpen()) myPlacemark.balloon.close();
+            });
+        });
+
+        myPlacemark.balloon.events.add('open', function (e) {
+            var filter = $("input[name='type_select']:checked").val();
+            switch(filter) {
+                case 'water':
+                    $('.gas').hide();
+                    $('.electricity').hide();
+                    $('.heat').hide();
+                    break;
+                case 'gas':
+                    $('.water').hide();
+                    $('.electricity').hide();
+                    $('.heat').hide();
+                    break;
+                case 'electricity':
+                    $('.water').hide();
+                    $('.gas').hide();
+                    $('.heat').hide();
+                    break;
+                case 'heat':
+                    $('.water').hide();
+                    $('.gas').hide();
+                    $('.electricity').hide();
+                    break;
+            }
+        });
+
+        // myPlacemark.balloon.events.add('click', function (e) {
+        //     location.href = "/dreports";
+        // });
+
+        self.placemark =  myPlacemark;
+        myMap.geoObjects.add(self.placemark);
+    };
+
+    self.setAlert = function(){
+        myGeoObject = new ymaps.GeoObject(
+            {
+                geometry: {
+                    type: "Point",
+                    coordinates: self.coords
+                },
+                properties: {
+                    iconContent: self.alertContent
+                }
+            }, {
+                preset: 'islands#yellowStretchyIcon'
+            });
+        self.alert = myGeoObject;
+        myMap.geoObjects.add(self.alert);
+    };
+    self.removeAllGeo = function(){
+        myMap.geoObjects.remove(self.placemark);
+        myMap.geoObjects.remove(self.alert);
+    };
+};
+var myMap;
+var dataset;
 window.onload = function(){
     var map_container = $('#map');
     map_container.height(map_container.width());
 
-    var myMap;
     if (typeof ymaps == 'undefined') return;
     ymaps.ready(function(){
         myMap = new ymaps.Map('map', {
-            // центр и коэффициент масштабирования однозначно
-            // определяют область картографирования
             center: [55.76, 37.64],
             zoom: 10
         });
@@ -89,10 +297,26 @@ window.onload = function(){
         myMap.controls.remove('fullscreenControl');
         myMap.controls.remove('typeSelector');
 
-        addAllHouses();
-//        addAlert([55.77404807445789, 37.680125122070306]);
-//        addAlert([55.66404807445789, 37.720125122070306]);
+        // addAllHouses();
+
+        //do all staff
+        dataset = new Dataset();
+        dataset.parseData();
+        dataset.init();
+
     });
+
+
+
+
+
+
+
+
+
+
+
+
     var addAllHouses = function(){
         for (var i = 0; i < houses_data.length; i++){
             var placemark = addHouse(houses_data[i]);
@@ -196,30 +420,19 @@ window.onload = function(){
         }
     });
     $('.tszhs>.item>p').click(function(){
-        for (var i = 0; i < indexes_of_removed.length; i++){
-            myMap.geoObjects.add(points[indexes_of_removed[i]].placemark);
-        }
-        points_to_default();
-        var id = $(this).parent().attr('id');
-        for (var i = 0; i < tszhs_data.length; i++){
-            if (id === tszhs_data[i].id){
-                // highlight_points(tszhs_data[i].houses);
-                remove_but(tszhs_data[i].houses);
-            }
-        }
+        console.log('tszh click');
+        dataset.removeHighlight();
+        var id = $(this).parent().data('id');
+        var tszh = dataset.find(1, id);
+        console.log(tszh);
+        if (tszh !== null) tszh.highlight();
     });
     $('.houses>.item>p').click(function(){
-        for (var i = 0; i < indexes_of_removed.length; i++){
-            myMap.geoObjects.add(points[indexes_of_removed[i]].placemark);
-        }
-        points_to_default();
-        var id = $(this).parent().attr('id');
-        for (var i = 0; i < houses_data.length; i++){
-            if (id === houses_data[i].id){
-                // highlight_points([houses_data[i].point]);
-                remove_but([houses_data[i].point]);
-            }
-        }
+        console.log('tszh click');
+        dataset.removeHighlight();
+        var id = $(this).parent().data('id');
+        var house = dataset.find(2, id);
+        if (house !== null) house.highlight();
     });
     var highlight_points = function(arr_of_ids){
         for(var i = 0; i < points.length; i++){
