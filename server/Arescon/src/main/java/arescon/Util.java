@@ -28,9 +28,20 @@ public class Util {
 
     void getActiveDevice( String expected, String activeMarker, Writer response, HttpServerExchange exchange ) {
         if (exchange.getRelativePath().equals("/" + expected)) {
-            try { response.append(" " + activeMarker); }
+            try { response.append(" ").append(activeMarker); }
             catch (IOException ignored) {     }
         }
+    }
+
+    void getTypeLink( int type, Writer response, String link ) {
+        try {
+            switch (type) {
+                case 0: if (!Data.DELETED[0]) response.append(link); break;
+                case 1: if (!Data.DELETED[3]) response.append(link); break;
+                case 2: if (!Data.DELETED[2]) response.append(link); break;
+                case 3: if (!Data.DELETED[1]) response.append(link); break;
+            }
+        } catch (IOException ignored) { }
     }
 
     void getDispatcherTree( Writer response, HttpServerExchange exchange ) {

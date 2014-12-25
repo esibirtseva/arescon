@@ -29,7 +29,19 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(0, writer, "href=\"/user/coldwater\"");
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getDevices(0, writer, exchange, false);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(1, writer, "href=\"/user/hotwater\"");
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
@@ -41,13 +53,31 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(2, writer, "href=\"/user/gas\"");
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getDevices(2, writer, exchange, false);
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(3, writer, "href=\"/user/electricity\"");
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getDevices(3, writer, exchange, false);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(4, writer, "href=\"/user/heat\"");
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
@@ -131,7 +161,13 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getActiveDevice("coldwater", "active", writer, exchange);
+                        util.getActiveDevice("coldwater", "active_b", writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(0, writer, "href=\"/user/coldwater\"");
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
@@ -143,7 +179,13 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
-                        util.getActiveDevice("hotwater", "active", writer, exchange);
+                        util.getActiveDevice("hotwater", "active_b", writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(1, writer, "href=\"/user/hotwater\"");
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {
@@ -161,6 +203,12 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(2, writer, "href=\"/user/gas\"");
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getDevices(2, writer, exchange, true);
                     }
                 },
@@ -173,6 +221,12 @@ public class Handlers {
                 new CommonHandlers.StringWriterHandler() {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(3, writer, "href=\"/user/electricity\"");
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getDevices(3, writer, exchange, true);
                     }
                 },
@@ -180,6 +234,12 @@ public class Handlers {
                     @Override
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getActiveDevice("heat", "active_b", writer, exchange);
+                    }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getTypeLink(4, writer, "href=\"/user/heat\"");
                     }
                 },
                 new CommonHandlers.StringWriterHandler() {

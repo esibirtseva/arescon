@@ -22,8 +22,8 @@
           %dynamic_content%
           <div class="menu_block">
             <h4>Данные</h4>
-            <a class="active" href="#">Услуги</a>
-            <a href="#">Отчеты</a>
+            <a class="active" href="/user">Услуги</a>
+            <a href="/ureports">Отчеты</a>
           </div>
           <div class="menu_block">
             <h4>Аккаунт</h4>
@@ -57,39 +57,38 @@
                   </form>
                 </div>
               </div>
-              <div id="s1" class="service row">
-                <a href="/user/water"><h4><span class="device_blue">&#9679;</span> Вода</h4></a>
+              <div id="s0" class="service row">
+                <a class="water_type" %dynamic_content%><h4><span class="device_blue">&#9679;</span> Холодная вода</h4></a>
                 <div class="service_devices">
-                  <div class="type_container">
-                    <a class="water_type" href="/user/coldwater">Холодная вода</a>
-                    %dynamic_content% <!-- холодная вода -->                    
-                  </div>
-                  <div class="type_container">
-                    <a class="water_type" href="/user/hotwater">Горячая вода</a>
-                    %dynamic_content% <!-- горячая вода -->
-                  </div>
+                  %dynamic_content%
+                </div>
+              </div>
+              <div id="s1" class="service row" >
+                <a class="water_type" %dynamic_content%><h4><span class="device_red">&#9679;</span> Горячая вода</h4></a>
+                <div class="service_devices">
+                  %dynamic_content%
                 </div>
               </div>
               <div id="s2" class="service row">
-                <a href="/user/gas"><h4><span class="device_green">&#9679;</span> Газ</h4></a>
+                <a %dynamic_content%><h4><span class="device_green">&#9679;</span> Газ</h4></a>
                 <div class="service_devices">
                   %dynamic_content%
                 </div>
               </div>
               <div id="s3" class="service row">
-                <a href="/user/electricity"><h4><span class="device_orange">&#9679;</span> Электричество</h4></a>
+                <a %dynamic_content%><h4><span class="device_orange">&#9679;</span> Электричество</h4></a>
                 <div class="service_devices">
                   %dynamic_content%
                 </div>
               </div>
               <div id="s4" class="service row">
-                <a href="/user/heat"><h4><span class="device_red">&#9679;</span> Отопление</h4></a>
+                <a %dynamic_content%><h4><span class="device_red">&#9679;</span> Отопление</h4></a>
                 <div class="service_devices">
                   %dynamic_content%
                 </div>
               </div>
               <div id="s5" class="service row active_b">
-                <h4>Общедомовые нужды</h4>
+                <a href="/user/odn"><h4>Общедомовые нужды</h4></a>
               </div>
             </div>
             <div class="data hidden-xs col-sm-6 col-md-7">
@@ -97,7 +96,7 @@
                 <div class="col-xs-5 col-md-4 col-lg-3"><div class="device_image" style="background-image: url(/images/odn.png);"></div></div>
                 <div class="device_name col-xs-6">
                   <h4>Общедомовые нужды</h4>
-                  <p>Описание. Что это такое? Зачем? Какая польза?</p>
+                  <p>Описание. Общедомовые нужды.</p>
                 </div>
               </div>
               <div class="data_block">
