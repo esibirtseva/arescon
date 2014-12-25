@@ -171,6 +171,62 @@ public class Main {
             return;
         }
 
+        paths.put("type/deviation", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.typeDeviation(exchange);
+            }
+        });
+        paths.put("device/deviation", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceDeviation(exchange);
+            }
+        });
+        paths.put("setDeviationName", new HttpHandler() {
+            @Override
+            public void handleRequest( HttpServerExchange exchange ) throws Exception {
+                api.deviationRecordName(exchange);
+            }
+        });
+
+        paths.put("type/percentage", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.typePercentage(exchange);
+            }
+        });
+        paths.put("device/percentage", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.devicePercentage(exchange);
+            }
+        });
+        paths.put("flat/percentage", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.housePercentage(exchange);
+            }
+        });
+        paths.put("house/percentage", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.housePercentage(exchange);
+            }
+        });
+        paths.put("tszh/percentage", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.housePercentage(exchange);
+            }
+        });
+        paths.put("uk/percentage", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.housePercentage(exchange);
+            }
+        });
+
         paths.put("type/profile/money", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {

@@ -328,6 +328,173 @@ public class API {
         return response.append(arrays.toString()).append("}").toString();
     }
 
+    private String getDeviceDeviation( int id, long startTime, long endTime, double edge ) {
+        if (startTime < Data.DEVIATION_START_TIME) startTime = Data.DEVIATION_START_TIME;
+
+        int period = 60 / (int)Data.PERIOD;
+        DeviationRecord[] values = Data.DEVIATION_RECORDS;
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
+        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
+
+        startTime = (startTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
+        endTime = (endTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
+
+        JSONArray list = new JSONArray();
+        for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+            if (Math.abs(values[(int)j].value) >= edge) list.put(values[(int)j]);
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
+    private String getTypeDeviation( int id, long startTime, long endTime, double edge ) {
+        if (startTime < Data.DEVIATION_START_TIME) startTime = Data.DEVIATION_START_TIME;
+
+        int period = 60 / (int)Data.PERIOD;
+        DeviationRecord[] values = Data.DEVIATION_RECORDS;
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"id\":\"").append(id);
+        response.append("\",\"values\":");
+
+        startTime = (startTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
+        endTime = (endTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
+
+        JSONArray list = new JSONArray();
+        for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+            if (Math.abs(values[(int)j].value) >= edge) list.put(values[(int)j]);
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
+    private String getDevicePercentage( int id, long startTime, long endTime, int period ) {
+        if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+
+        period /= (int)Data.PERIOD;
+        if (period < 1) period = 1;
+        double[] values = Data.VALUES[id - 1];
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
+        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
+
+        startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+        endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+
+        JSONArray list = new JSONArray();
+        for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+            double value = 0.0;
+            for (int i = 0; i < period; ++i) {
+                value += values[(int)j + i];
+            }
+            list.put(0.25 * value / (1000 * period));
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
+    private String getTypePercentage( int id, long startTime, long endTime, int period ) {
+        period /= (int)Data.PERIOD;
+        if (period < 1) period = 1;
+        List<double[]> values = new ArrayList<>();
+        List<Long> dataStartTimes = new ArrayList<>();
+        long dataStartTime = Long.MAX_VALUE;
+        int topLength = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (Data.TYPES[i].equals(Integer.toString(id))) {
+                if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
+                if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
+                dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
+                values.add(Data.VALUES[i]);
+            }
+        }
+
+        if (startTime < dataStartTime) startTime = dataStartTime;
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"type\":\"");
+        response.append(id).append("\",\"values\":");
+
+        startTime = (startTime) / 60000 / Data.PERIOD;
+        endTime = (endTime) / 60000 / Data.PERIOD;
+        dataStartTime = dataStartTime / 60000 / Data.PERIOD;
+
+        JSONArray list = new JSONArray();
+        for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+            double value = 0.0;
+            for (int i = 0; i < period; ++i) {
+                for (int k = 0; k < values.size(); ++k) {
+                    int index = (int)j - (int)(long)dataStartTimes.get(k) + i;
+                    if (index < values.get(k).length && index >= 0) {
+                        value += values.get(k)[index];
+                    }
+                }
+            }
+            list.put(0.25 * value / (1000 * period));
+        }
+
+        return response.append(list.toString()).append("}").toString();
+    }
+
+    private String getHousePercentage( Set<Integer> types, long startTime, long endTime, int period ) {
+        period /= (int)Data.PERIOD;
+        if (period < 1) period = 1;
+        List<double[]> values = new ArrayList<>();
+        List<Long> dataStartTimes = new ArrayList<>();
+        List<Integer> dataTypes = new ArrayList<>();
+        long dataStartTime = Long.MAX_VALUE;
+        int topLength = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
+            if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
+            dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
+            values.add(Data.VALUES[i]);
+            dataTypes.add(Integer.parseInt(Data.TYPES[i]));
+        }
+
+        if (startTime < dataStartTime) startTime = dataStartTime;
+
+        StringBuilder response = new StringBuilder("{\"start\":");
+        response.append("\"").append(startTime).append("\",\"period\":\"");
+        response.append(period * Data.PERIOD).append("\",\"types\":");
+        JSONArray list = new JSONArray();
+        for (int type : types) {
+            list.put(type);
+        }
+        response.append(list.toString()).append(",\"values\":");
+
+        startTime = (startTime) / 60000 / Data.PERIOD;
+        endTime = (endTime) / 60000 / Data.PERIOD;
+        dataStartTime = dataStartTime / 60000 / Data.PERIOD;
+
+        JSONArray arrays = new JSONArray();
+        for (int type : types) {
+            list = new JSONArray();
+            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    for (int k = 0; k < values.size(); ++k) {
+                        if (dataTypes.get(k) != type) continue;
+                        int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                        if (index < values.get(k).length && index >= 0) {
+                            value += values.get(k)[index];
+                        }
+                    }
+                }
+                list.put(0.25 * value / (1000 * period));
+            }
+            arrays.put(list);
+        }
+
+        return response.append(arrays.toString()).append("}").toString();
+    }
+
     public void deviceProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
@@ -610,6 +777,156 @@ public class API {
         }
     }
 
+    public void devicePercentage( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue deviceID = postData.getFirst("id");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+
+        if (deviceID == null || deviceID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(deviceID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getDevicePercentage(id, startTime, endTime, periodTime));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void typePercentage( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue typeID = postData.getFirst("id");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+
+        if (typeID == null || typeID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(typeID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypePercentage(id, startTime, endTime, periodTime));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void deviationRecordName( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            return;
+        }
+
+        FormData.FormValue recordID = postData.getFirst("id");
+        FormData.FormValue recordName = postData.getFirst("name");
+
+        if (recordID == null || recordID.getValue().isEmpty() ||
+            recordName == null || recordName.getValue().isEmpty())
+        {
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(recordID.getValue());
+            Data.DEVIATION_RECORDS[id - 1].name = recordName.getValue();
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void housePercentage( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+        Deque<FormData.FormValue> types = postData.get("types[]");
+
+        if (types == null || types.isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            Set<Integer> dataTypes = new LinkedHashSet<>();
+            for (FormData.FormValue type : types) {
+                dataTypes.add(Integer.parseInt(type.getValue()));
+            }
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getHousePercentage(dataTypes, startTime, endTime, periodTime));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
     public void deleteDevice( HttpServerExchange exchange ) throws IOException {
 
         String relPath = exchange.getRelativePath();
@@ -623,6 +940,86 @@ public class API {
         }
 
         redirect(exchange, "/user");
+    }
+
+    public void deviceDeviation( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue deviceID = postData.getFirst("id");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue value = postData.getFirst("value");
+
+        if (deviceID == null || deviceID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                value == null || value.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(deviceID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            double edgeValue = Double.parseDouble(value.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getDeviceDeviation(id, startTime, endTime, edgeValue));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void typeDeviation( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue typeID = postData.getFirst("id");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue value = postData.getFirst("value");
+
+        if (typeID == null || typeID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                value == null || value.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(typeID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            double edgeValue = Double.parseDouble(value.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypeDeviation(id, startTime, endTime, edgeValue));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
     }
 
     public void profileUpdate( HttpServerExchange exchange ) throws IOException, SQLException {
