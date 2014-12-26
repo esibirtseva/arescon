@@ -19,6 +19,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -344,7 +345,7 @@ public class API {
 
         JSONArray list = new JSONArray();
         for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            if (Math.abs(values[(int)j].value) >= edge) list.put(values[(int)j]);
+            if (Math.abs(values[(int)j].value) >= edge) list.put(new JSONObject(values[(int)j].toString()));
         }
 
         return response.append(list.toString()).append("}").toString();

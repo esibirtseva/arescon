@@ -74,12 +74,9 @@
       <file leaf-file-name="Handlers.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="389" max-vertical-offset="3604">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2633" max-vertical-offset="3553">
               <caret line="292" column="21" selection-start-line="292" selection-start-column="21" selection-end-line="292" selection-end-column="21" />
-              <folding>
-                <element signature="e#6628#6913#0" expanded="true" />
-                <element signature="e#6912#6913#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -97,11 +94,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="API.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="API.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="784" max-vertical-offset="2805">
-              <caret line="859" column="86" selection-start-line="859" selection-start-column="86" selection-end-line="859" selection-end-column="86" />
+            <state vertical-scroll-proportion="0.6644737" vertical-offset="310" max-vertical-offset="3468">
+              <caret line="345" column="41" selection-start-line="345" selection-start-column="41" selection-end-line="345" selection-end-column="41" />
               <folding>
                 <element signature="method#API#0;class#API#0" expanded="false" />
                 <element signature="method#getProfile#0;class#API#0" expanded="false" />
@@ -112,8 +109,6 @@
                 <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
                 <element signature="method#getTypeData#0;class#API#0" expanded="false" />
                 <element signature="method#getHouseData#0;class#API#0" expanded="false" />
-                <element signature="method#getDeviceDeviation#0;class#API#0" expanded="false" />
-                <element signature="method#getTypeDeviation#0;class#API#0" expanded="false" />
                 <element signature="method#getDevicePercentage#0;class#API#0" expanded="false" />
                 <element signature="method#getTypePercentage#0;class#API#0" expanded="false" />
                 <element signature="method#getHousePercentage#0;class#API#0" expanded="false" />
@@ -146,7 +141,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/DeviationRecord.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
-              <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+              <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -155,18 +150,18 @@
       <file leaf-file-name="Data.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="986">
+            <state vertical-scroll-proportion="0.0" vertical-offset="79" max-vertical-offset="986">
               <caret line="49" column="70" selection-start-line="49" selection-start-column="70" selection-end-line="49" selection-end-column="70" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.34539473" vertical-offset="2238" max-vertical-offset="3519">
-              <caret line="188" column="50" selection-start-line="188" selection-start-column="50" selection-end-line="188" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2161" max-vertical-offset="3519">
+              <caret line="182" column="27" selection-start-line="182" selection-start-column="27" selection-end-line="182" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -191,10 +186,10 @@
         <option value="$PROJECT_DIR$/src/test/java/arescon/APITest.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Util.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Handlers.java" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/DeviationRecord.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Data.java" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/DeviationRecord.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
       </list>
     </option>
   </component>
@@ -647,7 +642,7 @@
     <option name="totallyTimeSpent" value="213207000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
@@ -1025,17 +1020,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="389" max-vertical-offset="3604">
-          <caret line="292" column="21" selection-start-line="292" selection-start-column="21" selection-end-line="292" selection-end-column="21" />
-          <folding>
-            <element signature="e#6628#6913#0" expanded="true" />
-            <element signature="e#6912#6913#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="251" max-vertical-offset="15368">
@@ -1047,18 +1031,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="389" max-vertical-offset="3604">
+          <caret line="292" column="21" selection-start-line="292" selection-start-column="21" selection-end-line="292" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/DeviationRecord.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
-          <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+          <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2161" max-vertical-offset="3519">
+          <caret line="182" column="27" selection-start-line="182" selection-start-column="27" selection-end-line="182" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="986">
+          <caret line="49" column="70" selection-start-line="49" selection-start-column="70" selection-end-line="49" selection-end-column="70" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="784" max-vertical-offset="2805">
-          <caret line="859" column="86" selection-start-line="859" selection-start-column="86" selection-end-line="859" selection-end-column="86" />
+        <state vertical-scroll-proportion="0.6644737" vertical-offset="310" max-vertical-offset="3468">
+          <caret line="345" column="41" selection-start-line="345" selection-start-column="41" selection-end-line="345" selection-end-column="41" />
           <folding>
             <element signature="method#API#0;class#API#0" expanded="false" />
             <element signature="method#getProfile#0;class#API#0" expanded="false" />
@@ -1069,8 +1077,6 @@
             <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
             <element signature="method#getTypeData#0;class#API#0" expanded="false" />
             <element signature="method#getHouseData#0;class#API#0" expanded="false" />
-            <element signature="method#getDeviceDeviation#0;class#API#0" expanded="false" />
-            <element signature="method#getTypeDeviation#0;class#API#0" expanded="false" />
             <element signature="method#getDevicePercentage#0;class#API#0" expanded="false" />
             <element signature="method#getTypePercentage#0;class#API#0" expanded="false" />
             <element signature="method#getHousePercentage#0;class#API#0" expanded="false" />
@@ -1095,22 +1101,6 @@
             <element signature="method#deleteUser#0;class#API#0" expanded="false" />
             <element signature="method#redirect#0;class#API#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="986">
-          <caret line="49" column="70" selection-start-line="49" selection-start-column="70" selection-end-line="49" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34539473" vertical-offset="2238" max-vertical-offset="3519">
-          <caret line="188" column="50" selection-start-line="188" selection-start-column="50" selection-end-line="188" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>

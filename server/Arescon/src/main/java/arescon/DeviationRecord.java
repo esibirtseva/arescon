@@ -16,8 +16,8 @@ public class DeviationRecord {
 
     @Override
     public String toString( ) {
-        return "{\'id\':\'" + this.id + "\',\'time\':\'" + this.time + "\',\'name\':\'" + this.name +
-                "\',\'value\':\'" + this.value + "\'}";
+        return "{\"id\":\"" + this.id + "\",\"time\":\"" + this.time + "\",\"name\":\"" + this.name +
+                "\",\"value\":\"" + this.value + "\"}";
     }
 
 }
