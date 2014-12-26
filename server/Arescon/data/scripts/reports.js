@@ -67,10 +67,6 @@ window.onload = function(){
     //daterange
     initDateRangePicker();
     
-    var date = new Date();
-
-    currentStart = date.setDate(date.getDate()-7);
-    currentEnd = date.setDate(date.getDate()+7);
     currentReporttype = $('#reporttype').val();
     currentPeriod = $('#period').val();
 
@@ -85,19 +81,24 @@ $('#reporttype').change(function(e){
     buildPageData(reporttype, currentPeriod, currentStart, currentEnd);
 });
 var initDateRangePicker = function(){
+    var date = new Date();
+    currentEnd = date.getTime();
+    date.setDate(date.getDate()-7);
+    currentStart = date.getTime();
+    $('input[name="daterange"]').val(getTimeFormatddmmyyyy(currentStart) + " - " + getTimeFormatddmmyyyy(currentEnd));
     $('input[name="daterange"]').daterangepicker(
         {
             format: 'DD.MM.YYYY',
             ranges: {
                 'Сегодня': [moment(), moment()],
                 'Вчера': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                'Последние 7 дней': [moment().subtract('days', 6), moment()],
-                'Последние 30 дней': [moment().subtract('days', 29), moment()],
                 'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
-                'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                'Последние 7 дней': [moment().subtract('days', 6), moment()],
+                'Последние 30 дней': [moment().subtract('days', 29), moment()]
             },
-            startDate: moment().subtract('days', 29),
-            endDate: moment(),
+            startDate: currentStart,//moment().subtract('days', 29),
+            endDate: currentEnd,//moment(),
             locale: {
                 applyLabel: 'Применить',
                 cancelLabel: 'Очистить',
@@ -158,9 +159,35 @@ $('#period').change(function(e){
     currentPageData.updPeriod(period);
     currentPageData.updateData(true);
 });
-
+var interfaceInit = function(only){
+    console.log('123' + only);
+    $('.data_block').hide();
+    switch(only){
+        case '0':
+            console.log(only);
+            $('#type_coldwater').show();
+            break;
+        case '1':
+            $('#type_hotwater').show();
+            break;
+        case '2':
+            $('#type_gas').show();
+            break;
+        case '3':
+            $('#type_electricity').show();
+            break;
+        case '4':
+            $('#type_heat').show();
+            break;
+        default:
+            $('.data_block').show();
+            break;
+    }
+    $('#type_share').hide();
+}
 var buildPageData = function(reporttype, period, start, end){
-
+    console.log(currentStart);
+    console.log(currentEnd);
     var selectiontype = getParameterByName('selectiontype');
     $('#add_interval,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
@@ -168,8 +195,10 @@ var buildPageData = function(reporttype, period, start, end){
     if (typeof currentPageData !== 'undefined') currentPageData.destroyAllData();
     if (selectiontype === '5' || selectiontype === '4'){
         $('#reporttype option[value="4"]').hide();
+        $('#reporttype option[value="5"]').show();
     }else{
         $('#reporttype option[value="4"]').show();
+        $('#reporttype option[value="5"]').hide();
     }
     if (reporttype === '1'){
         var id = getParameterByName('id');
@@ -336,6 +365,7 @@ function Profile(id, start, end, period, selectiontype){
             $('.data_block').show();
             $('#type_share').hide();
             $('.table,.share').hide();
+            interfaceInit(getParameterByName('only'));
             for (var i = 0; i < self.profileData.values.length; i++){
                 self.graphs.push(self.setLinearGraph({
                     type : i,
@@ -485,6 +515,7 @@ function Forecast(id, start, end, period, selectiontype){
         }else{//multiple
             $('.data_block').show();
             $('.table,.share').hide();
+            interfaceInit(getParameterByName('only'));
             for (var i = 0; i < self.profileData.values.length; i++){
                 self.graphs.push(self.setLinearGraph({
                     type : i,
@@ -692,6 +723,7 @@ function Multiple(id, start, end, period, selectiontype){
             $('.data_block').show();
             $('#type_share').hide();
             $('.table,.share').hide();
+            interfaceInit(getParameterByName('only'));
             for (var i = 0; i < self.profileData.values.length; i++){
                 self.graphs.push(self.setLinearGraph(self.profileData, self.valuesData, i));
             }
@@ -987,6 +1019,7 @@ function ODN(id, start, end, period, selectiontype){
             $('#type_share').hide();
 
             $('.table,.share').show();
+            interfaceInit(getParameterByName('only'));
             for(var i = 0; i < self.profileData.types.length; i++)
                 $(typeMap[self.profileData.types[i]].selector).show();
 
@@ -1096,7 +1129,7 @@ function ODN(id, start, end, period, selectiontype){
             var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
             var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
             console.log(i + " " + data_size);
-            current_tbody.append("<tr><td>"+time_str+"</td><td>"+time_str+"</td><td>"+(dataMoney[i]).toFixed(2)+"</td><td>"+(dataODN[i]).toFixed(2)+"</td></tr>")
+            current_tbody.append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+(dataMoney[i]).toFixed(2)+"</td><td>"+(dataODN[i]).toFixed(2)+"</td></tr>")
         }
     };
     self.setShareGraph = function(selector, dataODN, dataMoney, type){
@@ -1181,4 +1214,9 @@ function toFixed ( number, precision ) {
     var multiplier = Math.pow( 10, precision + 1 ),
         wholeNumber = Math.floor( number * multiplier );
     return Math.round( wholeNumber / 10 ) * 10 / multiplier;
+}
+var getTimeFormatddmmyyyy = function(date_ms){
+    var current_date = new Date(date_ms);
+    var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
+    return date_str;
 }

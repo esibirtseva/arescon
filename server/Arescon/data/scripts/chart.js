@@ -52,13 +52,10 @@ var currentRoute;//odn
 var odnDataSet = [];
 var period = 1440;//default
 var currentPageData;//new meta!
+var daterangeStart, daterangeEnd;
 window.onload = function(){
     //daterange
     initDateRangePicker();
-    var date = new Date();
-
-    daterangeStart = date.setDate(date.getDate()-7);
-    daterangeEnd = date.setDate(date.getDate()+7);
 
     var currentRoute = getLastParamUrl();
     if ($('.device.active').length > 0){
@@ -90,7 +87,8 @@ window.onload = function(){
         currentPageData.updateData(true);
     }
     else if (currentRoute === "heat"){
-        window.location.href = "/404";//TODO: change request
+        currentPageData = new Type(4, daterangeStart, daterangeEnd, period);
+        currentPageData.updateData(true);
     }
     else if (currentRoute === "odn"){
         currentPageData = new ODN([
@@ -176,6 +174,11 @@ var sumCosts = function(data){
 var daterangeStart, daterangeEnd;
 var dataBank; //TODO change implementation
 var initDateRangePicker = function(){
+    var date = new Date();
+    daterangeEnd = date.getTime();
+    date.setDate(date.getDate()-7);
+    daterangeStart = date.getTime();
+    $('input[name="daterange"]').val(getTimeFormatddmmyyyy(daterangeStart) + " - " + getTimeFormatddmmyyyy(daterangeEnd));
     $('input[name="daterange"]').daterangepicker(
         {
             format: 'DD.MM.YYYY',
@@ -187,8 +190,8 @@ var initDateRangePicker = function(){
                 'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
                 'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
             },
-            startDate: moment().subtract('days', 29),
-            endDate: moment(),
+            startDate: daterangeStart,//moment().subtract('days', 29),
+            endDate: daterangeEnd,//moment(),
             locale: {
                 applyLabel: 'Применить',
                 cancelLabel: 'Очистить',
@@ -708,4 +711,9 @@ function ODN(arr_odnitems){
     self.destroyAllGraphs = function(){
         for (var i = 0; i < self.odnItems.length; i++) self.odnItems[i].destroyAllGraphs();
     }
+}
+var getTimeFormatddmmyyyy = function(date_ms){
+    var current_date = new Date(date_ms);
+    var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
+    return date_str;
 }
