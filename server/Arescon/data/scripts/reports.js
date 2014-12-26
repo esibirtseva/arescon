@@ -160,11 +160,9 @@ $('#period').change(function(e){
     currentPageData.updateData(true);
 });
 var interfaceInit = function(only){
-    console.log('123' + only);
     $('.data_block').hide();
     switch(only){
         case '0':
-            console.log(only);
             $('#type_coldwater').show();
             break;
         case '1':
@@ -186,8 +184,6 @@ var interfaceInit = function(only){
     $('#type_share').hide();
 }
 var buildPageData = function(reporttype, period, start, end){
-    console.log(currentStart);
-    console.log(currentEnd);
     var selectiontype = getParameterByName('selectiontype');
     $('#add_interval,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
@@ -195,9 +191,12 @@ var buildPageData = function(reporttype, period, start, end){
     if (typeof currentPageData !== 'undefined') currentPageData.destroyAllData();
     if (selectiontype === '5' || selectiontype === '4'){
         $('#reporttype option[value="4"]').hide();
-        $('#reporttype option[value="5"]').show();
     }else{
         $('#reporttype option[value="4"]').show();
+    }
+    if (selectiontype === '4'){
+        $('#reporttype option[value="5"]').show();
+    }else{
         $('#reporttype option[value="5"]').hide();
     }
     if (reporttype === '1'){
@@ -583,7 +582,6 @@ function Multiple(id, start, end, period, selectiontype){
     self.addDate = function(date){
         self.dates.push(date);
         self.updateData(true);
-        console.log(date);
     };
     self.removeDate = function(index){
         self.dates.splice(index, 1);
@@ -657,7 +655,6 @@ function Multiple(id, start, end, period, selectiontype){
             if (!shouldContinue) clearInterval(periodicFunction);
             shouldContinue = false;
             if(self.requstStatus.length === self.dates.length + 2){
-                console.log("RETRIEVED");
                 self.updateRepresentation();
             } else{
                 shouldContinue = true;
@@ -706,7 +703,6 @@ function Multiple(id, start, end, period, selectiontype){
             if (!shouldContinue) clearInterval(periodicFunction);
             shouldContinue = false;
             if(self.requstStatus.length === self.dates.length + 2){
-                console.log("RETRIEVED");
                 self.updateRepresentation();
             } else{
                 shouldContinue = true;
@@ -759,7 +755,6 @@ function Multiple(id, start, end, period, selectiontype){
             ]   
         };
         //values
-        console.log(valuesData);
         if (type == -1){
             type = profileData.type;
             for (var i = self.valuesData.length-1; i >= 0; i--){
@@ -811,7 +806,6 @@ function Multiple(id, start, end, period, selectiontype){
             legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
-        console.log("UPDATINg2"); 
         return chart;
     };
 
@@ -937,7 +931,6 @@ function ODN(id, start, end, period, selectiontype){
             'end' : self.end+"",
             'period' : self.period
         }, function(data){
-            console.log(data);
             var currentData = JSON.parse(data);
             self.valuesData = currentData;
             self.requstStatus.push(true);
@@ -948,7 +941,6 @@ function ODN(id, start, end, period, selectiontype){
                 'end' : self.end+"",
                 'period' : self.period
             }, function(data){
-                console.log(data);
                 var currentData = JSON.parse(data);
                 self.profileData = currentData;
                 self.requstStatus.push(true);
@@ -994,7 +986,6 @@ function ODN(id, start, end, period, selectiontype){
             if (!shouldContinue) clearInterval(periodicFunction);
             shouldContinue = false;
             if(self.requstStatus.length === self.dates.length + 2){
-                // console.log("RETRIEVED");
                 self.updateRepresentation();
             } else{
                 shouldContinue = true;
@@ -1034,9 +1025,6 @@ function ODN(id, start, end, period, selectiontype){
         } 
     };
     self.setLinearGraph = function(profileData, valuesData, type){  
-        console.log(profileData);
-        console.log(valuesData);
-        console.log(type);
         var data_points = filter_dataset({
             type: type == -1 ? profileData.type : type,
             start: profileData.start,
@@ -1121,14 +1109,12 @@ function ODN(id, start, end, period, selectiontype){
 
     self.setTable = function(selector, dataODN, dataMoney){//arrs with values
         var current_tbody = $(selector+' tbody');
-        console.log(selector);
         current_tbody.html("");
         var data_size = dataODN.length;
         for(var i = 0; i < data_size; i++){
             var current_date = new Date(i*self.period*60*1000 + self.start*1);
             var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
             var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
-            console.log(i + " " + data_size);
             current_tbody.append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+(dataMoney[i]).toFixed(2)+"</td><td>"+(dataODN[i]).toFixed(2)+"</td></tr>")
         }
     };
