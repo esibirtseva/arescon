@@ -217,6 +217,9 @@ var buildPageData = function(reporttype, period, start, end){
     }else if (reporttype === '5'){
         var id = getParameterByName('id');
         currentPageData = new ODN(id, start, end, period, selectiontype); 
+    }else if (reporttype === '6'){
+        var id = getParameterByName('id');
+        currentPageData = new Deviation(id, start, end, period, selectiontype); 
     }else{//no PageData
         //let user watch previous reports
         console.log("nothing to do here");
@@ -1160,6 +1163,68 @@ function ODN(id, start, end, period, selectiontype){
         return chart;
     };
 
+}
+function Deviation(id, start, end, period, selectiontype){
+    var self = this;
+
+    PageData.call(this, id, start, end, period, selectiontype);  
+
+    
+
+    self.updateData = function(updateRepresentation){
+        var selectiontype_str = '';
+        if(selectiontype === '5'){//device
+            selectiontype_str = 'device';
+        }else if (selectiontype === '4'){//type
+            selectiontype_str = 'type';
+        }
+        self.isUpdated = false;
+        $.post('/' + selectiontype_str + '/deviation',
+            {'id':self.id,
+            'start' : self.start+"",
+            'end' : self.end+"",
+            'value':'0.90'},
+            function(data){
+                var currentData = JSON.parse(data);
+                self.data = currentData;
+
+                
+                if (updateRepresentation){
+                    self.updateRepresentation();
+                }
+                self.isUpdated = true;
+            }
+        );
+
+    };
+
+    self.updateRepresentation = function(){ 
+        self.destroyAllData();
+        $('.data_block').hide();
+        $('#type_deviation').show();
+        self.setTable()
+    };
+    self.setTable = function(){//arrs with values
+        var current_tbody = $('#type_deviation tbody');
+        current_tbody.html("");
+        var data_size = self.data.values.length;
+        for(var i = 0; i < data_size; i++){
+            var current_date = new Date(i*60*60*1000 + self.start*1);
+            var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
+            var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
+            var date_start = date_str + " " + time_str;
+
+            current_date = new Date((i+1)*self.period*60*1000 + self.start*1);
+            date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
+            time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
+            var date_end = date_str + " " + time_str;
+            var value = self.data.values[i];//.replace(/'/g, "\"")
+            var deviation = Math.round((value.value - 1)*100);
+            deviation = deviation > 0 ? "+"+deviation : ""+deviation;
+            var change_field = '<form class="form-inline change_form" style="display: inline-block;"><div class="form-group"><div class="input-group"><input type="text" class="form-control" id="exampleInputAmount" placeholder="Новое описание"><div class="input-group-addon glyphicon glyphicon-pencil" style="top: 0;" onclick="alert(\'will be changed\');"></div></div></div></form>';
+            current_tbody.append("<tr><td>"+date_start+"</td><td>"+date_end+"</td><td>"+deviation+"%</td><td><span style='margin-right: 10px'>"+value.name+"</span>"+change_field+"<div></div></td></tr>")
+        }
+    };
 }
 var filter_dataset = function(data){
     var result = {};

@@ -5678,3 +5678,11 @@ a.water_type{
   border-left-color: #428bca;
 }
 /* Responsive: Portrait tablets and up */
+table .change_form .glyphicon:hover{
+  cursor: pointer;
+  background-color: rgb(66, 139, 202);
+  color: white;
+}
+table td{
+  vertical-align: middle!important;
+}
