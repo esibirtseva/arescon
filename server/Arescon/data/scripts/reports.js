@@ -1192,7 +1192,7 @@ function Deviation(id, start, end, period, selectiontype){
             {'id':self.id,
             'start' : self.start+"",
             'end' : self.end+"",
-            'value':  (1 - self.deviation/100)//'0.90'
+            'value':  (Number(self.deviation)/100.0)//'0.90'
         },
             function(data){
                 var currentData = JSON.parse(data);
