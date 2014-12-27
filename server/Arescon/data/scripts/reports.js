@@ -473,8 +473,8 @@ function Forecast(id, start, end, period, selectiontype){
     var map = [];
     map['1440'] = {period: 60,count: 24};
     map['302400'] = {period: 1440,count: 30};
-    map['907200'] = {period: 302400,count: 3};
-    map['3628800'] = {period: 302400,count: 12};
+    map['907200'] = {period: 43200,count: 3};
+    map['3628800'] = {period: 43200,count: 12};
 
     self.updateData = function(updateRepresentation){
         self.isUpdated = false;

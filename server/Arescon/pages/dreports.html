@@ -51,28 +51,47 @@
             <h4>Последний отчет</h4>
             <form>
               <div class="reporttypepicker form-inline">
-                <label for="date_filter">Тип отчета:</label>
+                <label for="date_filter">Тип отчета: </label>
                 <select class="form-control" name="" id="reporttype">
                   <option value="1" selected="selected">Профиль</option>
                   <option value="2">Прогноз</option>
                   <option value="3">Множественный</option>
                   <option value="4">Доли потребления</option>
-                  <option value="5">Общедомовые нужды</option>
                   <option value="6">Отклонение</option>
+                  <option value="7">Доли по времени</option>
                 </select>
               </div>
               <div class="rangepicker form-inline">
-                <label for="date_filter">Интервал времени:</label>
+                <label for="date_filter">Интервал времени: </label>
                 <input type="text" name="daterange" id="date_filter" class="form-control" placeholder="Выберите интервал">
               </div>
               <div class="frequencypicker form-inline">
-                <label for="date_filter">Частота съема:</label>
+                <label for="date_filter">Частота съема: </label>
                 <select class="form-control" name="" id="period">
                   <option value="5">5 минут</option>
                   <option value="60" class="report_profile" selected="selected">Час</option>
                   <option value="1440" class="report_profile">День</option>
                   <option value="10080">Неделя</option>
                   <option value="302400">Месяц</option>
+                </select>
+              </div>
+              <div class="forecastpicker form-inline">
+                <label for="date_filter">Период: </label>
+                <select class="form-control" name="" id="forecast_period">
+                  <option value="1440">День</option>
+                  <option value="302400" selected="selected">Месяц</option>
+                  <option value="907200">Квартал</option>
+                  <option value="3628800">Год</option>
+                </select>
+              </div>
+              <div class="percentpicker form-inline">
+                <label for="date_filter">Минимальное отклонение: </label>
+                <select class="form-control" name="" id="deviation">
+                  <option value="5">5%</option>
+                  <option value="10" class="report_profile" selected="selected">10%</option>
+                  <option value="25" class="report_profile">25%</option>
+                  <option value="50">50%</option>
+                  <option value="100">100%</option>
                 </select>
               </div>
               <div id="add_interval" class="btn btn-success" style="display: none;">Добавить интервал</div>
@@ -105,8 +124,8 @@
                   <tr>
                     <th>Дата</th>
                     <th>Время</th>
-                    <th>Потребление</th>
                     <th>Расходы (руб.)</th>
+                    <th>Общедомовые асходы (руб.)</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -175,14 +194,14 @@
                 </thead>
                 <tbody></tbody>
               </table>  
-            </div> 
+            </div>  
             <div id="type_deviation" class="data_block col-md-6" style="display: none;">
               <h4>Отклонение потребления от ожидаемого</h4>
               <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th>Дата</th>
-                    <th>Время</th>
+                    <th>Начло</th>
+                    <th>Конец</th>
                     <th>Отклонение(%)</th>
                     <th>Описание</th>
                   </tr>

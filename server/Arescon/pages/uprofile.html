@@ -50,12 +50,8 @@
               <div class="reporttypepicker form-inline">
                 <label for="date_filter">Тип отчета:</label>
                 <select class="form-control" name="" id="reporttype">
-                  <option value="1" selected="selected">Профиль</option>
-                  <option value="2">Прогноз</option>
-                  <option value="3">Множественный</option>
-                  <option value="4">Доли потребления</option>
-                  <option value="5">Общедомовые нужды</option>
-                  <option value="6">Отклонение</option>
+                  <option value="1" selected="selected">Личные расходы на домовые нужды</option>
+                  <option value="2">Доля расходов на домовые нужды</option>
                 </select>
               </div>
               <div class="rangepicker form-inline">
@@ -72,27 +68,7 @@
                   <option value="302400">Месяц</option>
                 </select>
               </div>
-              <div id="add_interval" class="btn btn-success" style="display: none;">Добавить интервал</div>
-              <div class="datepicker form-inline" style="display: none;">
-                <label for="date_filter">Дополнительный интервал:</label>
-                <input type="text" name="datepicker1" class="form-control" placeholder="Выберите интервал">
-                <div class="btn btn-danger">удалить</div>
-              </div>
-              <div class="datepicker form-inline" style="display: none;">
-                <label for="date_filter">Дополнительный интервал:</label>
-                <input type="text" name="datepicker2" class="form-control" placeholder="Выберите интервал">
-                <div class="btn btn-danger">удалить</div>
-              </div>
-              <div class="datepicker form-inline" style="display: none;">
-                <label for="date_filter">Дополнительный интервал:</label>
-                <input type="text" name="datepicker3" class="form-control" placeholder="Выберите интервал">
-                <div class="btn btn-danger">удалить</div>
-              </div>
             </form>
-            <div id="type_share" class="data_block col-md-6" style="display: none;">
-              <h4>Доли затрат на услуги</h4>
-              <canvas class="share" width="370" height="250"></canvas>   
-            </div>
             <div id="type_coldwater" class="data_block col-md-6" style="display: none;">
               <h4>Холодная вода</h4>
               <canvas class="linear" width="370" height="250"></canvas> 
@@ -172,21 +148,7 @@
                 </thead>
                 <tbody></tbody>
               </table>  
-            </div>  
-            <div id="type_deviation" class="data_block col-md-6" style="display: none;">
-              <h4>Отклонение потребления от ожидаемого</h4>
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Начло</th>
-                    <th>Конец</th>
-                    <th>Отклонение(%)</th>
-                    <th>Описание</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>  
-            </div>           
+            </div>       
           </div>
         </div>
       </div>
@@ -196,6 +158,6 @@
 
     <script src="scripts/vendor.js"></script>
     <script src="scripts/main.js"></script>
-    <script src="scripts/reports.js"></script>
+    <script src="scripts/odn.js"></script>
 </body>
 </html>
