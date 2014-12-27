@@ -159,6 +159,12 @@ $('#period').change(function(e){
     currentPageData.updPeriod(period);
     currentPageData.updateData(true);
 });
+$('#forecast_period').change(function(e){
+    var period = $(this).val();
+
+    currentPageData.updPeriod(period);
+    currentPageData.updateData(true);
+});
 $('#deviation').change(function(e){
     var deviation = $(this).val()/100;
 
@@ -191,7 +197,7 @@ var interfaceInit = function(only){
 }
 var buildPageData = function(reporttype, period, start, end){
     var selectiontype = getParameterByName('selectiontype');
-    $('.percentpicker').hide();
+    $('.percentpicker,.forecastpicker').hide();
     $('#add_interval,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
@@ -208,6 +214,11 @@ var buildPageData = function(reporttype, period, start, end){
         $('#reporttype option[value="5"]').show();
     }else{
         $('#reporttype option[value="5"]').hide();
+    }
+    if (selectiontype === '3'){
+        $('#reporttype option[value="7"]').show();
+    }else{
+        $('#reporttype option[value="7"]').hide();
     }
     if (reporttype === '1'){
         var id = getParameterByName('id');
@@ -230,6 +241,9 @@ var buildPageData = function(reporttype, period, start, end){
     }else if (reporttype === '6'){
         var id = getParameterByName('id');
         currentPageData = new Deviation(id, start, end, period, selectiontype); 
+    }else if (reporttype === '7'){
+        var id = getParameterByName('id');
+        currentPageData = new ShareLines(id, start, end, period, selectiontype); 
     }else{//no PageData
         //let user watch previous reports
         console.log("nothing to do here");
@@ -376,6 +390,7 @@ function Profile(id, start, end, period, selectiontype){
         }else{//multiple
             $('.data_block').show();
             $('#type_share').hide();
+            $('#type_hide').hide();
             $('.table,.share').hide();
             interfaceInit(getParameterByName('only'));
             for (var i = 0; i < self.profileData.values.length; i++){
@@ -454,11 +469,15 @@ function Forecast(id, start, end, period, selectiontype){
 
     PageData.call(this, id, start, end, period, selectiontype);  
 
-    
+    self.period = $('#forecast_period').val();
+    var map = [];
+    map['1440'] = {period: 60,count: 24};
+    map['302400'] = {period: 1440,count: 30};
+    map['907200'] = {period: 302400,count: 3};
+    map['3628800'] = {period: 302400,count: 12};
 
     self.updateData = function(updateRepresentation){
         self.isUpdated = false;
-
         
         var selectiontype_str = '';
         if(selectiontype === '5'){//device
@@ -486,8 +505,8 @@ function Forecast(id, start, end, period, selectiontype){
             'id' : self.id,
             'start' : '0',
             'end' : '99999999999999',
-            'period' : '1440',
-            'count' : '30'
+            'period' : map[self.period].period,
+            'count' : map[self.period].count
         }, function(data){
             var currentData = JSON.parse(data);
             self.profileData = currentData;
@@ -505,8 +524,10 @@ function Forecast(id, start, end, period, selectiontype){
             'types' : [0,1,2,3,4],
             'start' : '0',
             'end' : '99999999999999',
-            'period' : '1440',
-            'count' : '30'
+            'period' : map[self.period].period,
+            'count' : map[self.period].count
+            // 'period' : '1440',
+            // 'count' : '30'
         }, function(data){
             var currentData = JSON.parse(data);
             self.profileData = currentData;
@@ -519,13 +540,14 @@ function Forecast(id, start, end, period, selectiontype){
     };
     self.updateRepresentation = function(){        
         self.destroyAllData();
-
+        $('.forecastpicker').show();
         if(selectiontype === '5' || selectiontype === '4'){//one
             $(typeMap[self.profileData.type].selector).show();
             $('.table,.share').hide();
             self.graphs.push(self.setLinearGraph(self.profileData));
         }else{//multiple
             $('.data_block').show();
+            $('#type_deviation').hide();
             $('.table,.share').hide();
             interfaceInit(getParameterByName('only'));
             for (var i = 0; i < self.profileData.values.length; i++){
@@ -730,6 +752,7 @@ function Multiple(id, start, end, period, selectiontype){
             self.graphs.push(self.setLinearGraph(self.profileData, self.valuesData, -1));
         }else{//multiple
             $('.data_block').show();
+            $('#type_deviation').hide();
             $('#type_share').hide();
             $('.table,.share').hide();
             interfaceInit(getParameterByName('only'));
@@ -799,7 +822,7 @@ function Multiple(id, start, end, period, selectiontype){
                     values: valuesData[i].values[type]
                 });
                 dataDailyUsage.datasets.push({
-                    label: "интервал номер " + (i+1),//typeMap[type].label,
+                    label: typeMap[type].label,
                     fillColor: typeMap[type].colors.fill,
                     strokeColor: typeMap[type].colors.stroke,
                     pointColor: typeMap[type].colors.stroke,
@@ -814,7 +837,7 @@ function Multiple(id, start, end, period, selectiontype){
         
         dataDailyUsage.labels = data_points.labels;
         optionsDailyUsage = {
-            multiTooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
+            // multiTooltipTemplate: "<%if (datasetIndex){%><%=datasetIndex%>: <%}%><%= value %>",
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
@@ -875,6 +898,7 @@ function Share(id, start, end, period, selectiontype){
     self.updateRepresentation = function(){ 
         self.destroyAllData();
         $('.data_block').hide();
+        $('#type_deviation').hide();
         $('#type_share').show();
         self.graphs.push(self.setShareGraph());
     };
@@ -1023,7 +1047,7 @@ function ODN(id, start, end, period, selectiontype){
         }else{//multiple
             $('.data_block').show();
             $('#type_share').hide();
-
+            $('#type_deviation').hide();
             $('.table,.share').show();
             interfaceInit(getParameterByName('only'));
             for(var i = 0; i < self.profileData.types.length; i++)
@@ -1199,6 +1223,7 @@ function Deviation(id, start, end, period, selectiontype){
             'value':  self.deviation//'0.90'
         },
             function(data){
+                
                 var currentData = JSON.parse(data);
                 self.data = currentData;
 
@@ -1225,6 +1250,7 @@ function Deviation(id, start, end, period, selectiontype){
         current_tbody.html("");
         var data_size = self.data.values.length;
         for(var i = 0; i < data_size; i++){
+            console.log(self.data);
             var current_date = new Date(i*self.period*60*1000 + self.data.start*1);
             var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
             var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
@@ -1234,8 +1260,8 @@ function Deviation(id, start, end, period, selectiontype){
             time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
             var date_end = date_str + " " + time_str;
             
-            var value = JSON.parse(self.data.values[i]);//.replace(/'/g, "\"")
-            // console.log(JSON.parse(value));
+            var value = self.data.values[i];//.replace(/'/g, "\"")
+            console.log(value);
             var deviation = Math.round(value.value*100);
             deviation = deviation > 0 ? "+"+deviation : ""+deviation;
             var change_field = '<form class="form-inline change_form" style="display: inline-block;"><div class="form-group"><div class="input-group"><input  id="cname_' + value.id + '" type="text" class="form-control" placeholder="Новое описание"><div class="input-group-addon glyphicon glyphicon-pencil" style="top: 0;" onclick="currentPageData.changeDeviationName(' + value.id + ')"></div></div></div></form>';
@@ -1261,6 +1287,142 @@ function Deviation(id, start, end, period, selectiontype){
         self.deviation = deviation;
         self.updateData(true);
     };
+}
+function ShareLines(id, start, end, period, selectiontype){
+    var self = this;
+
+    PageData.call(this, id, start, end, period, selectiontype);  
+
+    
+
+    self.updateData = function(updateRepresentation){
+        self.isUpdated = false;
+
+        
+        var selectiontype_str = '';
+        if(selectiontype === '5'){//device
+            selectiontype_str = 'device';
+        }else if (selectiontype === '4'){//type
+            selectiontype_str = 'type';
+        }else if (selectiontype === '3'){//flat
+            selectiontype_str = 'flat';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
+        }else if (selectiontype === '2'){//house
+            selectiontype_str = 'house';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
+        }else if (selectiontype === '1'){//tszh
+            selectiontype_str = 'tszh';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
+        }else if (selectiontype === '0'){//uk
+            selectiontype_str = 'uk';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
+            return;
+        }
+        $.post('/' + selectiontype_str + '/percentage',{
+            'types' : [self.id],
+            'start' : self.start+"",
+            'end' : self.end+"",
+            'period' : self.period
+        }, function(data){
+            var currentData = JSON.parse(data);
+            self.data = currentData;
+            
+            if (updateRepresentation){
+                self.updateRepresentation();
+            }
+            // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
+            self.isUpdated = true;
+        });
+    };
+
+    self.multipleDataFetch = function(selectiontype_str, updateRepresentation){
+        $.post('/' + selectiontype_str + '/percentage',{
+            'types' : [0,1,2,3,4],
+            'start' : self.start+"",
+            'end' : self.end+"",
+            'period' : self.period
+        }, function(data){
+            var currentData = JSON.parse(data);
+            self.data = currentData;
+            
+            if (updateRepresentation){
+                self.updateRepresentation();
+            }
+            self.isUpdated = true;
+        });
+    };
+    self.updateRepresentation = function(){        
+        self.destroyAllData();
+
+        if(selectiontype === '5' || selectiontype === '4'){//one
+            $(typeMap[self.data.types[0]].selector).show();
+            $('.table,.share').hide();
+            self.graphs.push(self.setLinearGraph(self.data));
+        }else{//multiple
+            $('.data_block').show();
+            $('#type_deviation').hide();
+            $('.table,.share').hide();
+            interfaceInit(getParameterByName('only'));
+            for (var i = 0; i < self.data.values.length; i++){
+                self.graphs.push(self.setLinearGraph({
+                    type : self.data.types[i],
+                    start : self.data.start,
+                    period : self.data.period,
+                    values : self.data.values[i]
+                }));
+            }            
+        } 
+        $('#type_share').hide();
+    };
+    self.setLinearGraph = function(data){       
+        var data_points = filter_dataset(data);
+        
+        //daily
+        var selector = typeMap[data.type].selector + ' .linear';
+        var canvas = $(selector);
+        ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+
+        for (var i = 0; i < data_points.values.length; i++){
+            data_points.values[i] = Math.round(data_points.values[i] * 100);
+        }
+        var dataDailyUsage = {
+            datasets: [
+                {
+                    label: typeMap[data.type].label,
+                    fillColor: typeMap[data.type].colors.fill,
+                    strokeColor: typeMap[data.type].colors.stroke,
+                    pointColor: typeMap[data.type].colors.stroke,
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+                }
+            ]   
+        };
+        dataDailyUsage.labels = data_points.labels;
+        optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        return chart;
+    };
+
+    self.updateControls = function(){
+        $('#period option').hide()
+                           .removeAttr('selected');
+        $('#period .report_profile').show();
+        $('#period .report_profile').first().attr('selected','selected');
+    };
+    self.updateControls();
 }
 var filter_dataset = function(data){
     var result = {};
