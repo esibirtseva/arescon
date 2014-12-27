@@ -228,6 +228,8 @@ public class Util {
                         dataMap.put("status", "good");
                         dataMap.put("status_icon", "ok");
                         templates.getTemplated(root, "user.device.htm", response);
+                    } else {
+                        response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
                     }
                     break;
                 case 1:
@@ -239,6 +241,8 @@ public class Util {
                         dataMap.put("status", "good");
                         dataMap.put("status_icon", "ok");
                         templates.getTemplated(root, "user.device.htm", response);
+                    } else {
+                        response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
                     }
                     break;
                 case 2: // fire
@@ -250,6 +254,8 @@ public class Util {
                         dataMap.put("status", "wait");
                         dataMap.put("status_icon", "warning-sign");
                         templates.getTemplated(root, "user.device.htm", response);
+                    } else {
+                        response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
                     }
                     break;
                 case 3: // earth
@@ -261,6 +267,8 @@ public class Util {
                         dataMap.put("status", "bad");
                         dataMap.put("status_icon", "remove");
                         templates.getTemplated(root, "user.device.htm", response);
+                    } else {
+                        response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
                     }
                     break;
                 case 4: // air

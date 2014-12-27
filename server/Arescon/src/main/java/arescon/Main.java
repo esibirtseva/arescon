@@ -55,7 +55,7 @@ public class Main {
 
     static Undertow server = null;
 
-    private static enum PAGES { index, user, dispatcher, login, registration, dreports, odn, ureports }
+    private static enum PAGES { index, user, dispatcher, login, registration, dreports, odn, ureports, uprofile }
 
     private static void readConfig( String filename ) throws IOException {
         Map<String, String> config = new HashMap<>(10);
@@ -162,6 +162,9 @@ public class Main {
                             break;
                         case ureports:
                             paths.put("ureports", handlers.ureports(file));
+                            break;
+                        case uprofile:
+                            paths.put("uprofile", handlers.uprofile(file));
                             break;
                     }
                 }
