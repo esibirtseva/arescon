@@ -159,6 +159,12 @@ $('#period').change(function(e){
     currentPageData.updPeriod(period);
     currentPageData.updateData(true);
 });
+$('#deviation').change(function(e){
+    var deviation = $(this).val();
+
+    currentPageData.updDeviation(deviation);
+    currentPageData.updateData(true);
+});
 var interfaceInit = function(only){
     $('.data_block').hide();
     switch(only){
@@ -185,9 +191,11 @@ var interfaceInit = function(only){
 }
 var buildPageData = function(reporttype, period, start, end){
     var selectiontype = getParameterByName('selectiontype');
+    $('.percentpicker').hide();
     $('#add_interval,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
+    $('#type_deviation').hide();
     if (typeof currentPageData !== 'undefined') currentPageData.destroyAllData();
     if (selectiontype === '5' || selectiontype === '4'){
         $('#reporttype option[value="4"]').hide();
@@ -1169,7 +1177,8 @@ function Deviation(id, start, end, period, selectiontype){
 
     PageData.call(this, id, start, end, period, selectiontype);  
 
-    
+    self.deviation = $('#deviation').val();
+    self.period = 60;
 
     self.updateData = function(updateRepresentation){
         var selectiontype_str = '';
@@ -1183,7 +1192,8 @@ function Deviation(id, start, end, period, selectiontype){
             {'id':self.id,
             'start' : self.start+"",
             'end' : self.end+"",
-            'value':'0.90'},
+            'value':  (1 - self.deviation/100)//'0.90'
+        },
             function(data){
                 var currentData = JSON.parse(data);
                 self.data = currentData;
@@ -1200,6 +1210,8 @@ function Deviation(id, start, end, period, selectiontype){
 
     self.updateRepresentation = function(){ 
         self.destroyAllData();
+        $('.percentpicker').show();
+        $('.frequencypicker').hide();
         $('.data_block').hide();
         $('#type_deviation').show();
         self.setTable()
@@ -1209,21 +1221,41 @@ function Deviation(id, start, end, period, selectiontype){
         current_tbody.html("");
         var data_size = self.data.values.length;
         for(var i = 0; i < data_size; i++){
-            var current_date = new Date(i*60*60*1000 + self.start*1);
+            var current_date = new Date(i*self.period*60*1000 + self.data.start*1);
             var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
             var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
             var date_start = date_str + " " + time_str;
-
-            current_date = new Date((i+1)*self.period*60*1000 + self.start*1);
+            current_date = new Date((i+1)*self.period*60*1000 + self.data.start*1);
             date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
             time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
             var date_end = date_str + " " + time_str;
-            var value = self.data.values[i];//.replace(/'/g, "\"")
-            var deviation = Math.round((value.value - 1)*100);
+            
+            var value = JSON.parse(self.data.values[i]);//.replace(/'/g, "\"")
+            // console.log(JSON.parse(value));
+            var deviation = Math.round(value.value*100);
             deviation = deviation > 0 ? "+"+deviation : ""+deviation;
-            var change_field = '<form class="form-inline change_form" style="display: inline-block;"><div class="form-group"><div class="input-group"><input type="text" class="form-control" id="exampleInputAmount" placeholder="Новое описание"><div class="input-group-addon glyphicon glyphicon-pencil" style="top: 0;" onclick="alert(\'will be changed\');"></div></div></div></form>';
-            current_tbody.append("<tr><td>"+date_start+"</td><td>"+date_end+"</td><td>"+deviation+"%</td><td><span style='margin-right: 10px'>"+value.name+"</span>"+change_field+"<div></div></td></tr>")
+            var change_field = '<form class="form-inline change_form" style="display: inline-block;"><div class="form-group"><div class="input-group"><input  id="cname_' + value.id + '" type="text" class="form-control" placeholder="Новое описание"><div class="input-group-addon glyphicon glyphicon-pencil" style="top: 0;" onclick="currentPageData.changeDeviationName(' + value.id + ')"></div></div></div></form>';
+            current_tbody.append("<tr><td>"+date_start+"</td><td>"+date_end+"</td><td>"+deviation+"%</td><td><span id='aname_" + value.id + "' style='margin-right: 10px'>"+value.name+"</span>"+change_field+"<div></div></td></tr>")
         }
+    };
+
+    self.changeDeviationName = function(id){
+        var input = $('#cname_'+id);
+        var newname = input.val().trim();
+        if (newname){
+            $.post('/setDeviationName',{'id': id, 'name': newname},function(response){
+                //TODO: handle response
+                $('#aname_'+id).html(newname);
+                input.val('');
+            });
+        }
+        else{
+            input.focus();
+        }
+    };
+    self.updDeviation = function(deviation){
+        self.deviation = deviation;
+        self.updateData(true);
     };
 }
 var filter_dataset = function(data){
