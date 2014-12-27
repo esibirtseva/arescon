@@ -92,7 +92,7 @@ public class API {
                 period, count);
 
         for (int i = 0; i < expected; ++i) {
-            list.put(profile[i % profile.length] * multiplier);
+            if (Double.isFinite(profile[i % profile.length])) list.put(profile[i % profile.length] * multiplier);
         }
 
         return response.append(list.toString()).append("}").toString();
@@ -139,7 +139,7 @@ public class API {
 
         if (values.size() > 0) {
             for (int i = 0; i < expected; ++i) {
-                list.put(profile[i % profile.length] * multiplier / values.size());
+                if (Double.isFinite(profile[i % profile.length])) list.put(profile[i % profile.length] * multiplier / values.size());
             }
         }
 
@@ -195,7 +195,7 @@ public class API {
 
             if (typeCount > 0) {
                 for (int i = 0; i < expected; ++i) {
-                    list.put(profile[i % profile.length] * multiplier / typeCount);
+                    if (Double.isFinite(profile[i % profile.length])) list.put(profile[i % profile.length] * multiplier / typeCount);
                 }
             }
 
@@ -345,7 +345,7 @@ public class API {
 
         JSONArray list = new JSONArray();
         for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            if (Math.abs(values[(int)j].value) >= edge) list.put(new JSONObject(values[(int)j].toString()));
+            if (Math.abs(values[(int)j].value) >= edge) list.put(values[(int)j].toString());
         }
 
         return response.append(list.toString()).append("}").toString();
@@ -366,7 +366,7 @@ public class API {
 
         JSONArray list = new JSONArray();
         for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            if (Math.abs(values[(int)j].value) >= edge) list.put(new JSONObject(values[(int)j].toString()));
+            if (Math.abs(values[(int)j].value) >= edge) list.put(values[(int)j].toString());
         }
 
         return response.append(list.toString()).append("}").toString();
@@ -534,6 +534,8 @@ public class API {
                 countNumber = 24;
             } else if (periodTime == 1440) {
                 countNumber = 30;
+            } else if (periodTime == 43200) {
+                countNumber = 12;
             } else {
                 exchange.getResponseSender().send("error");
                 return;
@@ -586,6 +588,8 @@ public class API {
                 countNumber = 24;
             } else if (periodTime == 1440) {
                 countNumber = 30;
+            } else if (periodTime == 43200) {
+                countNumber = 12;
             } else {
                 exchange.getResponseSender().send("error");
                 return;
@@ -641,6 +645,8 @@ public class API {
                 countNumber = 24;
             } else if (periodTime == 1440) {
                 countNumber = 30;
+            } else if (periodTime == 43200) {
+                countNumber = 12;
             } else {
                 exchange.getResponseSender().send("error");
                 return;
