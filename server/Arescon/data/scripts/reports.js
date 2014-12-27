@@ -160,7 +160,7 @@ $('#period').change(function(e){
     currentPageData.updateData(true);
 });
 $('#deviation').change(function(e){
-    var deviation = $(this).val();
+    var deviation = $(this).val()/100;
 
     currentPageData.updDeviation(deviation);
     currentPageData.updateData(true);
@@ -199,7 +199,9 @@ var buildPageData = function(reporttype, period, start, end){
     if (typeof currentPageData !== 'undefined') currentPageData.destroyAllData();
     if (selectiontype === '5' || selectiontype === '4'){
         $('#reporttype option[value="4"]').hide();
+        $('#reporttype option[value="6"]').show();
     }else{
+        $('#reporttype option[value="6"]').hide();
         $('#reporttype option[value="4"]').show();
     }
     if (selectiontype === '4'){
@@ -751,10 +753,11 @@ function Multiple(id, start, end, period, selectiontype){
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
+        console.log(valuesData);
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: typeMap[type == -1 ? profileData.type : type].label,
+                    label: getTimeFormatddmmyyyy(valuesData[0].start),
                     fillColor: 'rgb(244, 247, 251)',
                     strokeColor: 'rgb(216, 219, 223)',
                     pointColor: 'rgb(216, 219, 223)',
@@ -788,7 +791,7 @@ function Multiple(id, start, end, period, selectiontype){
                 });
             }
         }else{
-            for (var i = self.valuesData.length-1; i >= 0; i--){
+            for (var i = 0; i < self.valuesData.length; i++){
                 data_points = filter_dataset({
                     type: type,
                     start: self.valuesData[0].start,
@@ -796,7 +799,7 @@ function Multiple(id, start, end, period, selectiontype){
                     values: valuesData[i].values[type]
                 });
                 dataDailyUsage.datasets.push({
-                    label: typeMap[type].label,
+                    label: "интервал номер " + (i+1),//typeMap[type].label,
                     fillColor: typeMap[type].colors.fill,
                     strokeColor: typeMap[type].colors.stroke,
                     pointColor: typeMap[type].colors.stroke,
@@ -811,6 +814,7 @@ function Multiple(id, start, end, period, selectiontype){
         
         dataDailyUsage.labels = data_points.labels;
         optionsDailyUsage = {
+            multiTooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
@@ -1177,7 +1181,7 @@ function Deviation(id, start, end, period, selectiontype){
 
     PageData.call(this, id, start, end, period, selectiontype);  
 
-    self.deviation = $('#deviation').val();
+    self.deviation = $('#deviation').val()/100;
     self.period = 60;
 
     self.updateData = function(updateRepresentation){
@@ -1192,7 +1196,7 @@ function Deviation(id, start, end, period, selectiontype){
             {'id':self.id,
             'start' : self.start+"",
             'end' : self.end+"",
-            'value':  (Number(self.deviation)/100.0)//'0.90'
+            'value':  self.deviation//'0.90'
         },
             function(data){
                 var currentData = JSON.parse(data);
