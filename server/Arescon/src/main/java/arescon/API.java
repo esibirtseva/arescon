@@ -345,7 +345,7 @@ public class API {
 
         JSONArray list = new JSONArray();
         for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            if (Math.abs(values[(int)j].value) >= edge) list.put(values[(int)j].toString());
+            if (Math.abs(values[(int)j].value) >= edge) list.put(new JSONObject(values[(int)j].toString()));
         }
 
         return response.append(list.toString()).append("}").toString();
@@ -366,7 +366,7 @@ public class API {
 
         JSONArray list = new JSONArray();
         for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            if (Math.abs(values[(int)j].value) >= edge) list.put(values[(int)j].toString());
+            if (Math.abs(values[(int)j].value) >= edge) list.put(new JSONObject(values[(int)j].toString()));
         }
 
         return response.append(list.toString()).append("}").toString();
