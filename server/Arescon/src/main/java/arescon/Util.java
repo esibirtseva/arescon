@@ -26,6 +26,74 @@ public class Util {
         this.templates = templates;
     }
 
+    void getReportName( boolean dispatcher, Writer response, HttpServerExchange exchange ) {
+
+        int selectionType = 0;
+        int id = 0;
+
+        try {
+            try {
+                selectionType = Integer.parseInt(exchange.getQueryParameters().get("selectiontype").getFirst());
+            } catch (Throwable ignored) { }
+            try {
+                id = Integer.parseInt(exchange.getQueryParameters().get("id").getFirst());
+            } catch (Throwable ignored) { }
+            String name = "";
+            switch (selectionType) {
+                case 0:
+                    name = " (Управляющая компания)";
+                    break;
+                case 1:
+                    if (id == 1) name = " (ТСЖ 2)";
+                    else if (id == 2) name = " (ТСЖ 1)";
+                    break;
+                case 2:
+                    if (id == 4) name = " (Иловайская улица, д. 3)";
+                    else if (id == 3) name = " (Башиловская улица, д. 15)";
+                    else if (id == 2) name = " (Нежинская улица, д. 13)";
+                    else if (id == 1) name = " (Минусинская улица, д. 37)";
+                    break;
+                case 3:
+                    if (id == 1) name = " (Башиловская улица, д. 15, кв. 65)";
+                    else if (id == 2) name = " (Иловайская улица, д. 3, кв. 32)";
+                    else if (id == 3) name = " (Нежинская улица, д. 13, кв. 145)";
+                    else if (id == 4) name = " (Минусинская улица, д. 37, кв. 20)";
+                    break;
+                case 4:
+                    if (dispatcher) {
+                        if (id == 1) name = " (Минусинская улица, д. 37, кв. 20 - Газ)";
+                        else if (id == 2) name = " (Минусинская улица, д. 37, кв. 20 - Вода)";
+                        else if (id == 3) name = " (Минусинская улица, д. 37, кв. 20 - Электричество)";
+                        else if (id == 4) name = " (Нежинская улица, д. 13, кв. 145 - Газ)";
+                        else if (id == 5) name = " (Нежинская улица, д. 13, кв. 145 - Вода)";
+                        else if (id == 6) name = " (Нежинская улица, д. 13, кв. 145 - Электричество)";
+                        else if (id == 7) name = " (Башиловская улица, д. 15, кв. 65 - Газ)";
+                        else if (id == 8) name = " (Башиловская улица, д. 15, кв. 65 - Вода)";
+                        else if (id == 9) name = " (Башиловская улица, д. 15, кв. 65 - Электричество)";
+                        else if (id == 10) name = " (Иловайская улица, д. 3, кв. 32 - Газ)";
+                        else if (id == 11) name = " (Иловайская улица, д. 3, кв. 32 - Вода)";
+                        else if (id == 12) name = " (Иловайская улица, д. 3, кв. 32 - Электричество)";
+                    } else {
+                        if (id  == 0) name = " (Холодная вода)";
+                        else if (id  == 1) name = " (Горячая вода)";
+                        else if (id  == 2) name = " (Газ)";
+                        else if (id  == 3) name = " (Электричество)";
+                        else if (id  == 4) name = " (Отопление)";
+                    }
+                    break;
+                case 5:
+                    if (!dispatcher) {
+                        if (id == 1) name = " (Холодная вода - Счетчик Techem AP)";
+                        else if (id == 2) name = " (Электричество - Счетчик однофазный СОЭ-52)";
+                        else if (id == 3) name = " (Газ - Счетчик ГРАНД-25Т)";
+                        else if (id == 4) name = " (Горячая вода - Счетчик СВ-15 Х \"МЕТЕР\")";
+                    }
+                    break;
+            }
+            response.write(name);
+        } catch (Throwable ignored) { }
+    }
+
     void getActiveDevice( String expected, String activeMarker, Writer response, HttpServerExchange exchange ) {
         if (exchange.getRelativePath().equals("/" + expected)) {
             try { response.append(" ").append(activeMarker); }

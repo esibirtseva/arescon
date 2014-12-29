@@ -111,8 +111,13 @@ public class Handlers {
     }
 
     public HttpHandler dreports( String file ) {
-        final HttpHandler handler = CommonHandlers.templatedPage(file
-
+        final HttpHandler handler = CommonHandlers.templatedPage(file,
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getReportName(true, writer, exchange);
+                    }
+                }
         );
 
         return handler;
@@ -120,12 +125,17 @@ public class Handlers {
 
     public HttpHandler ureports( String file ) {
         final HttpHandler handler = CommonHandlers.templatedPage(file,
-            new CommonHandlers.StringWriterHandler() {
-                @Override
-                public void execute(StringWriter writer, HttpServerExchange exchange) {
-                    util.getUserInfo(writer, exchange);
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getUserInfo(writer, exchange);
+                    }
+                }, new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getReportName(false, writer, exchange);
+                    }
                 }
-            }
         );
 
         return handler;

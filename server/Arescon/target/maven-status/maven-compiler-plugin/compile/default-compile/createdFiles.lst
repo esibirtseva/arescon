@@ -22,6 +22,7 @@ arescon\Main$26.class
 arescon\Main$23.class
 arescon\Handlers$21.class
 net\avkorneenkov\undertow\DatabaseIdentityManager.class
+arescon\Handlers$36.class
 arescon\Handlers$16.class
 net\avkorneenkov\IOUtil.class
 arescon\Handlers$10.class
@@ -56,6 +57,7 @@ arescon\Handlers$11.class
 net\avkorneenkov\util\Pair.class
 net\avkorneenkov\undertow\FormAuth.class
 arescon\Handlers$25.class
+arescon\Handlers$35.class
 arescon\Handlers$5.class
 arescon\Main.class
 arescon\Util.class
