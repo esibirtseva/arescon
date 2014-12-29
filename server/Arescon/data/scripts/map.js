@@ -24,7 +24,7 @@ function Dataset(){
                 income = $(this).children('div').eq(0).data('income'),
                 outcome = $(this).children('div').eq(1).data('outcome'),
                 balance = $(this).children('div').eq(2).data('balance');
-            // console.log(id + " " + name + " " + income + " " + outcome + " " + balance);
+            
             
             var tszh = new Tszh(id, name, income, outcome, balance);
             self.data.push(tszh);
@@ -37,7 +37,7 @@ function Dataset(){
                     balance = $(this).children('div').eq(2).data('balance');
                     coords = [$(this).data('x'), $(this).data('y')],
                     alert = $(this).data('alert');
-                // console.log(id + " " + name + " " + income + " " + outcome + " " + balance);    
+                
                 var house = new House(id, income, outcome, balance, coords, name);
                 if (alert){
                     house.alert = true;
@@ -60,19 +60,15 @@ function Dataset(){
     };
 
     self.find = function(type, id){
-        // console.log("find " + type + " " + id);
         if(type === 1){
             for (var i = 0; i < self.data.length; i ++){
                 var entry = self.data[i];
-                // console.log(entry.name + " " + entry.id);
                 if(entry.id == id) return entry;
             }
         }
         if (type === 2){
             for (var i = 0; i < self.data.length; i ++){
                 var entry = self.data[i];
-                // console.log(entry.name + " " + entry.id);
-                // if(entry.id == id) return entry;
                 for (var j = 0; j < entry.children.length; j++){
                     if (entry.children[j].id === id) return entry.children[j];
                 }
@@ -81,11 +77,11 @@ function Dataset(){
         return null;
     };
 
-    self.changePlacemarkLinks = function(type){
+    self.toggleAlertsTo = function(areOn){
         self.data.forEach(function(entry){
-            entry.changePlacemarkLink(type);
+            entry.toggleAlertsTo(areOn);
         });
-    }
+    };
 };
 function DataNode(id, income, outcome, balance){//parent class
     var self = this;
@@ -108,23 +104,28 @@ function Tszh(id, name, income, outcome, balance){
     DataNode.call(this, id, income, outcome, balance); 
 
     self.name = name;
-    // console.log(id + " " + name + " " + income + " " + outcome + " " + balance);
+    
     self.highlight = function(){
-        // console.log("tszh highlight");
         self.children.forEach(function(entry){
             entry.highlight();
         });
     };
     self.removeHighlight = function(){
-        // console.log("tszh highlight");
+        
         self.children.forEach(function(entry){
             entry.removeHighlight();
         });
     };
     self.addToMap = function(){
         self.children.forEach(function(entry){
-            // console.log(entry);
+            
             entry.setPlacemark();
+        });
+    };
+
+    self.toggleAlertsTo = function(areOn){
+        self.children.forEach(function(entry){
+            entry.toggleAlertsTo(areOn);
         });
     };
 };
@@ -138,15 +139,16 @@ function House(id, income, outcome, balance, coords, name){
     self.placemark = null;
     self.defaultColor;
     self.alert = false;
+    self.alertIsOn = $(this).is(':checked');
     self.alertText = "Текст алерта";
-    // console.log(id + " " + coords + " " + name + " " + income + " " + outcome + " " + balance);   
+    
 
     self.highlight = function(){
-        console.log("house highlight " + self.id + " " + 'islands#blueDotIcon');
+       
         self.placemark.options.set('preset', 'islands#blueDotIcon');
     };
     self.removeHighlight = function(){
-        console.log("house removehighlight " + self.id + " " + self.defaultColor);
+       
         self.placemark.options.set('preset', self.defaultColor);  
     };
 
@@ -161,7 +163,6 @@ function House(id, income, outcome, balance, coords, name){
         } else if(self.balance == 0) {
             color = 'islands#yellowIcon';
         }        
-        if(self.alert) color = 'islands#orangeDotIcon';
         self.defaultColor = color;
 
         var myPlacemark = new ymaps.Placemark(self.coords,{
@@ -173,7 +174,6 @@ function House(id, income, outcome, balance, coords, name){
 
         myPlacemark.events.add('mouseenter', function(e) {
             var filter = $("input[name='type_select']:checked").val();
-            console.log(filter);
             var link = '';
             switch(filter) {
                 case 'coldwater':
@@ -200,7 +200,7 @@ function House(id, income, outcome, balance, coords, name){
                                     ["Холодная вода", "Горячая вода", "Газ","Электричество", "Отопление"],
                                     [11237,2565,3487,-432, 132], 
                                     link, 
-                                    self.alert?self.alertText:""));
+                                    self.alertIsOn?self.alertText:""));
             myPlacemark.balloon.open();
             myPlacemark.balloon.events.add('mouseleave', function() {
                 if(myPlacemark.balloon.isOpen()) myPlacemark.balloon.close();
@@ -210,7 +210,6 @@ function House(id, income, outcome, balance, coords, name){
         myPlacemark.balloon.events.add('open', function (e) {
             $('.baloon_item').hide();
             var filter = $("input[name='type_select']:checked").val();
-            console.log(filter);
             switch(filter) {
                 case 'coldwater':
                     $('.coldwater').show();
@@ -225,7 +224,6 @@ function House(id, income, outcome, balance, coords, name){
                     $('.electricity').show();
                     break;
                 case 'heat':
-                    console.log(filter + "stays");
                     $('.heat').show();
                     break;
                 case 'all':
@@ -233,10 +231,6 @@ function House(id, income, outcome, balance, coords, name){
                     break;
             }
         });
-
-        // myPlacemark.balloon.events.add('click', function (e) {
-        //     location.href = "/dreports";
-        // });
         
         myMap.geoObjects.add(myPlacemark);
         self.placemark =  myPlacemark;
@@ -244,6 +238,33 @@ function House(id, income, outcome, balance, coords, name){
 
     self.removeAllGeo = function(){
         myMap.geoObjects.remove(self.placemark);
+    };
+
+    self.toggleAlertsTo = function(isOn){
+        self.alertIsOn = isOn; 
+        var color = "";
+        if (isOn && self.alert){
+            self.placemark.options.set({
+                'iconLayout': "default#image",
+                'iconImageHref': '../images/warning-icon.png',
+                'iconImageSize': [42, 42],
+                'iconImageOffset': [-21, -43]
+            }); 
+        } else{
+            if(self.balance > 0) {
+                color = 'islands#greenIcon';
+            } else if(self.balance < 0) {
+                color = 'islands#redIcon';
+            } else{
+                color = 'islands#yellowIcon';
+            }  
+            self.defaultColor = color;
+            self.placemark.options.unset(['iconLayout',
+            'iconImageHref',
+            'iconImageSize',
+            'iconImageOffset']); 
+            self.placemark.options.set({'preset': self.defaultColor});
+        }
     };
 };
 var myMap;
@@ -277,7 +298,6 @@ window.onload = function(){
         dataset.removeHighlight();
     });
     $('.tszhs>.item>p').click(function(){
-        console.log('tszh clicked');
         dataset.removeHighlight();
         var id = $(this).parent().data('id');
         var tszh = dataset.find(1, id);
@@ -293,4 +313,7 @@ window.onload = function(){
 $(window).resize(function(){
     var map_container = $('#map');
     map_container.height(map_container.width());
+});
+$('#toggle_alert').change(function(){
+    dataset.toggleAlertsTo($(this).is(':checked'));
 });
