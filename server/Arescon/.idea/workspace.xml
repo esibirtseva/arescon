@@ -71,20 +71,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Handlers.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Handlers.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.39144737" vertical-offset="1190" max-vertical-offset="4029">
-              <caret line="135" column="50" selection-start-line="135" selection-start-column="50" selection-end-line="135" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1071" max-vertical-offset="4012">
+              <caret line="156" column="27" selection-start-line="156" selection-start-column="27" selection-end-line="156" selection-end-column="27" />
               <folding>
-                <element signature="e#4716#4988#0" expanded="true" />
-                <element signature="e#4987#4988#0" expanded="true" />
-                <element signature="e#5168#5432#0" expanded="true" />
-                <element signature="e#5431#5432#0" expanded="true" />
-                <element signature="e#5434#5707#0" expanded="true" />
-                <element signature="e#5706#5707#0" expanded="true" />
-                <element signature="e#5887#6151#0" expanded="true" />
-                <element signature="e#6150#6151#0" expanded="true" />
+                <element signature="e#6327#6591#0" expanded="true" />
+                <element signature="e#6590#6591#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -113,8 +107,8 @@
       <file leaf-file-name="API.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="608" max-vertical-offset="2176">
-              <caret line="357" column="58" selection-start-line="357" selection-start-column="58" selection-end-line="357" selection-end-column="58" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3590" max-vertical-offset="17170">
+              <caret line="700" column="13" selection-start-line="700" selection-start-column="13" selection-end-line="700" selection-end-column="13" />
               <folding>
                 <element signature="method#API#0;class#API#0" expanded="false" />
                 <element signature="method#getProfile#0;class#API#0" expanded="false" />
@@ -125,31 +119,11 @@
                 <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
                 <element signature="method#getTypeData#0;class#API#0" expanded="false" />
                 <element signature="method#getHouseData#0;class#API#0" expanded="false" />
+                <element signature="method#getDeviceDeviation#0;class#API#0" expanded="false" />
+                <element signature="method#getTypeDeviation#0;class#API#0" expanded="false" />
                 <element signature="method#getDevicePercentage#0;class#API#0" expanded="false" />
                 <element signature="method#getTypePercentage#0;class#API#0" expanded="false" />
                 <element signature="method#getHousePercentage#0;class#API#0" expanded="false" />
-                <element signature="method#deviceProfile#0;class#API#0" expanded="false" />
-                <element signature="method#typeProfile#0;class#API#0" expanded="false" />
-                <element signature="method#houseProfile#0;class#API#0" expanded="false" />
-                <element signature="method#deviceData#0;class#API#0" expanded="false" />
-                <element signature="method#typeData#0;class#API#0" expanded="false" />
-                <element signature="method#houseData#0;class#API#0" expanded="false" />
-                <element signature="method#devicePercentage#0;class#API#0" expanded="false" />
-                <element signature="method#typePercentage#0;class#API#0" expanded="false" />
-                <element signature="method#deviationRecordName#0;class#API#0" expanded="false" />
-                <element signature="method#housePercentage#0;class#API#0" expanded="false" />
-                <element signature="method#deleteDevice#0;class#API#0" expanded="false" />
-                <element signature="method#deviceDeviation#0;class#API#0" expanded="false" />
-                <element signature="method#typeDeviation#0;class#API#0" expanded="false" />
-                <element signature="method#profileUpdate#0;class#API#0" expanded="false" />
-                <element signature="method#addPlace#0;class#API#0" expanded="false" />
-                <element signature="method#inviteSportsman#0;class#API#0" expanded="false" />
-                <element signature="method#approve#0;class#API#0" expanded="false" />
-                <element signature="method#logout#0;class#API#0" expanded="false" />
-                <element signature="method#register#0;class#API#0" expanded="false" />
-                <element signature="method#deletePlace#0;class#API#0" expanded="false" />
-                <element signature="method#deleteUser#0;class#API#0" expanded="false" />
-                <element signature="method#redirect#0;class#API#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -158,8 +132,8 @@
       <file leaf-file-name="DeviationRecord.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/DeviationRecord.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="493">
-              <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="493">
+              <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -175,12 +149,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2465" max-vertical-offset="3774">
-              <caret line="179" column="26" selection-start-line="179" selection-start-column="26" selection-end-line="179" selection-end-column="26" />
-              <folding />
+            <state vertical-scroll-proportion="1.1496711" vertical-offset="1647" max-vertical-offset="4148">
+              <caret line="168" column="34" selection-start-line="168" selection-start-column="34" selection-end-line="168" selection-end-column="34" />
+              <folding>
+                <element signature="e#14229#14425#0" expanded="true" />
+                <element signature="e#14424#14425#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -203,11 +180,11 @@
         <option value="$PROJECT_DIR$/src/test/java/arescon/APITest.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Data.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/DeviationRecord.java" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
         <option value="$PROJECT_DIR$/data.txt" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Util.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Handlers.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
       </list>
     </option>
   </component>
@@ -252,6 +229,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -273,7 +251,6 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -713,7 +690,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="172" />
+      <option name="time" value="174" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1031,11 +1008,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/DeviationRecord.java">
+    <entry file="file://$PROJECT_DIR$/data.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
-          <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="503">
+          <caret line="0" column="908105" selection-start-line="0" selection-start-column="908105" selection-end-line="0" selection-end-column="908105" />
         </state>
       </provider>
     </entry>
@@ -1047,25 +1023,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/DeviationRecord.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2091" max-vertical-offset="3655">
-          <caret line="179" column="26" selection-start-line="179" selection-start-column="26" selection-end-line="179" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="503">
-          <caret line="0" column="908105" selection-start-line="0" selection-start-column="908105" selection-end-line="0" selection-end-column="908105" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="608" max-vertical-offset="2176">
-          <caret line="357" column="58" selection-start-line="357" selection-start-column="58" selection-end-line="357" selection-end-column="58" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="3590" max-vertical-offset="17170">
+          <caret line="700" column="13" selection-start-line="700" selection-start-column="13" selection-end-line="700" selection-end-column="13" />
           <folding>
             <element signature="method#API#0;class#API#0" expanded="false" />
             <element signature="method#getProfile#0;class#API#0" expanded="false" />
@@ -1076,31 +1045,22 @@
             <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
             <element signature="method#getTypeData#0;class#API#0" expanded="false" />
             <element signature="method#getHouseData#0;class#API#0" expanded="false" />
+            <element signature="method#getDeviceDeviation#0;class#API#0" expanded="false" />
+            <element signature="method#getTypeDeviation#0;class#API#0" expanded="false" />
             <element signature="method#getDevicePercentage#0;class#API#0" expanded="false" />
             <element signature="method#getTypePercentage#0;class#API#0" expanded="false" />
             <element signature="method#getHousePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#deviceProfile#0;class#API#0" expanded="false" />
-            <element signature="method#typeProfile#0;class#API#0" expanded="false" />
-            <element signature="method#houseProfile#0;class#API#0" expanded="false" />
-            <element signature="method#deviceData#0;class#API#0" expanded="false" />
-            <element signature="method#typeData#0;class#API#0" expanded="false" />
-            <element signature="method#houseData#0;class#API#0" expanded="false" />
-            <element signature="method#devicePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#typePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#deviationRecordName#0;class#API#0" expanded="false" />
-            <element signature="method#housePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#deleteDevice#0;class#API#0" expanded="false" />
-            <element signature="method#deviceDeviation#0;class#API#0" expanded="false" />
-            <element signature="method#typeDeviation#0;class#API#0" expanded="false" />
-            <element signature="method#profileUpdate#0;class#API#0" expanded="false" />
-            <element signature="method#addPlace#0;class#API#0" expanded="false" />
-            <element signature="method#inviteSportsman#0;class#API#0" expanded="false" />
-            <element signature="method#approve#0;class#API#0" expanded="false" />
-            <element signature="method#logout#0;class#API#0" expanded="false" />
-            <element signature="method#register#0;class#API#0" expanded="false" />
-            <element signature="method#deletePlace#0;class#API#0" expanded="false" />
-            <element signature="method#deleteUser#0;class#API#0" expanded="false" />
-            <element signature="method#redirect#0;class#API#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1071" max-vertical-offset="4012">
+          <caret line="156" column="27" selection-start-line="156" selection-start-column="27" selection-end-line="156" selection-end-column="27" />
+          <folding>
+            <element signature="e#6327#6591#0" expanded="true" />
+            <element signature="e#6590#6591#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1123,19 +1083,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39144737" vertical-offset="1190" max-vertical-offset="4029">
-          <caret line="135" column="50" selection-start-line="135" selection-start-column="50" selection-end-line="135" selection-end-column="50" />
+        <state vertical-scroll-proportion="1.1496711" vertical-offset="1647" max-vertical-offset="4148">
+          <caret line="168" column="34" selection-start-line="168" selection-start-column="34" selection-end-line="168" selection-end-column="34" />
           <folding>
-            <element signature="e#4716#4988#0" expanded="true" />
-            <element signature="e#4987#4988#0" expanded="true" />
-            <element signature="e#5168#5432#0" expanded="true" />
-            <element signature="e#5431#5432#0" expanded="true" />
-            <element signature="e#5434#5707#0" expanded="true" />
-            <element signature="e#5706#5707#0" expanded="true" />
-            <element signature="e#5887#6151#0" expanded="true" />
-            <element signature="e#6150#6151#0" expanded="true" />
+            <element signature="e#14229#14425#0" expanded="true" />
+            <element signature="e#14424#14425#0" expanded="true" />
           </folding>
         </state>
       </provider>

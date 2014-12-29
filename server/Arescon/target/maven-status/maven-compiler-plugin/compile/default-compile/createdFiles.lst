@@ -28,6 +28,7 @@ net\avkorneenkov\IOUtil.class
 arescon\Handlers$10.class
 arescon\Main$21.class
 arescon\Handlers$17.class
+arescon\Main$38.class
 arescon\Main$28.class
 net\avkorneenkov\undertow\CommonHandlers$StringWriterHandler.class
 arescon\Main$11.class
@@ -87,6 +88,7 @@ net\avkorneenkov\undertow\UndertowUtil.class
 arescon\Main$31.class
 arescon\Handlers$30.class
 arescon\Handlers$27.class
+arescon\Handlers$37.class
 arescon\Main$2.class
 de\vogella\rss\model\Feed.class
 de\vogella\rss\tests\ReadTest.class

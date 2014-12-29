@@ -34,10 +34,13 @@ public class API {
     private Random random;
     private Util util;
 
+    private List<JSONObject> requests;
+
     public API( DatabaseIdentityManager identityManager, Util util ) {
         this.identityManager = identityManager;
         this.util = util;
         this.random = new SecureRandom();
+        this.requests = new LinkedList<>();
     }
 
     double[] getProfile( double[] data, int period, int count ) {
@@ -68,6 +71,14 @@ public class API {
             }
             profile[j / period] += value / iterations;
         }
+    }
+
+    private JSONObject getLastRequests( int count ) {
+        JSONArray result = new JSONArray();
+        for (int i = requests.size() - 1; i >= Math.max(0, requests.size() - count); --i) {
+            result.put(requests.get(i));
+        }
+        return new JSONObject().put("count", Math.min(count, requests.size())).put("requests", result);
     }
 
     private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier ) {
@@ -496,7 +507,7 @@ public class API {
         return response.append(arrays.toString()).append("}").toString();
     }
 
-    public void deviceProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
+    public void deviceProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -512,6 +523,7 @@ public class API {
         FormData.FormValue end = postData.getFirst("end");
         FormData.FormValue period = postData.getFirst("period");
         FormData.FormValue count = postData.getFirst("count");
+        FormData.FormValue saveData = postData.getFirst("save");
 
         if (count == null || count.getValue().isEmpty() ||
                 deviceID == null || deviceID.getValue().isEmpty() ||
@@ -544,13 +556,21 @@ public class API {
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
             exchange.getResponseSender().send(getDeviceProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
 
+            if (saveData != null && !saveData.getValue().isEmpty()) {
+                JSONObject request = new JSONObject().put("selectiontype", 5).put("link", link).
+                        put("time", new DateTime().getMillis()).put("request",
+                        new JSONObject().put("id", id).put("start", startTime).put("end", endTime)
+                                .put("period", periodTime).put("count", countExpected));
+                requests.add(request);
+            }
+
         } catch (Throwable e) {
             e.printStackTrace();
             exchange.getResponseSender().send("error");
         }
     }
 
-    public void typeProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
+    public void typeProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -566,6 +586,7 @@ public class API {
         FormData.FormValue end = postData.getFirst("end");
         FormData.FormValue period = postData.getFirst("period");
         FormData.FormValue count = postData.getFirst("count");
+        FormData.FormValue saveData = postData.getFirst("save");
 
         if (count == null || count.getValue().isEmpty() ||
                 typeID == null || typeID.getValue().isEmpty() ||
@@ -598,13 +619,21 @@ public class API {
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
             exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
 
+            if (saveData != null && !saveData.getValue().isEmpty()) {
+                JSONObject request = new JSONObject().put("selectiontype", 4).put("link", link).
+                        put("time", new DateTime().getMillis()).put("request",
+                        new JSONObject().put("id", id).put("start", startTime).put("end", endTime)
+                                .put("period", periodTime).put("count", countExpected));
+                requests.add(request);
+            }
+
         } catch (Throwable e) {
             e.printStackTrace();
             exchange.getResponseSender().send("error");
         }
     }
 
-    public void houseProfile( HttpServerExchange exchange, double multiplier ) throws IOException {
+    public void houseProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -620,6 +649,7 @@ public class API {
         FormData.FormValue period = postData.getFirst("period");
         Deque<FormData.FormValue> types = postData.get("types[]");
         FormData.FormValue count = postData.getFirst("count");
+        FormData.FormValue saveData = postData.getFirst("save");
 
         if (count == null || count.getValue().isEmpty() ||
                 types == null || types.isEmpty() ||
@@ -632,7 +662,7 @@ public class API {
         }
 
         try {
-            Set<Integer> dataTypes = new LinkedHashSet<>();
+            Set dataTypes = new LinkedHashSet();
             for (FormData.FormValue type : types) {
                 dataTypes.add(Integer.parseInt(type.getValue()));
             }
@@ -654,6 +684,21 @@ public class API {
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
             exchange.getResponseSender().send(getHouseProfile(dataTypes, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
+
+            int selectionType = 0;
+
+            if (link.startsWith("/flat")) selectionType = 3;
+            else if (link.startsWith("/house")) selectionType = 2;
+            else if (link.startsWith("/tszh")) selectionType = 1;
+            else if (link.startsWith("/uk")) selectionType = 0;
+
+            if (saveData != null && !saveData.getValue().isEmpty()) {
+                JSONObject request = new JSONObject().put("selectiontype", selectionType).put("link", link).
+                        put("time", new DateTime().getMillis()).put("request",
+                        new JSONObject().put("types", new JSONArray(dataTypes)).put("start", startTime).put("end", endTime)
+                                .put("period", periodTime).put("count", countExpected));
+                requests.add(request);
+            }
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -1022,6 +1067,36 @@ public class API {
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
             exchange.getResponseSender().send(getTypeDeviation(id, startTime, endTime, edgeValue));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void lastRequests( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue countData = postData.getFirst("count");
+
+        if (countData == null || countData.getValue().isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int count = Integer.parseInt(countData.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getLastRequests(count).toString());
 
         } catch (Throwable e) {
             e.printStackTrace();
