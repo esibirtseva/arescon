@@ -202,6 +202,12 @@ public class Main {
                 api.typePercentage(exchange);
             }
         });
+        paths.put("service/percentage", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.servicePercentage(exchange);
+            }
+        });
         paths.put("device/percentage", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -239,6 +245,12 @@ public class Main {
                 api.typeProfile(exchange, 20, "/type/profile/money");
             }
         });
+        paths.put("service/profile/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.serviceProfile(exchange, 20, "/service/profile/money");
+            }
+        });
         paths.put("device/profile/money", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -274,6 +286,12 @@ public class Main {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
                 api.typeProfile(exchange, 1, "/type/profile/values");
+            }
+        });
+        paths.put("type/profile/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.serviceProfile(exchange, 1, "/service/profile/values");
             }
         });
         paths.put("device/profile/values", new HttpHandler() {
@@ -319,6 +337,12 @@ public class Main {
                 api.typeData(exchange, 20);
             }
         });
+        paths.put("service/money", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.serviceData(exchange, 20);
+            }
+        });
         paths.put("flat/money", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -354,6 +378,12 @@ public class Main {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
                 api.typeData(exchange, 1);
+            }
+        });
+        paths.put("service/values", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.serviceData(exchange, 1);
             }
         });
         paths.put("flat/values", new HttpHandler() {

@@ -14,6 +14,7 @@ net\avkorneenkov\SQLUtil$1.class
 arescon\Main$20.class
 arescon\Main$29.class
 arescon\Handlers$24.class
+arescon\Main$40.class
 arescon\Handlers$13.class
 arescon\Handlers$33.class
 arescon\Handlers$19.class
@@ -21,6 +22,7 @@ net\avkorneenkov\undertow\CommonHandlers$3.class
 arescon\Main$26.class
 arescon\Main$23.class
 arescon\Handlers$21.class
+arescon\Main$43.class
 net\avkorneenkov\undertow\DatabaseIdentityManager.class
 arescon\Handlers$36.class
 arescon\Handlers$16.class
@@ -43,6 +45,7 @@ net\avkorneenkov\DebugUtil.class
 arescon\Handlers$3.class
 arescon\Main$22.class
 arescon\Handlers$34.class
+arescon\Main$39.class
 arescon\Main$10.class
 de\vogella\rss\read\RSSFeedParser.class
 arescon\Handlers$18.class
@@ -68,6 +71,7 @@ arescon\Handlers$22.class
 arescon\Handlers$15.class
 arescon\Handlers$12.class
 arescon\Main$32.class
+arescon\Main$42.class
 arescon\Main$17.class
 net\avkorneenkov\NetUtil.class
 arescon\Main$27.class
@@ -86,6 +90,7 @@ arescon\Handlers$20.class
 net\avkorneenkov\undertow\CommonActions.class
 net\avkorneenkov\undertow\UndertowUtil.class
 arescon\Main$31.class
+arescon\Main$41.class
 arescon\Handlers$30.class
 arescon\Handlers$27.class
 arescon\Handlers$37.class

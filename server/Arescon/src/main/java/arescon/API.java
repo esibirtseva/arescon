@@ -43,6 +43,28 @@ public class API {
         this.requests = new LinkedList<>();
     }
 
+    int getType( int id ) {
+        switch (id) {
+            case 1:
+            case 4:
+            case 7:
+            case 10:
+                return 2;
+            case 2:
+            case 5:
+            case 8:
+            case 11:
+                return 0;
+            case 3:
+            case 6:
+            case 9:
+            case 12:
+                return 3;
+            default:
+                return -1;
+        }
+    }
+
     double[] getProfile( double[] data, int period, int count ) {
         double[] profile = new double[count];
         int len = count * period;
@@ -633,6 +655,69 @@ public class API {
         }
     }
 
+    public void serviceProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue typeID = postData.getFirst("id");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+        FormData.FormValue count = postData.getFirst("count");
+        FormData.FormValue saveData = postData.getFirst("save");
+
+        if (count == null || count.getValue().isEmpty() ||
+                typeID == null || typeID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(typeID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+            int countExpected = Integer.parseInt(count.getValue());
+            int countNumber;
+            if (periodTime == 60) {
+                countNumber = 24;
+            } else if (periodTime == 1440) {
+                countNumber = 30;
+            } else if (periodTime == 43200) {
+                countNumber = 12;
+            } else {
+                exchange.getResponseSender().send("error");
+                return;
+            }
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypeProfile(getType(id), startTime, endTime, periodTime, countNumber, countExpected, multiplier));
+
+            if (saveData != null && !saveData.getValue().isEmpty()) {
+                JSONObject request = new JSONObject().put("selectiontype", 4).put("link", link).
+                        put("time", new DateTime().getMillis()).put("request",
+                        new JSONObject().put("id", id).put("start", startTime).put("end", endTime)
+                                .put("period", periodTime).put("count", countExpected));
+                requests.add(request);
+            }
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
     public void houseProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
@@ -786,6 +871,46 @@ public class API {
         }
     }
 
+    public void serviceData( HttpServerExchange exchange, double multiplier ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue typeID = postData.getFirst("id");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
+
+        if (typeID == null || typeID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(typeID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypeData(getType(id), startTime, endTime, periodTime, multiplier));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
     public void houseData( HttpServerExchange exchange, double multiplier ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
@@ -909,30 +1034,43 @@ public class API {
         }
     }
 
-    public void deviationRecordName( HttpServerExchange exchange ) throws IOException {
+    public void servicePercentage( HttpServerExchange exchange ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
             return;
         }
         FormData postData = UndertowUtil.parsePostData(exchange);
         if (postData == null) {
+            exchange.getResponseSender().send("error");
             return;
         }
 
-        FormData.FormValue recordID = postData.getFirst("id");
-        FormData.FormValue recordName = postData.getFirst("name");
+        FormData.FormValue typeID = postData.getFirst("id");
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+        FormData.FormValue period = postData.getFirst("period");
 
-        if (recordID == null || recordID.getValue().isEmpty() ||
-            recordName == null || recordName.getValue().isEmpty())
+        if (typeID == null || typeID.getValue().isEmpty() ||
+                start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty() ||
+                period == null || period.getValue().isEmpty())
         {
+            exchange.getResponseSender().send("error");
             return;
         }
 
         try {
-            int id = Integer.parseInt(recordID.getValue());
-            Data.DEVIATION_RECORDS[id - 1].name = recordName.getValue();
+            int id = Integer.parseInt(typeID.getValue());
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+            int periodTime = Integer.parseInt(period.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypePercentage(getType(id), startTime, endTime, periodTime));
 
         } catch (Throwable e) {
             e.printStackTrace();
+            exchange.getResponseSender().send("error");
         }
     }
 
@@ -1071,6 +1209,33 @@ public class API {
         } catch (Throwable e) {
             e.printStackTrace();
             exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void deviationRecordName( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            return;
+        }
+
+        FormData.FormValue recordID = postData.getFirst("id");
+        FormData.FormValue recordName = postData.getFirst("name");
+
+        if (recordID == null || recordID.getValue().isEmpty() ||
+                recordName == null || recordName.getValue().isEmpty())
+        {
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(recordID.getValue());
+            Data.DEVIATION_RECORDS[id - 1].name = recordName.getValue();
+
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
