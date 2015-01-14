@@ -191,7 +191,7 @@ function ODNvalues(start, end, period, selectiontype){
             var currentData = JSON.parse(data);
             self.valuesData = currentData;
             self.requstStatus.push(true);
-
+            console.log(data);
             $.post('/house/money',{
                 'types' : [0,1,2,3,4],
                 'start' : self.start+"",

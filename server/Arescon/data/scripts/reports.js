@@ -215,7 +215,7 @@ var buildPageData = function(reporttype, period, start, end){
     }else{
         $('#reporttype option[value="5"]').hide();
     }
-    if (selectiontype === '3'){
+    if (selectiontype === '3' || selectiontype === '4'){
         $('#reporttype option[value="7"]').show();
     }else{
         $('#reporttype option[value="7"]').hide();
@@ -337,7 +337,7 @@ function Profile(id, start, end, period, selectiontype){
             self.valuesData = currentData;
 
             $.post('/' + selectiontype_str + '/profile/values',{
-                'id' : self.id,
+                'id' : self.id,//TODO: change implementation
                 'start' : '0',
                 'end' : '99999999999999',
                 'period' : self.period,
@@ -345,7 +345,6 @@ function Profile(id, start, end, period, selectiontype){
             }, function(data){
                 var currentData = JSON.parse(data);
                 self.profileData = currentData;
-                
                 if (updateRepresentation){
                     self.updateRepresentation();
                 }
@@ -373,7 +372,6 @@ function Profile(id, start, end, period, selectiontype){
             }, function(data){
                 var currentData = JSON.parse(data);
                 self.profileData = currentData;
-                
                 if (updateRepresentation){
                     self.updateRepresentation();
                 }
@@ -776,7 +774,6 @@ function Multiple(id, start, end, period, selectiontype){
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
-        console.log(valuesData);
         var dataDailyUsage = {
             datasets: [
                 {
@@ -1250,7 +1247,6 @@ function Deviation(id, start, end, period, selectiontype){
         current_tbody.html("");
         var data_size = self.data.values.length;
         for(var i = 0; i < data_size; i++){
-            console.log(self.data);
             var current_date = new Date(i*self.period*60*1000 + self.data.start*1);
             var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
             var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
@@ -1261,12 +1257,30 @@ function Deviation(id, start, end, period, selectiontype){
             var date_end = date_str + " " + time_str;
             
             var value = self.data.values[i];//.replace(/'/g, "\"")
-            console.log(value);
             var deviation = Math.round(value.value*100);
             deviation = deviation > 0 ? "+"+deviation : ""+deviation;
-            var change_field = '<form class="form-inline change_form" style="display: inline-block;"><div class="form-group"><div class="input-group"><input  id="cname_' + value.id + '" type="text" class="form-control" placeholder="Новое описание"><div class="input-group-addon glyphicon glyphicon-pencil" style="top: 0;" onclick="currentPageData.changeDeviationName(' + value.id + ')"></div></div></div></form>';
+            var change_field = '<div class="form-inline change_form" style="display: inline-block;"><div class="form-group"><div class="input-group"><input  id="cname_' + value.id + '" type="text" class="form-control" onkeydown="if (event.keyCode == 13) { currentPageData.changeDeviationName(' + value.id + '); return false; }" placeholder="Новое описание"/><div class="input-group-addon glyphicon glyphicon-pencil edit_btn" style="top: 0;" onclick="currentPageData.changeDeviationName(' + value.id + ')"></div></div></div></div>';
             current_tbody.append("<tr><td>"+date_start+"</td><td>"+date_end+"</td><td>"+deviation+"%</td><td><span id='aname_" + value.id + "' style='margin-right: 10px'>"+value.name+"</span>"+change_field+"<div></div></td></tr>")
         }
+        // $('form').each(function() {
+        //     this.submit(function(e){
+        //         if (e.preventDefault) e.preventDefault();
+
+        //         /* do what you want with the form */
+        //         console.log("hello");
+        //         // You must return false to prevent the default form behavior
+        //         return false;
+                
+        //     });
+        //     // $(this).find('.edit_btn').keypress(function(e) {
+        //     //     // Enter pressed?
+        //     //     if(e.which == 10 || e.which == 13) {
+        //     //         this.form.submit();
+        //     //     }
+        //     // });
+
+        //     // console.log('submited');
+        // });
     };
 
     self.changeDeviationName = function(id){
@@ -1304,6 +1318,8 @@ function ShareLines(id, start, end, period, selectiontype){
             selectiontype_str = 'device';
         }else if (selectiontype === '4'){//type
             selectiontype_str = 'type';
+            selectiontype_str = 'flat';
+            self.multipleDataFetch(selectiontype_str, updateRepresentation);
         }else if (selectiontype === '3'){//flat
             selectiontype_str = 'flat';
             self.multipleDataFetch(selectiontype_str, updateRepresentation);
@@ -1358,9 +1374,14 @@ function ShareLines(id, start, end, period, selectiontype){
         self.destroyAllData();
 
         if(selectiontype === '5' || selectiontype === '4'){//one
-            $(typeMap[self.data.types[0]].selector).show();
             $('.table,.share').hide();
-            self.graphs.push(self.setLinearGraph(self.data));
+            interfaceInit(self.id.toString());
+            self.graphs.push(self.setLinearGraph({
+                    type : self.data.types[0],
+                    start : self.data.start,
+                    period : self.data.period,
+                    values : self.data.values[0]
+                }));
         }else{//multiple
             $('.data_block').show();
             $('#type_deviation').hide();
