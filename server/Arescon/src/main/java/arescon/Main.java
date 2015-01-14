@@ -183,6 +183,12 @@ public class Main {
                 api.typeDeviation(exchange);
             }
         });
+        paths.put("service/deviation", new HttpHandler() {
+            @Override
+            public void handleRequest( HttpServerExchange exchange ) throws Exception {
+                exchange.getResponseSender().send("not implemented");
+            }
+        });
         paths.put("device/deviation", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -288,7 +294,7 @@ public class Main {
                 api.typeProfile(exchange, 1, "/type/profile/values");
             }
         });
-        paths.put("type/profile/values", new HttpHandler() {
+        paths.put("service/profile/values", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
                 api.serviceProfile(exchange, 1, "/service/profile/values");
