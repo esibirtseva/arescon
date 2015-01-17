@@ -141,6 +141,10 @@ public class Handlers {
         return handler;
     }
 
+    public HttpHandler notifications( String file ) {
+        return uprofile(file);
+    }
+
     public HttpHandler uprofile( String file ) {
         final HttpHandler handler = CommonHandlers.templatedPage(file,
                 new CommonHandlers.StringWriterHandler() {

@@ -14,16 +14,14 @@ import net.avkorneenkov.undertow.CommonHandlers;
 import net.avkorneenkov.undertow.DatabaseIdentityManager;
 import net.avkorneenkov.undertow.UndertowUtil;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -55,7 +53,7 @@ public class Main {
 
     static Undertow server = null;
 
-    private static enum PAGES { index, user, dispatcher, login, registration, dreports, odn, ureports, uprofile, uodn }
+    private static enum PAGES { index, user, dispatcher, login, registration, dreports, odn, ureports, uprofile, uodn, notifications }
 
     private static void readConfig( String filename ) throws IOException {
         Map<String, String> config = new HashMap<>(10);
@@ -168,6 +166,9 @@ public class Main {
                             break;
                         case uodn:
                             paths.put("uodn", handlers.uodn(file));
+                            break;
+                        case notifications:
+                            paths.put("notifications", handlers.notifications(file));
                             break;
                     }
                 }
