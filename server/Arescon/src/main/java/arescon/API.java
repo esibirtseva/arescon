@@ -33,14 +33,16 @@ public class API {
     private DatabaseIdentityManager identityManager;
     private Random random;
     private Util util;
+    private int trendDegrees;
 
     private List<JSONObject> requests;
 
-    public API( DatabaseIdentityManager identityManager, Util util ) {
+    public API( DatabaseIdentityManager identityManager, Util util, int trendDegrees ) {
         this.identityManager = identityManager;
         this.util = util;
         this.random = new SecureRandom();
         this.requests = new LinkedList<>();
+        this.trendDegrees = trendDegrees;
     }
 
     int getType( int id ) {
@@ -103,7 +105,7 @@ public class API {
         return new JSONObject().put("count", Math.min(count, requests.size())).put("requests", result);
     }
 
-    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier ) {
+    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
         period /= (int) Data.PERIOD;
@@ -124,14 +126,27 @@ public class API {
                 Arrays.copyOfRange(values, (int) startTime, (int) Math.min(endTime, values.length)),
                 period, count);
 
-        for (int i = 0; i < expected; ++i) {
-            if (Double.isFinite(profile[i % profile.length])) list.put(profile[i % profile.length] * multiplier);
+        if (!trend) {
+            for (int i = 0; i < expected; ++i) {
+                if (Double.isFinite(profile[i % profile.length])) list.put(profile[i % profile.length] * multiplier);
+            }
+        } else {
+            PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+            for (int i = 0; i < expected; ++i) {
+                int index = i % profile.length;
+                if (Double.isFinite(profile[index])) trendFitter.addPoint(i, profile[index] * multiplier);
+            }
+            PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+            for (int i = 0; i < expected; ++i) {
+                double y = polynomial.getY(i);
+                if (Double.isFinite(y)) list.put(y);
+            }
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getTypeProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier ) {
+    private String getTypeProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -171,15 +186,35 @@ public class API {
         }
 
         if (values.size() > 0) {
-            for (int i = 0; i < expected; ++i) {
-                if (Double.isFinite(profile[i % profile.length])) list.put(profile[i % profile.length] * multiplier / values.size());
+            if (!trend) {
+                for (int i = 0; i < expected; ++i) {
+                    if (Double.isFinite(profile[i % profile.length])) {
+                        list.put(profile[i % profile.length] * multiplier / values.size());
+                    }
+                }
+            } else {
+                PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+
+                for (int i = 0; i < expected; ++i) {
+                    int index = i % profile.length;
+                    if (Double.isFinite(profile[index])) {
+                        trendFitter.addPoint(i, profile[index] * multiplier / values.size());
+                    }
+                }
+
+                PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+
+                for (int i = 0; i < expected; ++i) {
+                    double y = polynomial.getY(i);
+                    if (Double.isFinite(y)) list.put(y);
+                }
             }
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getHouseProfile( Set<Integer> types, long startTime, long endTime, int period, int count, int expected, double multiplier ) {
+    private String getHouseProfile( Set<Integer> types, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -227,8 +262,24 @@ public class API {
             }
 
             if (typeCount > 0) {
-                for (int i = 0; i < expected; ++i) {
-                    if (Double.isFinite(profile[i % profile.length])) list.put(profile[i % profile.length] * multiplier / typeCount);
+                if (!trend) {
+                    for (int i = 0; i < expected; ++i) {
+                        if (Double.isFinite(profile[i % profile.length]))
+                            list.put(profile[i % profile.length] * multiplier / typeCount);
+                    }
+                } else {
+                    PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+                    for (int i = 0; i < expected; ++i) {
+                        int index = i % profile.length;
+                        if (Double.isFinite(profile[index])) {
+                            trendFitter.addPoint(i, profile[index] * multiplier / typeCount);
+                        }
+                    }
+                    PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+                    for (int i = 0; i < expected; ++i) {
+                        double y = polynomial.getY(i);
+                        if (Double.isFinite(y)) list.put(y);
+                    }
                 }
             }
 
@@ -238,7 +289,7 @@ public class API {
         return response.append(arrays.toString()).append("}").toString();
     }
 
-    private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier ) {
+    private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier, boolean trend ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
         period /= (int)Data.PERIOD;
@@ -254,18 +305,34 @@ public class API {
         endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
-        for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            double value = 0.0;
-            for (int i = 0; i < period; ++i) {
-                value += values[(int)j + i];
+        if (!trend) {
+            for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    value += values[(int) j + i];
+                }
+                list.put(value * multiplier);
             }
-            list.put(value * multiplier);
+        } else {
+            PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+            for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    value += values[(int) j + i];
+                }
+                if (Double.isFinite(value)) trendFitter.addPoint(j, value * multiplier);
+            }
+            PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+            for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+                double y = polynomial.getY(j);
+                if (Double.isFinite(y)) list.put(y);
+            }
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getTypeData( int id, long startTime, long endTime, int period, double multiplier ) {
+    private String getTypeData( int id, long startTime, long endTime, int period, double multiplier, boolean trend ) {
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -293,24 +360,45 @@ public class API {
         dataStartTime = dataStartTime / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
-        for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
-            double value = 0.0;
-            for (int i = 0; i < period; ++i) {
-                for (int k = 0; k < values.size(); ++k) {
-                    int index = (int)j - (int)(long)dataStartTimes.get(k) + i;
-                    if (index < values.get(k).length && index >= 0) {
-                        value += values.get(k)[index];
+        if (!trend) {
+            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    for (int k = 0; k < values.size(); ++k) {
+                        int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                        if (index < values.get(k).length && index >= 0) {
+                            value += values.get(k)[index];
+                        }
                     }
                 }
+                list.put(value * multiplier);
             }
-            list.put(value * multiplier);
+        } else {
+            PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    for (int k = 0; k < values.size(); ++k) {
+                        int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                        if (index < values.get(k).length && index >= 0) {
+                            value += values.get(k)[index];
+                        }
+                    }
+                }
+                if (Double.isFinite(value)) trendFitter.addPoint(j, value * multiplier);
+            }
+            PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                double y = polynomial.getY(j);
+                if (Double.isFinite(y)) list.put(y);
+            }
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getHouseData( Set<Integer> types, long startTime, long endTime, int period, double multiplier ) {
-        period /= (int)Data.PERIOD;
+    private String getHouseData( Set<Integer> types, long startTime, long endTime, int period, double multiplier, boolean trend ) {
+        period /= (int) Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
         List<Long> dataStartTimes = new ArrayList<>();
@@ -341,20 +429,44 @@ public class API {
         dataStartTime = dataStartTime / 60000 / Data.PERIOD;
 
         JSONArray arrays = new JSONArray();
+
+
         for (int type : types) {
             list = new JSONArray();
-            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
-                double value = 0.0;
-                for (int i = 0; i < period; ++i) {
-                    for (int k = 0; k < values.size(); ++k) {
-                        if (dataTypes.get(k) != type) continue;
-                        int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
-                        if (index < values.get(k).length && index >= 0) {
-                            value += values.get(k)[index];
+            if (!trend) {
+                for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                    double value = 0.0;
+                    for (int i = 0; i < period; ++i) {
+                        for (int k = 0; k < values.size(); ++k) {
+                            if (dataTypes.get(k) != type) continue;
+                            int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                            if (index < values.get(k).length && index >= 0) {
+                                value += values.get(k)[index];
+                            }
                         }
                     }
+                    list.put(value * multiplier);
                 }
-                list.put(value * multiplier);
+            } else {
+                PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+                for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                    double value = 0.0;
+                    for (int i = 0; i < period; ++i) {
+                        for (int k = 0; k < values.size(); ++k) {
+                            if (dataTypes.get(k) != type) continue;
+                            int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                            if (index < values.get(k).length && index >= 0) {
+                                value += values.get(k)[index];
+                            }
+                        }
+                    }
+                    if (Double.isFinite(value)) trendFitter.addPoint(j, value * multiplier);
+                }
+                PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+                for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                    double y = polynomial.getY(j);
+                    if (Double.isFinite(y)) list.put(y);
+                }
             }
             arrays.put(list);
         }
@@ -377,9 +489,24 @@ public class API {
         endTime = (endTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
-        for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            if (Math.abs(values[(int)j].value) >= edge) list.put(new JSONObject(values[(int)j].toString()));
-        }
+//        if (!trend) {
+            for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+                if (Math.abs(values[(int) j].value) >= edge) list.put(new JSONObject(values[(int) j].toString()));
+            }
+//        } else {
+//            PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+//            for (int i = 0; i < expected; ++i) {
+//                int index = i % profile.length;
+//                if (Double.isFinite(profile[index])) {
+//                    trendFitter.addPoint(i, profile[index] * multiplier / typeCount);
+//                }
+//            }
+//            PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+//            for (int i = 0; i < expected; ++i) {
+//                double y = polynomial.getY(i);
+//                if (Double.isFinite(y)) list.put(y);
+//            }
+//        }
 
         return response.append(list.toString()).append("}").toString();
     }
@@ -405,7 +532,7 @@ public class API {
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getDevicePercentage( int id, long startTime, long endTime, int period ) {
+    private String getDevicePercentage( int id, long startTime, long endTime, int period, boolean trend ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
         period /= (int)Data.PERIOD;
@@ -421,18 +548,34 @@ public class API {
         endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
-        for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            double value = 0.0;
-            for (int i = 0; i < period; ++i) {
-                value += values[(int)j + i];
+        if (!trend) {
+            for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    value += values[(int) j + i];
+                }
+                if (Double.isFinite(value)) list.put(0.25 * value / (1000 * period));
             }
-            list.put(0.25 * value / (1000 * period));
+        } else {
+            PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+            for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    value += values[(int) j + i];
+                }
+                if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (1000 * period));
+            }
+            PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+            for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+                double y = polynomial.getY(j);
+                if (Double.isFinite(y)) list.put(y);
+            }
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getTypePercentage( int id, long startTime, long endTime, int period ) {
+    private String getTypePercentage( int id, long startTime, long endTime, int period, boolean trend ) {
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -460,23 +603,44 @@ public class API {
         dataStartTime = dataStartTime / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
-        for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
-            double value = 0.0;
-            for (int i = 0; i < period; ++i) {
-                for (int k = 0; k < values.size(); ++k) {
-                    int index = (int)j - (int)(long)dataStartTimes.get(k) + i;
-                    if (index < values.get(k).length && index >= 0) {
-                        value += values.get(k)[index];
+        if (!trend) {
+            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    for (int k = 0; k < values.size(); ++k) {
+                        int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                        if (index < values.get(k).length && index >= 0) {
+                            value += values.get(k)[index];
+                        }
                     }
                 }
+                if (Double.isFinite(value)) list.put(0.25 * value / (1000 * period));
             }
-            list.put(0.25 * value / (1000 * period));
+        } else {
+            PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                double value = 0.0;
+                for (int i = 0; i < period; ++i) {
+                    for (int k = 0; k < values.size(); ++k) {
+                        int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                        if (index < values.get(k).length && index >= 0) {
+                            value += values.get(k)[index];
+                        }
+                    }
+                }
+                if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (1000 * period));
+            }
+            PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                double y = polynomial.getY(j);
+                if (Double.isFinite(y)) list.put(y);
+            }
         }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getHousePercentage( Set<Integer> types, long startTime, long endTime, int period ) {
+    private String getHousePercentage( Set<Integer> types, long startTime, long endTime, int period, boolean trend ) {
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -510,18 +674,40 @@ public class API {
         JSONArray arrays = new JSONArray();
         for (int type : types) {
             list = new JSONArray();
-            for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
-                double value = 0.0;
-                for (int i = 0; i < period; ++i) {
-                    for (int k = 0; k < values.size(); ++k) {
-                        if (dataTypes.get(k) != type) continue;
-                        int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
-                        if (index < values.get(k).length && index >= 0) {
-                            value += values.get(k)[index];
+            if (!trend) {
+                for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                    double value = 0.0;
+                    for (int i = 0; i < period; ++i) {
+                        for (int k = 0; k < values.size(); ++k) {
+                            if (dataTypes.get(k) != type) continue;
+                            int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                            if (index < values.get(k).length && index >= 0) {
+                                value += values.get(k)[index];
+                            }
                         }
                     }
+                    list.put(0.25 * value / (1000 * period));
                 }
-                list.put(0.25 * value / (1000 * period));
+            } else {
+                PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
+                for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                    double value = 0.0;
+                    for (int i = 0; i < period; ++i) {
+                        for (int k = 0; k < values.size(); ++k) {
+                            if (dataTypes.get(k) != type) continue;
+                            int index = (int) j - (int) (long) dataStartTimes.get(k) + i;
+                            if (index < values.get(k).length && index >= 0) {
+                                value += values.get(k)[index];
+                            }
+                        }
+                    }
+                    if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (1000 * period));
+                }
+                PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
+                for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
+                    double y = polynomial.getY(j);
+                    if (Double.isFinite(y)) list.put(y);
+                }
             }
             arrays.put(list);
         }
@@ -529,7 +715,7 @@ public class API {
         return response.append(arrays.toString()).append("}").toString();
     }
 
-    public void deviceProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
+    public void deviceProfile( HttpServerExchange exchange, double multiplier, String link, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -576,7 +762,7 @@ public class API {
             }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDeviceProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
+            exchange.getResponseSender().send(getDeviceProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend));
 
             if (saveData != null && !saveData.getValue().isEmpty()) {
                 JSONObject request = new JSONObject().put("selectiontype", 5).put("link", link).
@@ -592,7 +778,7 @@ public class API {
         }
     }
 
-    public void typeProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
+    public void typeProfile( HttpServerExchange exchange, double multiplier, String link, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -639,7 +825,7 @@ public class API {
             }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
+            exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend));
 
             if (saveData != null && !saveData.getValue().isEmpty()) {
                 JSONObject request = new JSONObject().put("selectiontype", 4).put("link", link).
@@ -655,7 +841,7 @@ public class API {
         }
     }
 
-    public void serviceProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
+    public void serviceProfile( HttpServerExchange exchange, double multiplier, String link, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -702,7 +888,7 @@ public class API {
             }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeProfile(getType(id), startTime, endTime, periodTime, countNumber, countExpected, multiplier));
+            exchange.getResponseSender().send(getTypeProfile(getType(id), startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend));
 
             if (saveData != null && !saveData.getValue().isEmpty()) {
                 JSONObject request = new JSONObject().put("selectiontype", 4).put("link", link).
@@ -718,7 +904,7 @@ public class API {
         }
     }
 
-    public void houseProfile( HttpServerExchange exchange, double multiplier, String link ) throws IOException {
+    public void houseProfile( HttpServerExchange exchange, double multiplier, String link, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -768,7 +954,7 @@ public class API {
             }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getHouseProfile(dataTypes, startTime, endTime, periodTime, countNumber, countExpected, multiplier));
+            exchange.getResponseSender().send(getHouseProfile(dataTypes, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend));
 
             int selectionType = 0;
 
@@ -791,7 +977,7 @@ public class API {
         }
     }
 
-    public void deviceData( HttpServerExchange exchange, double multiplier ) throws IOException {
+    public void deviceData( HttpServerExchange exchange, double multiplier, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -823,7 +1009,7 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDeviceData(id, startTime, endTime, periodTime, multiplier));
+            exchange.getResponseSender().send(getDeviceData(id, startTime, endTime, periodTime, multiplier, trend));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -831,7 +1017,7 @@ public class API {
         }
     }
 
-    public void typeData( HttpServerExchange exchange, double multiplier ) throws IOException {
+    public void typeData( HttpServerExchange exchange, double multiplier, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -863,7 +1049,7 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeData(id, startTime, endTime, periodTime, multiplier));
+            exchange.getResponseSender().send(getTypeData(id, startTime, endTime, periodTime, multiplier, trend));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -871,7 +1057,7 @@ public class API {
         }
     }
 
-    public void serviceData( HttpServerExchange exchange, double multiplier ) throws IOException {
+    public void serviceData( HttpServerExchange exchange, double multiplier, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -903,7 +1089,7 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeData(getType(id), startTime, endTime, periodTime, multiplier));
+            exchange.getResponseSender().send(getTypeData(getType(id), startTime, endTime, periodTime, multiplier, trend));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -911,7 +1097,7 @@ public class API {
         }
     }
 
-    public void houseData( HttpServerExchange exchange, double multiplier ) throws IOException {
+    public void houseData( HttpServerExchange exchange, double multiplier, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -946,7 +1132,7 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getHouseData(dataTypes, startTime, endTime, periodTime, multiplier));
+            exchange.getResponseSender().send(getHouseData(dataTypes, startTime, endTime, periodTime, multiplier, trend));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -954,7 +1140,7 @@ public class API {
         }
     }
 
-    public void devicePercentage( HttpServerExchange exchange ) throws IOException {
+    public void devicePercentage( HttpServerExchange exchange, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -986,7 +1172,7 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDevicePercentage(id, startTime, endTime, periodTime));
+            exchange.getResponseSender().send(getDevicePercentage(id, startTime, endTime, periodTime, trend));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -994,7 +1180,7 @@ public class API {
         }
     }
 
-    public void typePercentage( HttpServerExchange exchange ) throws IOException {
+    public void typePercentage( HttpServerExchange exchange, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -1026,7 +1212,7 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypePercentage(id, startTime, endTime, periodTime));
+            exchange.getResponseSender().send(getTypePercentage(id, startTime, endTime, periodTime, trend));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -1034,7 +1220,7 @@ public class API {
         }
     }
 
-    public void servicePercentage( HttpServerExchange exchange ) throws IOException {
+    public void servicePercentage( HttpServerExchange exchange, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -1066,7 +1252,7 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypePercentage(getType(id), startTime, endTime, periodTime));
+            exchange.getResponseSender().send(getTypePercentage(getType(id), startTime, endTime, periodTime, trend));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -1074,7 +1260,7 @@ public class API {
         }
     }
 
-    public void housePercentage( HttpServerExchange exchange ) throws IOException {
+    public void housePercentage( HttpServerExchange exchange, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
             return;
@@ -1109,7 +1295,7 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getHousePercentage(dataTypes, startTime, endTime, periodTime));
+            exchange.getResponseSender().send(getHousePercentage(dataTypes, startTime, endTime, periodTime, trend));
 
         } catch (Throwable e) {
             e.printStackTrace();
