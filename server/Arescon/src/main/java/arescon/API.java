@@ -474,59 +474,57 @@ public class API {
         return response.append(arrays.toString()).append("}").toString();
     }
 
-    private String getDeviceDeviation( int id, long startTime, long endTime, double edge ) {
+    private String getDeviceDeviation( int id, long startTime, long endTime, double edge, String search ) {
         if (startTime < Data.DEVIATION_START_TIME) startTime = Data.DEVIATION_START_TIME;
 
-        int period = 60 / (int)Data.PERIOD;
         DeviationRecord[] values = Data.DEVIATION_RECORDS;
+
+        int period = 1;
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
-        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
+        response.append(period * Data.PERIOD * 12).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
         response.append(Data.TYPES[id - 1]).append("\",\"values\":");
 
-        startTime = (startTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
-        endTime = (endTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
+        startTime = (startTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD / 12;
+        endTime = (endTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD / 12;
 
         JSONArray list = new JSONArray();
-//        if (!trend) {
-            for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-                if (Math.abs(values[(int) j].value) >= edge) list.put(new JSONObject(values[(int) j].toString()));
+        String[] contextSearch = search.split(" ");
+        outer: for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+            if (Math.abs(values[(int) j].value) >= edge) {
+                for (String searchTerm : contextSearch) {
+                    if (!values[(int)j].name.toLowerCase().contains(searchTerm.toLowerCase())) continue outer;
+                }
+                list.put(new JSONObject(values[(int) j].toString()));
             }
-//        } else {
-//            PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
-//            for (int i = 0; i < expected; ++i) {
-//                int index = i % profile.length;
-//                if (Double.isFinite(profile[index])) {
-//                    trendFitter.addPoint(i, profile[index] * multiplier / typeCount);
-//                }
-//            }
-//            PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
-//            for (int i = 0; i < expected; ++i) {
-//                double y = polynomial.getY(i);
-//                if (Double.isFinite(y)) list.put(y);
-//            }
-//        }
+        }
 
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getTypeDeviation( int id, long startTime, long endTime, double edge ) {
+    private String getTypeDeviation( int id, long startTime, long endTime, double edge, String search ) {
         if (startTime < Data.DEVIATION_START_TIME) startTime = Data.DEVIATION_START_TIME;
 
-        int period = 60 / (int)Data.PERIOD;
+        int period = 1;
         DeviationRecord[] values = Data.DEVIATION_RECORDS;
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id);
         response.append("\",\"values\":");
 
-        startTime = (startTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
-        endTime = (endTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD;
+        startTime = (startTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD / 12;
+        endTime = (endTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD / 12;
 
         JSONArray list = new JSONArray();
-        for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
-            if (Math.abs(values[(int)j].value) >= edge) list.put(new JSONObject(values[(int)j].toString()));
+        String[] contextSearch = search.split(" ");
+        outer: for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
+            if (Math.abs(values[(int)j].value) >= edge) {
+                for (String searchTerm : contextSearch) {
+                    if (!values[(int)j].name.toLowerCase().contains(searchTerm.toLowerCase())) continue outer;
+                }
+                list.put(new JSONObject(values[(int)j].toString()));
+            }
         }
 
         return response.append(list.toString()).append("}").toString();
@@ -1348,9 +1346,13 @@ public class API {
             long startTime = Long.parseLong(start.getValue());
             long endTime = Long.parseLong(end.getValue());
             double edgeValue = Double.parseDouble(value.getValue());
+            String search = "";
+            if (postData.contains("search")) {
+                search = postData.getFirst("search").getValue();
+            }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDeviceDeviation(id, startTime, endTime, edgeValue));
+            exchange.getResponseSender().send(getDeviceDeviation(id, startTime, endTime, edgeValue, search));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -1389,8 +1391,13 @@ public class API {
             long endTime = Long.parseLong(end.getValue());
             double edgeValue = Double.parseDouble(value.getValue());
 
+            String search = "";
+            if (postData.contains("search")) {
+                search = postData.getFirst("search").getValue();
+            }
+
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeDeviation(id, startTime, endTime, edgeValue));
+            exchange.getResponseSender().send(getTypeDeviation(id, startTime, endTime, edgeValue, search));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -1418,8 +1425,8 @@ public class API {
 
         try {
             int id = Integer.parseInt(recordID.getValue());
-            Data.DEVIATION_RECORDS[id - 1].name = recordName.getValue();
-
+            String value = recordName.getValue();
+            Data.DEVIATION_RECORDS[id - 1].name = value;
         } catch (Throwable e) {
             e.printStackTrace();
         }
