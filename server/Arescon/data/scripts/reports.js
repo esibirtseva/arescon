@@ -385,6 +385,7 @@ function Profile(id, start, end, period, selectiontype){
             $(typeMap[self.profileData.type].selector).show();
             $('.table,.share').hide();
             self.graphs.push(self.setLinearGraph(self.profileData, self.valuesData));
+            self.graphs.push(self.setRublesGraph(self.profileData, self.valuesData));
         }else{//multiple
             $('.data_block').show();
             $('#type_share').hide();
@@ -448,9 +449,61 @@ function Profile(id, start, end, period, selectiontype){
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
+        return chart;
+    };
+    self.setRublesGraph = function(profileData, valuesData){
+        var data_points = filter_dataset(profileData);
+        //daily
+        var selector = typeMap[profileData.type].selector + ' .rubles';
+        var canvas = $(selector);
+        ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+        var dataDailyUsage = {
+            datasets: [
+                {
+                    label: "Среднее",
+                    fillColor: 'rgb(244, 247, 251)',
+                    strokeColor: 'rgb(216, 219, 223)',
+                    pointColor: 'rgb(216, 219, 223)',
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+                }
+            ]
+        };
+        //values
+        data_points = filter_dataset(valuesData);
+        dataDailyUsage.datasets.push({
+            label: typeMap[valuesData.type].label,
+            fillColor: typeMap[valuesData.type].colors.fill,
+            strokeColor: typeMap[valuesData.type].colors.stroke,
+            pointColor: typeMap[valuesData.type].colors.stroke,
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: data_points.values
+
+        });
+        dataDailyUsage.labels = data_points.labels;
+        optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
         return chart;
     };
 
@@ -543,6 +596,7 @@ function Forecast(id, start, end, period, selectiontype){
             $(typeMap[self.profileData.type].selector).show();
             $('.table,.share').hide();
             self.graphs.push(self.setLinearGraph(self.profileData));
+            self.graphs.push(self.setRublesGraph(self.profileData));
         }else{//multiple
             $('.data_block').show();
             $('#type_deviation').hide();
@@ -589,9 +643,50 @@ function Forecast(id, start, end, period, selectiontype){
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
+        return chart;
+    };
+    self.setRublesGraph = function(profileData){
+        profileData.start = new Date();
+        var data_points = filter_dataset(profileData);
+
+        //daily
+        var selector = typeMap[profileData.type].selector + ' .linear';
+        var canvas = $(selector);
+        ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+        var dataDailyUsage = {
+            datasets: [
+                {
+                    label: typeMap[profileData.type].label,
+                    fillColor: 'rgb(244, 247, 251)',
+                    strokeColor: '#707DB5',
+                    pointColor: '#707DB5',
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+                }
+            ]
+        };
+        dataDailyUsage.labels = data_points.labels;
+        optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
         return chart;
     };
 
@@ -748,6 +843,7 @@ function Multiple(id, start, end, period, selectiontype){
             $(typeMap[self.profileData.type].selector).show();
             $('.table,.share').hide();
             self.graphs.push(self.setLinearGraph(self.profileData, self.valuesData, -1));
+            self.graphs.push(self.setRublesGraph(self.profileData, self.valuesData, -1));
         }else{//multiple
             $('.data_block').show();
             $('#type_deviation').hide();
@@ -838,9 +934,98 @@ function Multiple(id, start, end, period, selectiontype){
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
+        return chart;
+    };
+    self.setRublesGraph = function(profileData, valuesData, type){
+        var data_points = filter_dataset({
+            type: type == -1 ? profileData.type : type,
+            start: profileData.start,
+            period: profileData.period,
+            values: type == -1 ? profileData.values : profileData.values[type]
+        });
+        //daily
+        var selector = typeMap[type == -1 ? profileData.type : type].selector + ' .linear';
+        var canvas = $(selector);
+        ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+        var dataDailyUsage = {
+            datasets: [
+                {
+                    label: getTimeFormatddmmyyyy(valuesData[0].start),
+                    fillColor: 'rgb(244, 247, 251)',
+                    strokeColor: 'rgb(216, 219, 223)',
+                    pointColor: 'rgb(216, 219, 223)',
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+                }
+            ]
+        };
+        //values
+        if (type == -1){
+            type = profileData.type;
+            for (var i = self.valuesData.length-1; i >= 0; i--){
+                data_points = filter_dataset({
+                    type: type,
+                    start: self.valuesData[0].start,
+                    period: profileData.period,
+                    values: valuesData[i].values
+                });
+                dataDailyUsage.datasets.push({
+                    label: typeMap[type].label,
+                    fillColor: typeMap[type].colors.fill,
+                    strokeColor: typeMap[type].colors.stroke,
+                    pointColor: typeMap[type].colors.stroke,
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+
+                });
+            }
+        }else{
+            for (var i = 0; i < self.valuesData.length; i++){
+                data_points = filter_dataset({
+                    type: type,
+                    start: self.valuesData[0].start,
+                    period: profileData.period,
+                    values: valuesData[i].values[type]
+                });
+                dataDailyUsage.datasets.push({
+                    label: typeMap[type].label,
+                    fillColor: typeMap[type].colors.fill,
+                    strokeColor: typeMap[type].colors.stroke,
+                    pointColor: typeMap[type].colors.stroke,
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+
+                });
+            }
+        }
+
+        dataDailyUsage.labels = data_points.labels;
+        optionsDailyUsage = {
+            // multiTooltipTemplate: "<%if (datasetIndex){%><%=datasetIndex%>: <%}%><%= value %>",
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
         return chart;
     };
 
