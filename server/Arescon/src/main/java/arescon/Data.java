@@ -46,8 +46,9 @@ public class Data {
 
         DEVIATION_RECORDS = new DeviationRecord[maxLength];
         for (int i = 0; i < DEVIATION_RECORDS.length; ++i) {
+            long time = DEVIATION_START_TIME + (long)i * 1000 * 60 * 60;
             DEVIATION_RECORDS[i] = new DeviationRecord(random.nextDouble() * 2.5 - 1.0,
-                    i + 1, DEVIATION_START_TIME + i * 1000 * 60 * 60);
+                    i + 1, time);
         }
     }
 
