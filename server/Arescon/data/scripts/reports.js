@@ -197,11 +197,23 @@ var interfaceInit = function(only){
 }
 var buildPageData = function(reporttype, period, start, end){
     var selectiontype = getParameterByName('selectiontype');
+    // here we will write smthg about with report
+    var descriptionObj = {
+        1: 'Profile',
+        2: 'Forecast',
+        3: 'Multiple',
+        4: 'Share',
+        5: 'ODN',
+        6: 'Deviation',
+        7: 'ShareLines'
+    }
     $('.percentpicker,.forecastpicker').hide();
     $('#add_interval,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
     $('#type_deviation').hide();
+    $('.reportdescription').text(descriptionObj[reporttype]);
+
     if (typeof currentPageData !== 'undefined') currentPageData.destroyAllData();
     if (selectiontype === '5' || selectiontype === '4'){
         $('#reporttype option[value="4"]').hide();
