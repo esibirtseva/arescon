@@ -30,16 +30,42 @@ public class Data {
             { },{ }
     };
 
+    public static double getMoneyMultiplier( final String type ) {
+        switch (type) {
+            case "0": return 0.02916;
+            case "1": return 0.13579;
+            case "2": return 5.18;
+            case "3": return 3.28;
+            default: return 0;
+        }
+    }
+
     static {
         Random random = new Random();
         int maxLength = 0;
+        double multiplier = 0;
         try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream("data.txt"), Charset.forName("UTF-8")))) {
             for (int i = 0; i < VALUES.length; ++i) {
+                switch (TYPES[i]) {
+                    case "0":
+                        multiplier = 1.9; // л холодной воды за 5 минут на 3 человек * 2
+                        break;
+                    case "1":
+                        multiplier = 1.21875; // л горячей воды за 5 минут на 3 человек * 2
+                        break;
+                    case "2":
+                        multiplier = 1.1458 / 500.0; // м3 газа за 5 минут на 2.2 человек * 2
+                        break;
+                    case "3":
+                        multiplier = 0.05787; // кВтч электроэнергии за 5 минут на 3 человек * 2
+                        break;
+                }
                 String[] line = input.readLine().split(", ");
                 VALUES[i] = new double[line.length];
                 if (line.length > maxLength) maxLength = line.length;
                 for (int j = 0; j < line.length; ++j) {
-                    VALUES[i][j] = Double.parseDouble(line[j]);
+                    //VALUES[i][j] = Double.parseDouble(line[j]);
+                    VALUES[i][j] = random.nextDouble() * multiplier;
                 }
             }
         } catch (IOException e) { e.printStackTrace(); }

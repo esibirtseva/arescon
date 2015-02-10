@@ -108,6 +108,10 @@ public class API {
     private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
+        if (multiplier / 20 >= 1.0) {
+            multiplier = Data.getMoneyMultiplier(Data.TYPES[id - 1]) * (multiplier / 20);
+        }
+
         period /= (int) Data.PERIOD;
         if (period < 1) period = 1;
         double[] values = Data.VALUES[id - 1];
@@ -147,6 +151,11 @@ public class API {
     }
 
     private String getTypeProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
+
+        if (multiplier / 20 >= 1.0) {
+            multiplier = Data.getMoneyMultiplier(id + "") * (multiplier / 20);
+        }
+
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -215,6 +224,9 @@ public class API {
     }
 
     private String getHouseProfile( Set<Integer> types, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
+
+        final double inputMultiplier = multiplier;
+
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -246,6 +258,11 @@ public class API {
 
         JSONArray arrays = new JSONArray();
         for (int type : types) {
+
+            if (inputMultiplier / 20 >= 1.0) {
+                multiplier = Data.getMoneyMultiplier(type + "") * (inputMultiplier / 20);
+            }
+
             list = new JSONArray();
             double[] profile = new double[count];
             int typeCount = 0;
@@ -292,6 +309,10 @@ public class API {
     private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier, boolean trend ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
+        if (multiplier / 20 >= 1.0) {
+            multiplier = Data.getMoneyMultiplier(Data.TYPES[id - 1]) * (multiplier / 20);
+        }
+
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         double[] values = Data.VALUES[id - 1];
@@ -333,6 +354,11 @@ public class API {
     }
 
     private String getTypeData( int id, long startTime, long endTime, int period, double multiplier, boolean trend ) {
+
+        if (multiplier / 20 >= 1.0) {
+            multiplier = Data.getMoneyMultiplier(id + "") * (multiplier / 20);
+        }
+
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -398,6 +424,9 @@ public class API {
     }
 
     private String getHouseData( Set<Integer> types, long startTime, long endTime, int period, double multiplier, boolean trend ) {
+
+        final double inputMultiplier = multiplier;
+
         period /= (int) Data.PERIOD;
         if (period < 1) period = 1;
         List<double[]> values = new ArrayList<>();
@@ -432,6 +461,11 @@ public class API {
 
 
         for (int type : types) {
+
+            if (inputMultiplier / 20 >= 1.0) {
+                multiplier = Data.getMoneyMultiplier(type + "") * (inputMultiplier / 20);
+            }
+
             list = new JSONArray();
             if (!trend) {
                 for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
