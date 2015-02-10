@@ -48,10 +48,10 @@ public class Data {
             for (int i = 0; i < VALUES.length; ++i) {
                 switch (TYPES[i]) {
                     case "0":
-                        multiplier = 1.9; // л холодной воды за 5 минут на 3 человек * 2
+                        multiplier = 1.9 / 1000.0; // л холодной воды за 5 минут на 3 человек * 2
                         break;
                     case "1":
-                        multiplier = 1.21875; // л горячей воды за 5 минут на 3 человек * 2
+                        multiplier = 1.21875 / 1000.0; // л горячей воды за 5 минут на 3 человек * 2
                         break;
                     case "2":
                         multiplier = 1.1458 / 500.0; // м3 газа за 5 минут на 2.2 человек * 2
