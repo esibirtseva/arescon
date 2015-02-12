@@ -208,7 +208,7 @@ var buildPageData = function(reporttype, period, start, end){
         7: 'ShareLines'
     }
     $('.percentpicker,.forecastpicker').hide();
-    $('#add_interval,.datepicker').hide();
+    $('#add_interval,#eval_intervals,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
     $('#type_deviation').hide();
@@ -246,7 +246,8 @@ var buildPageData = function(reporttype, period, start, end){
         currentPageData = new Forecast(id, start, end, period, selectiontype); 
     }else if (reporttype === '3'){
         $('#add_interval').show();
-        currentPageData = new Multiple(id, start, end, period, selectiontype); 
+        $('#eval_intervals').show();
+        currentPageData = new Multiple(id, start, end, period, selectiontype);
     }else if (reporttype === '4'){
         $('.frequencypicker').hide();
         currentPageData = new Share(id, start, end, period, selectiontype); 
@@ -268,8 +269,11 @@ $('#add_interval').click(function(){
         var new_picker = $('.datepicker[style="display: none;"]:first');
         new_picker.attr('style', 'display: block;');
         initDatePicker(new_picker.children('input').attr('name'));
-        // currentPageData.addDate(new Date());    
-    }    
+        // currentPageData.addDate(new Date());
+    }
+});
+$('#eval_intervals').click(function(){
+    currentPageData.updateData(true);
 });
 $('.datepicker .btn-danger').click(function(){
     var index = $('.datepicker[style="display: block;"]').index($(this).parent());
@@ -717,6 +721,8 @@ function Multiple(id, start, end, period, selectiontype){
   
     self.addDate = function(date){
         self.dates.push(date);
+    };
+    self.evalDates = function(date){
         self.updateData(true);
     };
     self.removeDate = function(index){
