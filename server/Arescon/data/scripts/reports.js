@@ -53,7 +53,7 @@ var typeMap = [
             stroke: "rgba(231, 75, 59, 1)"
         } ,
         selector: "#type_heat"     
-    },
+    }
 ]
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -236,30 +236,26 @@ var buildPageData = function(reporttype, period, start, end){
     }else{
         $('#reporttype option[value="7"]').hide();
     }
+
+    var id = getParameterByName('id');
+
     if (reporttype === '1'){
-        var id = getParameterByName('id');
-        currentPageData = new Profile(id, start, end, period, selectiontype);     
+        currentPageData = new Profile(id, start, end, period, selectiontype);
     }else if (reporttype === '2'){
-        var id = getParameterByName('id');
         $('.rangepicker,.frequencypicker').hide();
         currentPageData = new Forecast(id, start, end, period, selectiontype); 
     }else if (reporttype === '3'){
-        var id = getParameterByName('id');
         $('#add_interval').show();
         currentPageData = new Multiple(id, start, end, period, selectiontype); 
     }else if (reporttype === '4'){
-        var id = getParameterByName('id');
         $('.frequencypicker').hide();
         currentPageData = new Share(id, start, end, period, selectiontype); 
     }else if (reporttype === '5'){
-        var id = getParameterByName('id');
-        currentPageData = new ODN(id, start, end, period, selectiontype); 
+        currentPageData = new ODN(id, start, end, period, selectiontype);
     }else if (reporttype === '6'){
-        var id = getParameterByName('id');
-        currentPageData = new Deviation(id, start, end, period, selectiontype); 
+        currentPageData = new Deviation(id, start, end, period, selectiontype);
     }else if (reporttype === '7'){
-        var id = getParameterByName('id');
-        currentPageData = new ShareLines(id, start, end, period, selectiontype); 
+        currentPageData = new ShareLines(id, start, end, period, selectiontype);
     }else{//no PageData
         //let user watch previous reports
         console.log("nothing to do here");
@@ -429,7 +425,7 @@ function Profile(id, start, end, period, selectiontype){
         //daily
         var selector = typeMap[profileData.type].selector + ' .linear';
         var canvas = $(selector);
-        ctxDailyUsage = canvas.get(0).getContext("2d");
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
@@ -461,11 +457,10 @@ function Profile(id, start, end, period, selectiontype){
 
         });
         dataDailyUsage.labels = data_points.labels;
-        optionsDailyUsage = {
+        var optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
             legendTemplate : "<div class=\"legend <%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
@@ -478,7 +473,7 @@ function Profile(id, start, end, period, selectiontype){
         //daily
         var selector = typeMap[profileData.type].selector + ' .rubles';
         var canvas = $(selector);
-        ctxDailyUsage = canvas.get(0).getContext("2d");
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
@@ -510,11 +505,10 @@ function Profile(id, start, end, period, selectiontype){
 
         });
         dataDailyUsage.labels = data_points.labels;
-        optionsDailyUsage = {
+        var optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
             legendTemplate : "<div class=\"legend <%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
@@ -636,7 +630,7 @@ function Forecast(id, start, end, period, selectiontype){
         //daily
         var selector = typeMap[profileData.type].selector + ' .linear';
         var canvas = $(selector);
-        ctxDailyUsage = canvas.get(0).getContext("2d");
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
@@ -655,11 +649,10 @@ function Forecast(id, start, end, period, selectiontype){
             ]   
         };
         dataDailyUsage.labels = data_points.labels;
-        optionsDailyUsage = {
+        var optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
             legendTemplate : "<div class=\"legend<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
@@ -674,7 +667,7 @@ function Forecast(id, start, end, period, selectiontype){
         //daily
         var selector = typeMap[profileData.type].selector + ' .linear';
         var canvas = $(selector);
-        ctxDailyUsage = canvas.get(0).getContext("2d");
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
@@ -693,11 +686,10 @@ function Forecast(id, start, end, period, selectiontype){
             ]
         };
         dataDailyUsage.labels = data_points.labels;
-        optionsDailyUsage = {
+        var optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
             legendTemplate : "<div class=\"legend <%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
@@ -882,7 +874,7 @@ function Multiple(id, start, end, period, selectiontype){
         //daily
         var selector = typeMap[type == -1 ? profileData.type : type].selector + ' .linear';
         var canvas = $(selector);
-        ctxDailyUsage = canvas.get(0).getContext("2d");
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
@@ -903,12 +895,12 @@ function Multiple(id, start, end, period, selectiontype){
         //values
         if (type == -1){
             type = profileData.type;
-            for (var i = self.valuesData.length-1; i >= 0; i--){
+            for (var j = self.valuesData.length-1; j >= 0; j--){
                 data_points = filter_dataset({
                     type: type,
                     start: self.valuesData[0].start,
                     period: profileData.period,
-                    values: valuesData[i].values
+                    values: valuesData[j].values
                 });
                 dataDailyUsage.datasets.push({
                     label: typeMap[type].label,
@@ -923,12 +915,12 @@ function Multiple(id, start, end, period, selectiontype){
                 });
             }
         }else{
-            for (var i = 0; i < self.valuesData.length; i++){
+            for (var k = 0; k < self.valuesData.length; k++){
                 data_points = filter_dataset({
                     type: type,
                     start: self.valuesData[0].start,
                     period: profileData.period,
-                    values: valuesData[i].values[type]
+                    values: valuesData[k].values[type]
                 });
                 dataDailyUsage.datasets.push({
                     label: typeMap[type].label,
@@ -947,16 +939,15 @@ function Multiple(id, start, end, period, selectiontype){
         dataDailyUsage.labels = data_points.labels;
 
         // remove xAxis labels only for multiple charts
-        for (var i in dataDailyUsage.labels) {
-            dataDailyUsage.labels[i] = parseInt(i) + 1;
+        for (var a in dataDailyUsage.labels) {
+            dataDailyUsage.labels[a] = parseInt(a) + 1;
         }
 
-        optionsDailyUsage = {
+        var optionsDailyUsage = {
             // multiTooltipTemplate: "<%if (datasetIndex){%><%=datasetIndex%>: <%}%><%= value %>",
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
             legendTemplate : "<div class=\"legend <%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
@@ -974,7 +965,7 @@ function Multiple(id, start, end, period, selectiontype){
         //daily
         var selector = typeMap[type == -1 ? profileData.type : type].selector + ' .rubles';
         var canvas = $(selector);
-        ctxDailyUsage = canvas.get(0).getContext("2d");
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
@@ -1039,16 +1030,15 @@ function Multiple(id, start, end, period, selectiontype){
         dataDailyUsage.labels = data_points.labels;
 
         // remove xAxis labels only for multiple charts
-        for (var i in dataDailyUsage.labels) {
-            dataDailyUsage.labels[i] = parseInt(i) + 1;
+        for (var a in dataDailyUsage.labels) {
+            dataDailyUsage.labels[a] = parseInt(a) + 1;
         }
 
-        optionsDailyUsage = {
+        var optionsDailyUsage = {
             // multiTooltipTemplate: "<%if (datasetIndex){%><%=datasetIndex%>: <%}%><%= value %>",
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-//            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
             legendTemplate : "<div class=\"legend <%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
@@ -1283,7 +1273,7 @@ function ODN(id, start, end, period, selectiontype){
         //daily
         var selector = typeMap[type == -1 ? profileData.types[0] : type].selector + ' .linear';
         var canvas = $(selector);
-        ctxDailyUsage = canvas.get(0).getContext("2d");
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
@@ -1338,7 +1328,7 @@ function ODN(id, start, end, period, selectiontype){
         }
         
         dataDailyUsage.labels = data_points.labels;
-        optionsDailyUsage = {
+        var optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
@@ -1617,7 +1607,7 @@ function ShareLines(id, start, end, period, selectiontype){
         //daily
         var selector = typeMap[data.type].selector + ' .linear';
         var canvas = $(selector);
-        ctxDailyUsage = canvas.get(0).getContext("2d");
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
         ctxDailyUsage.canvas.width = canvas.parent().width();
         canvas.attr("height", "250");
@@ -1640,7 +1630,7 @@ function ShareLines(id, start, end, period, selectiontype){
             ]   
         };
         dataDailyUsage.labels = data_points.labels;
-        optionsDailyUsage = {
+        var optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
