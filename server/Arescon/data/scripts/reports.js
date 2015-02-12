@@ -945,6 +945,12 @@ function Multiple(id, start, end, period, selectiontype){
         }
         
         dataDailyUsage.labels = data_points.labels;
+
+        // remove xAxis labels only for multiple charts
+        for (var i in dataDailyUsage.labels) {
+            dataDailyUsage.labels[i] = parseInt(i) + 1;
+        }
+
         optionsDailyUsage = {
             // multiTooltipTemplate: "<%if (datasetIndex){%><%=datasetIndex%>: <%}%><%= value %>",
             scaleShowGridLines : false,
@@ -966,7 +972,7 @@ function Multiple(id, start, end, period, selectiontype){
             values: type == -1 ? profileData.values : profileData.values[type]
         });
         //daily
-        var selector = typeMap[type == -1 ? profileData.type : type].selector + ' .linear';
+        var selector = typeMap[type == -1 ? profileData.type : type].selector + ' .rubles';
         var canvas = $(selector);
         ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
@@ -1031,6 +1037,12 @@ function Multiple(id, start, end, period, selectiontype){
         }
 
         dataDailyUsage.labels = data_points.labels;
+
+        // remove xAxis labels only for multiple charts
+        for (var i in dataDailyUsage.labels) {
+            dataDailyUsage.labels[i] = parseInt(i) + 1;
+        }
+
         optionsDailyUsage = {
             // multiTooltipTemplate: "<%if (datasetIndex){%><%=datasetIndex%>: <%}%><%= value %>",
             scaleShowGridLines : false,
