@@ -176,8 +176,8 @@ var dataBank; //TODO change implementation
 var initDateRangePicker = function(){
     var date = new Date();
     daterangeEnd = date.getTime();
-    date.setDate(date.getDate()-7);
-    daterangeStart = date.getTime();
+    // start on current month
+    daterangeStart = (new Date(date.getFullYear(), date.getMonth(), 1)).getTime();
     $('input[name="daterange"]').val(getTimeFormatddmmyyyy(daterangeStart) + " - " + getTimeFormatddmmyyyy(daterangeEnd));
     $('input[name="daterange"]').daterangepicker(
         {

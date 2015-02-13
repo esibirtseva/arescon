@@ -80,8 +80,8 @@ $('#reporttype').change(function(e){
 var initDateRangePicker = function(){
     var date = new Date();
     currentEnd = date.getTime();
-    date.setDate(date.getDate()-7);
-    currentStart = date.getTime();
+    // start on current year
+    currentStart = (new Date(date.getFullYear(), 0, 1)).getTime();
     $('input[name="daterange"]').val(getTimeFormatddmmyyyy(currentStart) + " - " + getTimeFormatddmmyyyy(currentEnd));
     $('input[name="daterange"]').daterangepicker(
         {
