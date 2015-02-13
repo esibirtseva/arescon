@@ -78,3 +78,28 @@ $('.tszhs .item>p').click(function(){
 $('.history_reports h4').click(function(){
 	$('.history_reports h4 .glyphicon').toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up');
 });
+
+// to control change of 'Интервал' control
+$('#date_filter').on('apply.daterangepicker', function(ev, picker) {
+    var start = new Date(picker.startDate),
+        end = new Date(picker.endDate);
+
+    var timeDiff = Math.abs(end.getTime() - start.getTime());
+    var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+    var period = $("#period");
+
+    // set first option if cur value higher
+    if(period.val() >= diffMinutes) {
+        period.val($("#period option:first").val());
+    }
+
+    // hide options that a higher than current date_filter
+    $("#period option").each(function()
+    {
+        if ($(this).val() >= diffMinutes) {
+            $(this).hide();
+        } else {
+            $(this).show();
+        }
+    });
+});
