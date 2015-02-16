@@ -169,7 +169,11 @@ $('#deviation').change(function(e){
     var deviation = $(this).val()/100;
 
     currentPageData.updDeviation(deviation);
-    currentPageData.updateData(true);
+});
+$('.searchdescription input').change(function(e){
+    var searchDescription = $(this).val();
+
+    currentPageData.updSearchDescription(searchDescription);
 });
 var interfaceInit = function(only){
     $('.data_block').hide();
@@ -207,7 +211,8 @@ var buildPageData = function(reporttype, period, start, end){
         6: 'Deviation',
         7: 'ShareLines'
     }
-    $('.percentpicker,.forecastpicker').hide();
+
+    $('.percentpicker,.forecastpicker,.searchdescription').hide();
     $('#add_interval,#eval_intervals,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
@@ -1423,11 +1428,13 @@ function Deviation(id, start, end, period, selectiontype){
         }
         self.isUpdated = false;
         $.post('/' + selectiontype_str + '/deviation',
-            {'id':self.id,
-            'start' : self.start+"",
-            'end' : self.end+"",
-            'value':  self.deviation//'0.90'
-        },
+            {
+                'id': self.id,
+                'start': self.start + "",
+                'end': self.end + "",
+                'value': self.deviation,//'0.90'
+                'search': self.searchDescription
+            },
             function(data){
                 
                 var currentData = JSON.parse(data);
@@ -1446,6 +1453,7 @@ function Deviation(id, start, end, period, selectiontype){
     self.updateRepresentation = function(){ 
         self.destroyAllData();
         $('.percentpicker').show();
+        $('.searchdescription').show();
         $('.frequencypicker').hide();
         $('.data_block').hide();
         $('#type_deviation').show();
@@ -1508,6 +1516,10 @@ function Deviation(id, start, end, period, selectiontype){
     };
     self.updDeviation = function(deviation){
         self.deviation = deviation;
+        self.updateData(true);
+    };
+    self.updSearchDescription = function(searchDescription){
+        self.searchDescription = searchDescription;
         self.updateData(true);
     };
 }
