@@ -527,10 +527,9 @@ function Profile(id, start, end, period, selectiontype){
     };
 
     self.updateControls = function(){
-        $('#period option').hide()
-                           .removeAttr('selected');
         $('#period .report_profile').show();
-        $('#period .report_profile').first().attr('selected','selected');
+        $('#period .other_profile').hide();
+          $('#period option:visible:first').attr('selected','selected');
     };
     self.updateControls();
 }
@@ -708,10 +707,9 @@ function Forecast(id, start, end, period, selectiontype){
     };
 
     self.updateControls = function(){
-        $('#period option').hide()
-                           .removeAttr('selected');
-        $('#period .report_profile').show();
-        $('#period .report_profile').first().attr('selected','selected');
+        $('#period .report_profile').hide();
+        $('#period .other_profile').show();
+         $('#period option:visible:first').attr('selected','selected');
     };
     self.updateControls();
 }
@@ -1059,10 +1057,9 @@ function Multiple(id, start, end, period, selectiontype){
     };
 
     self.updateControls = function(){
-        $('#period option').hide()
-                           .removeAttr('selected');
-        $('#period .report_profile').show();
-        $('#period .report_profile').first().attr('selected','selected');
+        $('#period .report_profile').hide();
+        $('#period .other_profile').show();
+         $('#period option:visible:first').attr('selected','selected');
     };
     self.updateControls();
 }
@@ -1350,10 +1347,9 @@ function ODN(id, start, end, period, selectiontype){
     };
 
     self.updateControls = function(){
-        $('#period option').hide()
-                           .removeAttr('selected');
-        $('#period .report_profile').show();
-        $('#period .report_profile').first().attr('selected','selected');
+        $('#period .report_profile').hide();
+        $('#period .other_profile').show();
+         $('#period option:visible:first').attr('selected','selected');
     };
     self.updateControls();
 
@@ -1659,10 +1655,9 @@ function ShareLines(id, start, end, period, selectiontype){
     };
 
     self.updateControls = function(){
-        $('#period option').hide()
-                           .removeAttr('selected');
-        $('#period .report_profile').show();
-        $('#period .report_profile').first().attr('selected','selected');
+        $('#period .report_profile').hide();
+        $('#period .other_profile').show();
+         $('#period option:visible:first').attr('selected','selected');
     };
     self.updateControls();
 }

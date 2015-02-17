@@ -86,12 +86,8 @@ $('#date_filter').on('apply.daterangepicker', function(ev, picker) {
 
     var timeDiff = Math.abs(end.getTime() - start.getTime());
     var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
-    var period = $("#period");
-
-    // set first option if cur value higher
-    if(period.val() >= diffMinutes) {
-        period.val($("#period option:first").val());
-    }
+    var period = $("#period"),
+        isReportsPage = (window.location.pathname == "/ureports");
 
     // hide options that a higher than current date_filter
     $("#period option").each(function()
@@ -102,4 +98,14 @@ $('#date_filter').on('apply.daterangepicker', function(ev, picker) {
             $(this).show();
         }
     });
+
+    if (isReportsPage && currentReporttype == 1) {
+        $('#period .other_profile').hide();
+    } else if (isReportsPage && currentReporttype != 1) {
+        $('#period .report_profile').hide();
+    }
+
+    // set first option if cur value higher
+    period.val($("#period option:visible:first").val());
+
 });
