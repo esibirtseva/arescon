@@ -148,7 +148,7 @@ var initDatePicker = function(name){
         function(start, end) {
             daterangeStart = start;
             daterangeEnd = end; 
-            
+
             currentPageData.addDate(start);
         }
     );
@@ -284,7 +284,13 @@ $('.datepicker .btn-danger').click(function(){
     var index = $('.datepicker[style="display: block;"]').index($(this).parent());
 
     $(this).parent().attr('style', 'display: none;');
-    // alert(index);
+    currentPageData.removeDate(index);
+});
+// to not save previous date on datepicker change
+// FIXME: wrong behaviour when nothing selected after click, need to make smthg like 'afterselect' current datepicker event listener
+$('.datepicker input').click(function(){
+    var index = $('.datepicker[style="display: block;"]').index($(this).parent());
+
     currentPageData.removeDate(index);
 });
 function PageData(id, start, end, period, selectiontype){//root class
@@ -731,7 +737,6 @@ function Multiple(id, start, end, period, selectiontype){
     };
     self.removeDate = function(index){
         self.dates.splice(index, 1);
-        self.updateData(true);
     };
     self.updateData = function(updateRepresentation){
         self.isUpdated = false;
