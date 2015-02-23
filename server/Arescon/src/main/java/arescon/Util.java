@@ -7,6 +7,7 @@ import io.undertow.server.HttpServerExchange;
 import net.avkorneenkov.SQLUtil;
 import net.avkorneenkov.TimeUtil;
 import net.avkorneenkov.freemarker.TemplatesWorker;
+import net.avkorneenkov.util.Pair;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -110,6 +111,65 @@ public class Util {
                 case 3: if (!Data.DELETED[1]) response.append(link); break;
             }
         } catch (IOException ignored) { }
+    }
+
+    void getUserStats( Writer response, HttpServerExchange exchange ) {
+        Map<String, String> dataMap = new HashMap<>(3);
+        Map root = new HashMap<>();
+        root.put("map", dataMap);
+
+        double total = 0.0;
+        double average = 0.0;
+        double averageMoney = 0.0;
+
+        String relPath = exchange.getRelativePath();
+        if (relPath.length() <= 1) relPath = "1";
+        else relPath = relPath.substring(1);
+
+        int id = 0;
+        int type = 0;
+
+        switch (relPath) {
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+                id = Integer.parseInt(relPath);
+                break;
+            case "gas":
+                type = 2;
+                break;
+            case "heat":
+;               type = 4;
+                break;
+            case "electricity":
+                type = 3;
+                break;
+            case "coldwater":
+                type = 0;
+                break;
+            case "hotwater":
+                type = 1;
+                break;
+        }
+
+        Pair<Double, Integer> stats;
+        double multiplier = Data.getMoneyMultiplier(id > 0 ? Data.TYPES[id - 1] : Integer.toString(type));
+        if (id > 0) stats = Data.totalDevice(id);
+        else       stats = Data.totalType(type);
+
+        total = stats.key;
+        double months = stats.value * (Data.PERIOD * 60.0 * 1000.0) / Data.MONTH;
+        average = total / months;
+        averageMoney = average * multiplier;
+
+        dataMap.put("total", String.format("%.2f", total));
+        dataMap.put("average", String.format("%.2f", average));
+        dataMap.put("averageMoney", String.format("%.2f", averageMoney));
+
+        try {
+            templates.getTemplated(root, "user.stats.htm", response);
+        } catch (IOException | TemplateException e) { e.printStackTrace(); }
     }
 
     void getDispatcherTree( Writer response, HttpServerExchange exchange ) {

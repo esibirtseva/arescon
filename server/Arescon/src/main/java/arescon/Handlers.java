@@ -293,6 +293,12 @@ public class Handlers {
                     public void execute(StringWriter writer, HttpServerExchange exchange) {
                         util.getDeviceInfo(writer, exchange);
                     }
+                },
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getUserStats(writer, exchange);
+                    }
                 }
         );
 

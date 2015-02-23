@@ -1,5 +1,7 @@
 package arescon;
 
+import net.avkorneenkov.util.Pair;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Random;
@@ -7,7 +9,29 @@ import java.util.Random;
 public class Data {
 
     public static DeviationRecord[] DEVIATION_RECORDS;
-    public static long DEVIATION_START_TIME = 1409592882825l;
+    public static long DEVIATION_START_TIME = 1409592882825L;
+    public static long MONTH = 1000L * 60L * 60L * 24L * 30L;
+
+    public static Pair<Double, Integer> totalDevice( int id ) {
+        double total = 0.0;
+        for (double value : VALUES[id - 1]) {
+            total += value;
+        }
+        return new Pair<>(total, VALUES[id - 1].length);
+    }
+
+    public static Pair<Double, Integer> totalType( int type ) {
+        // TODO: replace with actual code
+        switch (type) {
+            case 0: return totalDevice(1);
+            case 1: return totalDevice(4);
+            case 2: return totalDevice(3);
+            case 3: return totalDevice(2);
+            case 4: return new Pair<>(0.0, 0);
+        }
+
+        return null;
+    }
 
     public static final long PERIOD = 5;
     public static final boolean[] DELETED = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
@@ -32,8 +56,8 @@ public class Data {
 
     public static double getMoneyMultiplier( final String type ) {
         switch (type) {
-            case "0": return 0.02916;
-            case "1": return 0.13579;
+            case "0": return 0.02916 * 1000.0;
+            case "1": return 0.13579 * 1000.0;
             case "2": return 5.18;
             case "3": return 3.28;
             default: return 0;
@@ -54,7 +78,7 @@ public class Data {
                         multiplier = 1.21875 / 1000.0; // л горячей воды за 5 минут на 3 человек * 2
                         break;
                     case "2":
-                        multiplier = 1.1458 / 500.0; // м3 газа за 5 минут на 2.2 человек * 2
+                        multiplier = 2.2916 / 1000.0; // м3 газа за 5 минут на 2.2 человек * 2
                         break;
                     case "3":
                         multiplier = 0.05787; // кВтч электроэнергии за 5 минут на 3 человек * 2
