@@ -1,0 +1,11 @@
+﻿port        : 80
+hostname    : 178.62.186.78
+resources   : data/
+pages       : pages/
+templates   : templates/
+
+db_port     : 
+db_hostname : 
+db_username : 
+db_password : 
+db_database : 
