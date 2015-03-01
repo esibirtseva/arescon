@@ -66,7 +66,11 @@ var currentReporttype, currentPeriod, currentStart, currentEnd;
 window.onload = function(){
     //daterange
     initDateRangePicker();
-    
+
+    // try to set report from hash
+    var hashReportId = getURLParameter('reportType', document.location.hash);
+    $('#reporttype').val((hashReportId === 'null') ? 1 : hashReportId);
+
     currentReporttype = $('#reporttype').val();
     currentPeriod = $('#period').val();
 
@@ -79,6 +83,7 @@ $('#reporttype').change(function(e){
     var reporttype = $(this).val();
     currentReporttype = reporttype;
     buildPageData(reporttype, currentPeriod, currentStart, currentEnd);
+    document.location.hash = "?reportType=" + reporttype;
 });
 var initDateRangePicker = function(){
     var date = new Date();
