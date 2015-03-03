@@ -569,7 +569,7 @@ public class API {
 
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
-        double[] values = Data.VALUES[id - 1];
+        double[] values = Data.PERCENTAGE_VALUES[id - 1];
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
@@ -586,7 +586,7 @@ public class API {
                 for (int i = 0; i < period; ++i) {
                     value += values[(int) j + i];
                 }
-                if (Double.isFinite(value)) list.put(0.25 * value / (1000 * period));
+                if (Double.isFinite(value)) list.put(0.25 * value / (period));
             }
         } else {
             PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
@@ -595,7 +595,7 @@ public class API {
                 for (int i = 0; i < period; ++i) {
                     value += values[(int) j + i];
                 }
-                if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (1000 * period));
+                if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (period));
             }
             PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
             for (long j = startTime; j + period <= endTime && j + period <= values.length; j += period) {
@@ -617,9 +617,9 @@ public class API {
         for (int i = 0; i < 4; ++i) {
             if (Data.TYPES[i].equals(Integer.toString(id))) {
                 if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
-                if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
+                if (Data.PERCENTAGE_VALUES[i].length > topLength) topLength = Data.PERCENTAGE_VALUES[i].length;
                 dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
-                values.add(Data.VALUES[i]);
+                values.add(Data.PERCENTAGE_VALUES[i]);
             }
         }
 
@@ -646,7 +646,7 @@ public class API {
                         }
                     }
                 }
-                if (Double.isFinite(value)) list.put(0.25 * value / (1000 * period));
+                if (Double.isFinite(value)) list.put(0.25 * value / (period));
             }
         } else {
             PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
@@ -660,7 +660,7 @@ public class API {
                         }
                     }
                 }
-                if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (1000 * period));
+                if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (period));
             }
             PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
             for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {
@@ -682,9 +682,9 @@ public class API {
         int topLength = 0;
         for (int i = 0; i < 4; ++i) {
             if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
-            if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
+            if (Data.PERCENTAGE_VALUES[i].length > topLength) topLength = Data.PERCENTAGE_VALUES[i].length;
             dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
-            values.add(Data.VALUES[i]);
+            values.add(Data.PERCENTAGE_VALUES[i]);
             dataTypes.add(Integer.parseInt(Data.TYPES[i]));
         }
 
@@ -718,7 +718,7 @@ public class API {
                             }
                         }
                     }
-                    list.put(0.25 * value / (1000 * period));
+                    list.put(0.25 * value / (period));
                 }
             } else {
                 PolynomialFitter trendFitter = new PolynomialFitter(this.trendDegrees);
@@ -733,7 +733,7 @@ public class API {
                             }
                         }
                     }
-                    if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (1000 * period));
+                    if (Double.isFinite(value)) trendFitter.addPoint(j, 0.25 * value / (period));
                 }
                 PolynomialFitter.Polynomial polynomial = trendFitter.getBestFit();
                 for (long j = startTime; j + period <= endTime && j - dataStartTime + period <= topLength; j += period) {

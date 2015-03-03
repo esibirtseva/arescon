@@ -1,0 +1,92 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>arescon</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/6df2b309.favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <link rel="stylesheet" href="/styles/2d856255.main.css">
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+
+    <div class="container-flex page_container">
+      <div class="row">
+        <div class="side_menu col-xs-4 col-sm-3 col-lg-2">
+          %dynamic_content%
+          <div class="menu_block">
+            <h4>Данные</h4>
+            <a class="active" href="/dispatcher">Клиенты</a>
+            <a href="/dreports">Отчеты</a>
+          </div>
+          <div class="menu_block">
+            <h4>Аккаунт</h4>
+            <a href="#">Настройки</a>
+            <a href="#">Выйти</a>
+          </div>
+        </div>
+        <div class="content container col-xs-offset-4 col-sm-offset-3 col-lg-offset-2 col-xs-8 col-sm-9 col-lg-10">
+          <div class="header row"><h3>Клиенты</h3></div>
+          <div class="prefilter row">
+            <div class="col-sm-6">
+              <h4>Поиск дома</h4>
+              <div class="search input-group">                
+                <input type="text" class="form-control" id="search" placeholder="Введите адрес">
+                <div class="input-group-addon btn btn-info">Найти</div>
+              </div>
+              <div class="filter_type">
+                <span>Тип счетчика</span>
+                <label class="checkbox-inline">
+                  <input type="radio" name="type_select" value="all" checked="checked"> Все
+                </label>
+                <label class="checkbox-inline">
+                  <input type="radio" name="type_select" value="coldwater"> Холодная вода
+                </label>
+                <label class="checkbox-inline">
+                  <input type="radio" name="type_select" value="hotwater"> Горячая вода
+                </label>
+                <label class="checkbox-inline">
+                  <input type="radio" name="type_select" value="electricity"> Электричество
+                </label>
+                <label class="checkbox-inline">
+                  <input type="radio" name="type_select" value="gas"> Газ
+                </label>
+                <label class="checkbox-inline">
+                  <input type="radio" name="type_select" value="heat"> Отопление
+                </label>
+              </div>
+              <div class="filter_type">
+                <span>Чрезвычайные ситуации</span>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="toggle_alert" id="toggle_alert"> Отображать чрезвычайные ситуации на карте
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="map col-md-7">
+              <div id="map"></div>
+            </div>
+            <div class="filter_precision col-md-5">
+              %dynamic_content%
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer></footer>
+
+
+    <!--<script src="scripts/d4213ac7.vendor.js"></script>-->
+    <script src="scripts/vendor.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/map.js"></script>
+</body>
+</html>

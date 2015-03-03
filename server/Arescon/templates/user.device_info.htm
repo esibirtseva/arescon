@@ -1,0 +1,22 @@
+<div class="device_info row">
+    <p>
+        <#if map["deviceID"] != "">
+            <a href='/deleteDevice/${map["deviceID"]}' class="remove_device">Удалить прибор</a>
+        </#if>
+    </p>
+    <div class="col-xs-5 col-md-4 col-lg-3"><div class="device_image" style='${map["image"]}'></div></div>
+    <div class="device_name col-xs-6">
+        <h4>${map["name"]}</h4>
+        <p>${map["description"]}</p>
+    </div>
+    <p>
+        <#if map["deviceID"] != "">
+            <a href='/ureports?selectiontype=5&id=${map["deviceID"]}'>Получить подробный отчёт</a>
+        </#if>
+    </p>
+    <p>
+        <#if map["typeID"] != "">
+            <a href='/ureports?selectiontype=4&id=${map["typeID"]}'>Получить подробный отчёт</a>
+        </#if>
+    </p>
+</div>

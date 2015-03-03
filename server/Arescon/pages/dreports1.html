@@ -1,0 +1,132 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>arescon</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/6df2b309.favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <link rel="stylesheet" href="/styles/main.css">
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+
+    <div class="container-flex page_container">
+      <div class="row">
+        <div class="side_menu col-xs-4 col-sm-3 col-lg-2">
+          <div class="user_info">
+            <div class="user_photo"></div>
+            <div class="user_name"><p>Сергей Николаев</p>диспетчер</div>
+          </div>
+          <div class="menu_block">
+            <h4>Данные</h4>
+            <a href="/dispatcher">Клиенты</a>
+            <a class="active" href="/dreports">Отчеты</a>
+          </div>
+          <div class="menu_block">
+            <h4>Аккаунт</h4>
+            <a href="#">Настройки</a>
+            <a href="#">Выйти</a>
+          </div>
+        </div>
+        <div class="content container col-xs-offset-4 col-sm-offset-3 col-lg-offset-2 col-xs-8 col-sm-9 col-lg-10">
+          <div class="header row"><h3>Отчеты</h3></div>
+          <div class="row history_reports">
+            <h4>Показать предыдущие отчеты <span class="glyphicon glyphicon-chevron-down"></span></h4>
+            <div class="reports" style="display: none;">
+              <p>Отчет 1</p>
+              <p>Отчет 2</p>
+              <p>Отчет 3</p>
+            </div>
+          </div>
+          <div class="row current_report">
+            <h4>Последний отчет</h4>
+            <form>
+              <div class="rangepicker form-inline">
+                <label for="date_filter">Интервал времени:</label>
+                <input type="text" name="daterange" id="date_filter" class="form-control" placeholder="Выберите интервал">
+              </div>
+              <div class="frequencypicker form-inline">
+                <label for="date_filter">Частота съема:</label>
+                <input type="text" name="frequency" id="frequency" class="form-control" placeholder="Число">
+                <select class="form-control" name="" id="">
+                  <option value="">Час</option>
+                  <option value="">День</option>
+                  <option value="">Неделя</option>
+                  <option value="">Месяц</option>
+                </select>
+              </div>
+            </form>
+            <div class="data_block col-sm-6">
+              <h4>Вода</h4>
+              <canvas id="dailyUsageChart" width="370" height="250"></canvas> 
+              <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Дата</th>
+                        <th>Время</th>
+                        <th>Потребление</th>
+                        <th>Расходы (руб.)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1.11.11</td>
+                        <td>12:00</td>
+                        <td>48.8</td>
+                        <td>760</td>
+                      </tr>
+                      <tr>
+                        <td>1.12.11</td>
+                        <td>12:00</td>
+                        <td>55.4</td>
+                        <td>795</td>
+                      </tr>
+                      <tr>
+                        <td>1.01.12</td>
+                        <td>12:00</td>
+                        <td>60.1</td>
+                        <td>820</td>
+                      </tr>
+                      <tr>
+                        <td>1.02.12</td>
+                        <td>12:00</td>
+                        <td>55.4</td>
+                        <td>795</td>
+                      </tr>
+                      <tr>
+                        <td>1.04.12</td>
+                        <td>12:00</td>
+                        <td>60.1</td>
+                        <td>820</td>
+                      </tr>
+                      <tr>
+                        <td>1.03.12</td>
+                        <td>12:00</td>
+                        <td>48.8</td>
+                        <td>760</td>
+                      </tr>     
+                    </tbody>
+                  </table> 
+            </div>
+            <div style="clear:both"></div>
+            <div class="btn btn-info">Сохранить</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer></footer>
+
+
+    <script src="scripts/vendor.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/chartDreports.js"></script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>arescon</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/6df2b309.favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/vendor.css">
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+
+    <div class="container-flex page_container">
+      <div class="row">
+        <div class="side_menu col-xs-4 col-sm-3 col-lg-2">
+          %dynamic_content%
+          <div class="menu_block">
+            <h4>Данные</h4>
+            <a href="/user">Услуги</a>
+            <a class="active" href="/ureports">Отчеты</a>
+          </div>
+          <div class="menu_block">
+            <h4>Аккаунт</h4>
+            <a href="#">Настройки</a>
+            <a href="#">Выйти</a>
+          </div>
+        </div>
+        <div class="content container col-xs-offset-4 col-sm-offset-3 col-lg-offset-2 col-xs-8 col-sm-9 col-lg-10">
+          <div class="header row"><h3>Отчеты%dynamic_content%</h3></div>
+          <div class="row history_reports">
+            <h4>Показать предыдущие отчеты <span class="glyphicon glyphicon-chevron-down"></span></h4>
+            <div class="reports" style="display: none;">
+              <p>Отчет 1</p>
+              <p>Отчет 2</p>
+              <p>Отчет 3</p>
+            </div>
+          </div>
+          <div class="row current_report">
+            <h4>Последний отчет</h4>
+            <form>
+              <div class="reporttypepicker form-inline">
+                <label for="date_filter">Тип отчета: </label>
+                <select class="form-control" name="" id="reporttype">
+                  <option value="1" selected="selected">Профиль</option>
+                  <option value="2">Прогноз</option>
+                  <option value="3">Множественный</option>
+                  <option value="4">Доли потребления</option>
+                  <option value="6">Отклонение</option>
+                  <option value="7">Доли по времени</option>
+                </select>
+              </div>
+              <div class="rangepicker form-inline">
+                <label for="date_filter">Интервал времени: </label>
+                <input type="text" name="daterange" id="date_filter" class="form-control" placeholder="Выберите интервал">
+              </div>
+              <div class="frequencypicker form-inline">
+                <label for="date_filter">Частота съема: </label>
+                <select class="form-control" name="" id="period">
+                  <option value="5">5 минут</option>
+                  <option value="60" class="report_profile">Час</option>
+                  <option value="1440" class="report_profile" selected="selected">День</option>
+                  <option value="10080">Неделя</option>
+                  <option value="43200">Месяц</option>
+                </select>
+              </div>
+              <div class="forecastpicker form-inline">
+                <label for="date_filter">Период: </label>
+                <select class="form-control" name="" id="forecast_period">
+                  <option value="1440">День</option>
+                  <option value="43200" selected="selected">Месяц</option>
+                  <option value="129600">Квартал</option>
+                  <option value="518400">Год</option>
+                </select>
+              </div>
+              <div class="percentpicker form-inline">
+                <label for="date_filter">Минимальное отклонение: </label>
+                <select class="form-control" name="" id="deviation">
+                  <option value="5">5%</option>
+                  <option value="10" class="report_profile" selected="selected">10%</option>
+                  <option value="25" class="report_profile">25%</option>
+                  <option value="50">50%</option>
+                  <option value="100">100%</option>
+                </select>
+              </div>
+              <div id="add_interval" class="btn btn-success" style="display: none;">Добавить интервал</div>
+              <div class="datepicker form-inline" style="display: none;">
+                <label for="date_filter">Дополнительный интервал:</label>
+                <input type="text" name="datepicker1" class="form-control" placeholder="Выберите интервал">
+                <div class="btn btn-danger">удалить</div>
+              </div>
+              <div class="datepicker form-inline" style="display: none;">
+                <label for="date_filter">Дополнительный интервал:</label>
+                <input type="text" name="datepicker2" class="form-control" placeholder="Выберите интервал">
+                <div class="btn btn-danger">удалить</div>
+              </div>
+              <div class="datepicker form-inline" style="display: none;">
+                <label for="date_filter">Дополнительный интервал:</label>
+                <input type="text" name="datepicker3" class="form-control" placeholder="Выберите интервал">
+                <div class="btn btn-danger">удалить</div>
+              </div>
+            </form>
+            <div id="type_share" class="data_block col-md-6" style="display: none;">
+              <h4>Доли затрат на услуги</h4>
+              <canvas class="share" width="370" height="250"></canvas>   
+            </div>
+            <div id="type_coldwater" class="data_block col-md-6" style="display: none;">
+              <h4>Холодная вода</h4>
+              <canvas class="linear" width="370" height="250"></canvas> 
+              <canvas class="share" width="370" height="250"></canvas> 
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Расходы (руб.)</th>
+                    <th>Общедомовые асходы (руб.)</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>  
+            </div>
+            <div id="type_hotwater" class="data_block col-md-6" style="display: none;">
+              <h4>Горячая вода</h4>
+              <canvas class="linear" width="370" height="250"></canvas> 
+              <canvas class="share" width="370" height="250"></canvas> 
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Расходы (руб.)</th>
+                    <th>Общедомовые асходы (руб.)</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>  
+            </div>
+            <div id="type_gas" class="data_block col-md-6" style="display: none;">
+              <h4>Газ</h4>
+              <canvas class="linear" width="370" height="250"></canvas> 
+              <canvas class="share" width="370" height="250"></canvas> 
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Расходы (руб.)</th>
+                    <th>Общедомовые асходы (руб.)</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>  
+            </div>
+            <div id="type_electricity" class="data_block col-md-6" style="display: none;">
+              <h4>Электричество</h4>
+              <canvas class="linear" width="370" height="250"></canvas> 
+              <canvas class="share" width="370" height="250"></canvas> 
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Расходы (руб.)</th>
+                    <th>Общедомовые асходы (руб.)</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>  
+            </div>
+            <div id="type_heat" class="data_block col-md-6" style="display: none;">
+              <h4>Отопление</h4>
+              <canvas class="linear" width="370" height="250"></canvas> 
+              <canvas class="share" width="370" height="250"></canvas> 
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Расходы (руб.)</th>
+                    <th>Общедомовые асходы (руб.)</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>  
+            </div>  
+            <div id="type_deviation" class="data_block col-md-6" style="display: none;">
+              <h4>Отклонение потребления от ожидаемого</h4>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Начло</th>
+                    <th>Конец</th>
+                    <th>Отклонение(%)</th>
+                    <th>Описание</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>  
+            </div>           
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer></footer>
+  
+
+    <script src="/scripts/vendor.js"></script>
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/reports.js"></script>
+</body>
+</html>
