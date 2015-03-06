@@ -97,12 +97,15 @@ public class API {
         }
     }
 
-    private JSONObject getLastRequests( int count ) {
+    private JSONObject getLastRequests( int count, int selectionType ) {
         JSONArray result = new JSONArray();
-        for (int i = requests.size() - 1; i >= Math.max(0, requests.size() - count); --i) {
-            result.put(requests.get(i));
+        for (int i = requests.size() - 1; i >= 0 && result.length() < count; --i) {
+            JSONObject entry = requests.get(i);
+            if (selectionType == -1 || entry.getInt("selectiontype") == selectionType) {
+                result.put(entry);
+            }
         }
-        return new JSONObject().put("count", Math.min(count, requests.size())).put("requests", result);
+        return new JSONObject().put("count", result.length()).put("requests", result);
     }
 
     private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
@@ -1478,6 +1481,7 @@ public class API {
         }
 
         FormData.FormValue countData = postData.getFirst("count");
+        FormData.FormValue selectionTypeData = postData.getFirst("selectionType");
 
         if (countData == null || countData.getValue().isEmpty()) {
             exchange.getResponseSender().send("error");
@@ -1488,7 +1492,12 @@ public class API {
             int count = Integer.parseInt(countData.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getLastRequests(count).toString());
+            if (selectionTypeData == null || selectionTypeData.getValue().isEmpty()) {
+                exchange.getResponseSender().send(getLastRequests(count, -1).toString());
+            } else {
+                exchange.getResponseSender().send(getLastRequests(count,
+                        Integer.parseInt(selectionTypeData.getValue())).toString());
+            }
 
         } catch (Throwable e) {
             e.printStackTrace();
