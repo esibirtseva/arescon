@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="/6df2b309.favicon.ico">
     <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-    <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <!--<script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>-->
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
     <link rel="stylesheet" href="/styles/main.css">
@@ -39,9 +39,13 @@
           <div class="row history_reports">
             <h4>Показать предыдущие отчеты <span class="glyphicon glyphicon-chevron-down"></span></h4>
             <div class="reports" style="display: none;">
-              <p>Отчет 1</p>
-              <p>Отчет 2</p>
-              <p>Отчет 3</p>
+                <div class="row">
+                    <div class="reports-list col-sm-4"></div>
+                    <div class="col-sm-4">
+                        <canvas class="linear-history" style="width: 693px; height: 261px;"></canvas>
+                    </div>
+                </div>
+
             </div>
           </div>
           <div class="row current_report">
@@ -57,6 +61,7 @@
                   <option value="6">Отклонение</option>
                   <option value="7">Доли по времени</option>
                 </select>
+                <div id="save_report" class="btn btn-success" style="display: none;">Сохранить</div>
               </div>
               <p class="reportdescription"></p>
               <div class="rangepicker form-inline">

@@ -63,6 +63,72 @@ function getParameterByName(name) {
 }
 var currentPageData;//new meta!
 var currentReporttype, currentPeriod, currentStart, currentEnd;
+
+var showSavedReport = function(obj) {
+    //remove previous legend
+    $(".reports .legendline-legend").remove();
+
+    $.post(obj.link, obj.request, function(data){
+        var currentData = JSON.parse(data);
+
+        currentData.start = new Date();
+        var data_points = filter_dataset(currentData);
+
+        var selector = '.linear-history';
+        var canvas = $(selector);
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+        var dataDailyUsage = {
+            datasets: [
+                {
+                    label: typeMap[currentData.type].label,
+                    fillColor: 'rgb(244, 247, 251)',
+                    strokeColor: '#707DB5',
+                    pointColor: '#707DB5',
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+                }
+            ]
+        };
+        dataDailyUsage.labels = data_points.labels;
+        var optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+            legendTemplate : "<div class=\"legend<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
+
+    });
+
+}
+
+var getSavedReports = function(){
+    $.post('/lastrequests', {'count': '10', 'selectionType': getParameterByName('selectiontype')}, function (data) {
+        var obj = jQuery.parseJSON(data);
+
+        // clear previous list first
+        $(".reports-list").empty();
+
+        for(var i in obj.requests) {
+            var reportDate = new Date(obj.requests[i].time);
+
+            $(".reports-list").append(
+                '<p class="show_saved_report" style="text-decoration: underline; cursor:pointer;"' +
+                    ' onclick=\'showSavedReport(' + JSON.stringify(obj.requests[i]) + ')\'>'
+                    + reportDate.toLocaleDateString("ru-RU") + ' '
+                    + reportDate.getHours() + ":" + reportDate.getMinutes() + ":" + reportDate.getSeconds()
+                    + '</span></p>');
+        }
+    });
+};
+
 window.onload = function(){
     //daterange
     initDateRangePicker();
@@ -75,16 +141,35 @@ window.onload = function(){
     currentPeriod = $('#period').val();
 
     buildPageData(currentReporttype, currentPeriod, currentStart, currentEnd);
+
+    getSavedReports();
 };
+
 var hideAllDataBlocks = function(){
     $('.data_block').hide();
 };
+
 $('#reporttype').change(function(e){
     var reporttype = $(this).val();
     currentReporttype = reporttype;
     buildPageData(reporttype, currentPeriod, currentStart, currentEnd);
     document.location.hash = "?reportType=" + reporttype;
 });
+
+// hide-show saved reports block
+$('.history_reports h4').click(function(){
+    $('.reports').toggle();
+});
+
+// start to save current report
+// TODO: add second parameter to all report types
+$('#save_report').click(function(){
+    currentPageData.updateData(false, true);
+    getSavedReports();
+});
+
+
+
 var initDateRangePicker = function(){
     var date = new Date();
     currentEnd = date.getTime();
@@ -218,7 +303,7 @@ var buildPageData = function(reporttype, period, start, end){
     }
 
     $('.percentpicker,.forecastpicker,.searchdescription').hide();
-    $('#add_interval,#eval_intervals,.datepicker').hide();
+    $('#add_interval,#eval_intervals,#save_report,.datepicker').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
     $('#type_deviation').hide();
@@ -253,6 +338,7 @@ var buildPageData = function(reporttype, period, start, end){
         currentPageData = new Profile(id, start, end, period, selectiontype);
     }else if (reporttype === '2'){
         $('.rangepicker,.frequencypicker').hide();
+        $('#save_report').show();
         currentPageData = new Forecast(id, start, end, period, selectiontype); 
     }else if (reporttype === '3'){
         $('#add_interval').show();
@@ -557,7 +643,7 @@ function Forecast(id, start, end, period, selectiontype){
     map['907200'] = {period: 43200, count: 3};
     map['3628800'] = {period: 43200, count: 12};
 
-    self.updateData = function(updateRepresentation){
+    self.updateData = function(updateRepresentation, saveReport){
         self.isUpdated = false;
         
         var selectiontype_str = '';
@@ -587,7 +673,8 @@ function Forecast(id, start, end, period, selectiontype){
             'start' : '0',
             'end' : '99999999999999',
             'period' : map[self.period].period,
-            'count' : map[self.period].count
+            'count' : map[self.period].count,
+            'save': saveReport ? 'true' : undefined
         }, function(data){
             var currentData = JSON.parse(data);
             self.profileData = currentData;
