@@ -778,7 +778,7 @@ function Forecast(id, start, end, period, selectiontype){
         var data_points = filter_dataset(profileData);
 
         //daily
-        var selector = typeMap[profileData.type].selector + ' .linear';
+        var selector = typeMap[profileData.type].selector + ' .rubles';
         var canvas = $(selector);
         var ctxDailyUsage = canvas.get(0).getContext("2d");
         ctxDailyUsage.clearRect(0, 0, 1000, 10000);
