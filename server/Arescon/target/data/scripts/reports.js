@@ -637,11 +637,13 @@ function Forecast(id, start, end, period, selectiontype){
 
     self.period = $('#forecast_period').val();
     var map = [];
-    map['1440'] = {period: 60, count: 24};
-    map['43200'] = {period: 60, count: 24};
-    map['302400'] = {period: 1440, count: 30};
-    map['907200'] = {period: 43200, count: 3};
-    map['3628800'] = {period: 43200, count: 12};
+
+    map['1440'] = {period: 60, count: 24};         // day
+    map['43200'] = {period: 1440, count: 30};      // month
+    map['129600'] = {period: 43200, count: 91};    // quarter
+    // year is an epic fail, strange to do forecast for it
+    map['518400'] = {period: 43200, count: 12};   // year
+
 
     self.updateData = function(updateRepresentation, saveReport){
         self.isUpdated = false;
