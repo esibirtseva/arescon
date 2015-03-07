@@ -64,6 +64,7 @@ function getParameterByName(name) {
 var currentPageData;//new meta!
 var currentReporttype, currentPeriod, currentStart, currentEnd;
 
+// function to render saved report to canvas
 var showSavedReport = function(obj) {
     //remove previous legend
     $(".reports .legendline-legend").remove();
@@ -165,7 +166,6 @@ $('.history_reports h4').click(function(){
 // TODO: add second parameter to all report types
 $('#save_report').click(function(){
     currentPageData.updateData(false, true);
-    getSavedReports();
 });
 
 
@@ -681,6 +681,10 @@ function Forecast(id, start, end, period, selectiontype){
             
             if (updateRepresentation){
                 self.updateRepresentation();
+            }
+
+            if (saveReport) {
+                getSavedReports();
             }
             // $('#graph_tab .measure').html(typeMap[currentData.type].measure);
             self.isUpdated = true;
