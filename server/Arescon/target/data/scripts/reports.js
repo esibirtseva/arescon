@@ -640,7 +640,7 @@ function Forecast(id, start, end, period, selectiontype){
 
     map['1440'] = {period: 60, count: 24};         // day
     map['43200'] = {period: 1440, count: 30};      // month
-    map['129600'] = {period: 43200, count: 91};    // quarter
+    map['129600'] = {period: 10800, count: 12};    // quarter
     // year is an epic fail, strange to do forecast for it
     map['518400'] = {period: 43200, count: 12};   // year
 
