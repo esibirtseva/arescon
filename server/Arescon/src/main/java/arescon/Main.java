@@ -8,22 +8,21 @@ import io.undertow.server.session.SessionManager;
 import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 import net.avkorneenkov.IOUtil;
-import net.avkorneenkov.SQLUtil;
 import net.avkorneenkov.freemarker.TemplatesWorker;
 import net.avkorneenkov.undertow.CommonHandlers;
 import net.avkorneenkov.undertow.DatabaseIdentityManager;
 import net.avkorneenkov.undertow.UndertowUtil;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.function.Consumer;
 
 public class Main {
@@ -56,7 +55,7 @@ public class Main {
 
     private static enum PAGES { index, user, dispatcher, login, registration, dreports, odn, ureports, uprofile, uodn, notifications }
 
-    private static void readConfig( String filename ) throws IOException {
+    private static void readConfig( String filename, boolean local ) throws IOException {
         Map<String, String> config = new HashMap<>(10);
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             for (String line; (line = reader.readLine()) != null; ) {
@@ -68,7 +67,7 @@ public class Main {
         }
         try { PORT = Integer.parseInt(config.get("port")); }
         catch (Throwable ignored) { }
-        try { HOSTNAME = config.get("hostname"); }
+        try { if (!local) HOSTNAME = config.get("hostname"); }
         catch (Throwable ignored) { }
         try { RESOURCES_PATH = config.get("resources"); }
         catch (Throwable ignored) { }
@@ -89,11 +88,11 @@ public class Main {
     }
 
     public static void main( String[] args ) {
-        launch();
+        launch(!(args.length > 0 && args[0].equalsIgnoreCase("remote")));
     }
 
-    private static void launch( ) {
-        try { readConfig(CONFIG_PATH); }
+    private static void launch( final boolean local ) {
+        try { readConfig(CONFIG_PATH, local); }
         catch (IOException e) { e.printStackTrace(); }
 
 //        try {
@@ -650,7 +649,7 @@ public class Main {
         paths.put("reboot", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
-                launch();
+                launch(local);
                 exchange.getResponseHeaders().put(Headers.LOCATION, "/");
                 exchange.setResponseCode(StatusCodes.TEMPORARY_REDIRECT);
             }
