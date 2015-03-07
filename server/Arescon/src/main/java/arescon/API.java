@@ -789,7 +789,7 @@ public class API {
                 countNumber = 24;
             } else if (periodTime == 1440) {
                 countNumber = 30;
-            } else if (periodTime == 43200) {
+            } else if (periodTime == 43200 || periodTime == 10800) {
                 countNumber = 12;
             } else {
                 exchange.getResponseSender().send("error");
@@ -852,7 +852,7 @@ public class API {
                 countNumber = 24;
             } else if (periodTime == 1440) {
                 countNumber = 30;
-            } else if (periodTime == 43200) {
+            } else if (periodTime == 43200 || periodTime == 10800) {
                 countNumber = 12;
             } else {
                 exchange.getResponseSender().send("error");
@@ -915,7 +915,7 @@ public class API {
                 countNumber = 24;
             } else if (periodTime == 1440) {
                 countNumber = 30;
-            } else if (periodTime == 43200) {
+            } else if (periodTime == 43200 || periodTime == 10800) {
                 countNumber = 12;
             } else {
                 exchange.getResponseSender().send("error");
@@ -981,7 +981,7 @@ public class API {
                 countNumber = 24;
             } else if (periodTime == 1440) {
                 countNumber = 30;
-            } else if (periodTime == 43200) {
+            } else if (periodTime == 43200 || periodTime == 10800) {
                 countNumber = 12;
             } else {
                 exchange.getResponseSender().send("error");
