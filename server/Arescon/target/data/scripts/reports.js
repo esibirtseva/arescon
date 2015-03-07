@@ -315,11 +315,11 @@ var buildPageData = function(reporttype, period, start, end){
     }
 
     if (selectiontype === '5' || selectiontype === '4'){
-        $('#reporttype option[value="4"]').hide();
+//        $('#reporttype option[value="4"]').hide();
         $('#reporttype option[value="6"]').show();
     }else{
         $('#reporttype option[value="6"]').hide();
-        $('#reporttype option[value="4"]').show();
+//        $('#reporttype option[value="4"]').show();
     }
     if (selectiontype === '4'){
         $('#reporttype option[value="5"]').show();
@@ -1177,7 +1177,11 @@ function Share(id, start, end, period, selectiontype){
 
         
         var selectiontype_str = '';
-        if (selectiontype === '3'){//flat
+        if(selectiontype === '5'){//device
+            selectiontype_str = 'device';
+        }else if (selectiontype === '4'){//type
+            selectiontype_str = 'type';
+        }else if (selectiontype === '3'){//flat
             selectiontype_str = 'flat';
         }else if (selectiontype === '2'){//house
             selectiontype_str = 'house';
@@ -1187,16 +1191,15 @@ function Share(id, start, end, period, selectiontype){
             selectiontype_str = 'uk';
         }
 
-        $.post('/' + selectiontype_str + '/money',{
-            'types' : [0,1,2,3,4],
+        $.post('/' + selectiontype_str + '/percentage',{
+            'id' : self.id,
             'start' : self.start+"",
             'end' : self.end+"",
             'period' : self.period
         }, function(data){
             var currentData = JSON.parse(data);
-            self.moneyData = currentData;
+            self.data = currentData;
 
-            
             if (updateRepresentation){
                 self.updateRepresentation();
             }
@@ -1205,44 +1208,145 @@ function Share(id, start, end, period, selectiontype){
         });
     };
 
-    self.updateRepresentation = function(){ 
+    self.updateRepresentation = function(){
         self.destroyAllData();
         $('.data_block').hide();
         $('#type_deviation').hide();
         $('#type_share').show();
-        self.graphs.push(self.setShareGraph());
+
+        if(selectiontype === '5' || selectiontype === '4'){//one
+            $('.table,.share').hide();
+            interfaceInit(self.id.toString());
+            self.graphs.push(self.setLinearGraph({
+                type : self.data.type,
+                start : self.data.start,
+                period : self.data.period,
+                values : self.data.values[0]
+            }));
+        }else{//multiple
+            $('.data_block').show();
+            $('#type_deviation').hide();
+            $('.table,.share').hide();
+            interfaceInit(getParameterByName('only'));
+            for (var i = 0; i < self.data.values.length; i++){
+                self.graphs.push(self.setLinearGraph({
+                    type : self.data.types[i],
+                    start : self.data.start,
+                    period : self.data.period,
+                    values : self.data.values[i]
+                }));
+            }
+        }
+
+
+        if(selectiontype === '5' || selectiontype === '4'){//one
+            $(typeMap[self.data.type].selector).show();
+            $('.table,.share').hide();
+            self.graphs.push(self.setLinearGraph(self.data, self.valuesData));
+            self.graphs.push(self.setRublesGraph(self.data, self.valuesData));
+        }else{//multiple
+            $('.data_block').show();
+            $('#type_share').hide();
+            $('#type_hide').hide();
+            $('.table,.share').hide();
+            interfaceInit(getParameterByName('only'));
+            for (var i = 0; i < self.data.values.length; i++){
+                self.graphs.push(self.setLinearGraph({
+                    type : i,
+                    start : self.data.start,
+                    period : self.data.period,
+                    values : self.data.values[i]
+                }, {
+                    type : i,
+                    start : self.valuesData.start,
+                    period : self.valuesData.period,
+                    values : self.valuesData.values[i]
+                }));
+            }
+
+        }
+
+        $('#type_share').hide();
+    };
+    self.setLinearGraph = function(data){
+        var data_points = filter_dataset(data);
+
+        //daily
+        var selector = typeMap[data.type].selector + ' .linear';
+        var canvas = $(selector);
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+
+        for (var i = 0; i < data_points.values.length; i++){
+            data_points.values[i] = Math.round(data_points.values[i] * 100);
+        }
+        var dataDailyUsage = {
+            datasets: [
+                {
+                    label: typeMap[data.type].label,
+                    fillColor: typeMap[data.type].colors.fill,
+                    strokeColor: typeMap[data.type].colors.stroke,
+                    pointColor: typeMap[data.type].colors.stroke,
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+                }
+            ]
+        };
+        dataDailyUsage.labels = data_points.labels;
+        var optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
+        return chart;
     };
 
-    self.setShareGraph = function(){
-        var canvas = $('#type_share .share');
-        var ctxShareUsage = canvas.get(0).getContext("2d");
-        ctxShareUsage.canvas.width = canvas.parent().width();
-        
-        var dataShareUsage = [];
-        for(var i = 0; i < self.moneyData.values.length; i++){
-            var sum = 0;
-            for(var j = 0; j < self.moneyData.values[i].length; j++){
-                sum += self.moneyData.values[i][j];
-            }
-            dataShareUsage.push({
-                value: toFixed(sum, 2),
-                color: typeMap[self.moneyData.types[i]].colors.fillDarken,
-                highlight: typeMap[self.moneyData.types[i]].colors.stroke,
-                label: typeMap[self.moneyData.types[i]].label
-            });
+    self.setRublesGraph = function(data){
+        var data_points = filter_dataset(data);
+
+        //daily
+        var selector = typeMap[data.type].selector + ' .rubles';
+        var canvas = $(selector);
+        var ctxDailyUsage = canvas.get(0).getContext("2d");
+        ctxDailyUsage.clearRect(0, 0, 1000, 10000);
+        ctxDailyUsage.canvas.width = canvas.parent().width();
+        canvas.attr("height", "250");
+
+        for (var i = 0; i < data_points.values.length; i++){
+            data_points.values[i] = Math.round(data_points.values[i] * 100);
         }
-        var optionsShareUsage = {
-            segmentShowStroke : true,
-            segmentStrokeColor : "#fff",
-            segmentStrokeWidth : 5,
-            percentageInnerCutout : 50,
-            animationSteps : 100,
-            animationEasing : "easeOutBounce",
-            animateRotate : true,
-            animateScale : false,
-            legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+        var dataDailyUsage = {
+            datasets: [
+                {
+                    label: typeMap[data.type].label,
+                    fillColor: typeMap[data.type].colors.fill,
+                    strokeColor: typeMap[data.type].colors.stroke,
+                    pointColor: typeMap[data.type].colors.stroke,
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: data_points.values
+                }
+            ]
         };
-        var chart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
+        dataDailyUsage.labels = data_points.labels;
+        var optionsDailyUsage = {
+            scaleShowGridLines : false,
+            showTooltips: true,
+            responsive: true,
+            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+        };
+        var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
+        // put legend (temporary on the bottom)
+        canvas.after(chart.generateLegend());
         return chart;
     };
 }
