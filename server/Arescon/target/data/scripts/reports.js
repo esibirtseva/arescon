@@ -689,7 +689,7 @@ function Forecast(id, start, end, period, selectiontype){
         }
         $.post('/' + selectiontype_str + '/values',{
             'id' : self.id,
-            'start' : '0',
+            'start' : self.start+"",
             'end' : '99999999999999',
             'period' : map[self.period].period,
             'count' : map[self.period].count/*,
@@ -700,7 +700,7 @@ function Forecast(id, start, end, period, selectiontype){
 
             $.post('/' + selectiontype_str + '/profile/values',{
                 'id' : self.id,
-                'start' : '0',
+                'start' : self.start+"",
                 'end' : '99999999999999',
                 'period' : map[self.period].period,
                 'count' : map[self.period].count,
