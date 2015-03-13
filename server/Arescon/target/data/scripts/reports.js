@@ -67,7 +67,11 @@ var currentReporttype, currentPeriod, currentStart, currentEnd;
 // function to render saved report to canvas
 var showSavedReport = function(obj) {
     //remove previous legend
-    $(".reports .legendline-legend").remove();
+    $(".history_reports .line-legend").remove();
+
+    // remove previous history chart (with canvas, total refresh)
+    $('.reports .chart canvas').remove();
+    $('.reports .chart').append('<canvas class="linear-history" style="width: 693px; height: 261px;"></canvas>');
 
     $.post(obj.link.replace('/profile', ''), obj.request, function(data){
         var currentData = JSON.parse(data);
@@ -133,6 +137,8 @@ var getSavedReports = function(){
 
         // clear previous list first
         $(".reports-list").empty();
+
+        $(".linear-history").empty();
 
         for(var i in obj.requests) {
             var reportDate = new Date(obj.requests[i].time);
@@ -422,6 +428,7 @@ function PageData(id, start, end, period, selectiontype){//root class
         self.end = end;
     };
     self.destroyAllData = function(){
+        console.log(self);
         self.graphs.forEach(function(entry) {
             entry.destroy();
         });
