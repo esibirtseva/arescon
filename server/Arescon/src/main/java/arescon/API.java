@@ -395,6 +395,7 @@ public class API {
         }
 
         if (startTime < dataStartTime) startTime = dataStartTime;
+        if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"period\":\"");
@@ -463,6 +464,7 @@ public class API {
         }
 
         if (startTime < dataStartTime) startTime = dataStartTime;
+        if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"period\":\"");
