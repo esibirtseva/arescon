@@ -67,33 +67,49 @@ public class API {
         }
     }
 
-    double[] getProfile( double[] data, int period, int count ) {
+    double STEP = 1.5;
+
+    double[] getProfile( double[] data, int period, int count, boolean weighted ) {
         double[] profile = new double[count];
         int len = count * period;
         int iterations = data.length / len;
+        double divisor = weighted ? 0 : iterations;
+        double step = weighted ? STEP : 1;
+        if (weighted) for (int i = 0; i < iterations; ++i) {
+            divisor += Math.pow(STEP, i);
+        }
         for (int j = 0; j + period <= len; j += period) {
             double value = 0.0;
+            double weight = 1;
             for (int k = 0; k < iterations; ++k) {
                 for (int i = 0; i < period; ++i) {
-                    value += data[k * len + j + i];
+                    value += data[k * len + j + i] * weight;
                 }
+                weight *= step;
             }
-            profile[j / period] = value / iterations;
+            profile[j / period] = value / divisor;
         }
         return profile;
     }
 
-    void getProfile( double[] data, int period, int count, double[] profile ) {
+    void getProfile( double[] data, int period, int count, double[] profile, boolean weighted ) {
         int len = count * period;
         int iterations = data.length / len;
+        int divisor = iterations;
+        double step = weighted ? STEP : 1;
+        if (weighted) for (int i = 0; i < iterations; ++i) {
+            divisor += Math.pow(STEP, i);
+        }
         for (int j = 0; j + period <= len; j += period) {
             double value = 0.0;
+            double weight = 1;
             for (int k = 0; k < iterations; ++k) {
                 for (int i = 0; i < period; ++i) {
-                    value += data[k * len + j + i];
+                    value += data[k * len + j + i] * weight;
                 }
+                weight *= step;
             }
-            profile[j / period] += value / iterations;
+            profile[j / period] += value / divisor;
         }
     }
 
@@ -108,7 +124,7 @@ public class API {
         return new JSONObject().put("count", result.length()).put("requests", result);
     }
 
-    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
+    private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend, boolean weighted ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
 
         if (multiplier / 20 >= 1.0) {
@@ -131,7 +147,7 @@ public class API {
 
         double[] profile = getProfile(
                 Arrays.copyOfRange(values, (int) startTime, (int) Math.min(endTime, values.length)),
-                period, count);
+                period, count, weighted);
 
         if (!trend) {
             for (int i = 0; i < expected; ++i) {
@@ -153,7 +169,7 @@ public class API {
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getTypeProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
+    private String getTypeProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend, boolean weighted ) {
 
         if (multiplier / 20 >= 1.0) {
             multiplier = Data.getMoneyMultiplier(id + "") * (multiplier / 20);
@@ -194,7 +210,7 @@ public class API {
                             values.get(i),
                             (int)Math.max(0, startTime - dataStartTimes.get(i)),
                             (int)Math.min(values.get(i).length, endTime - dataStartTimes.get(i))),
-                    period, count, profile);
+                    period, count, profile, weighted);
         }
 
         if (values.size() > 0) {
@@ -226,7 +242,7 @@ public class API {
         return response.append(list.toString()).append("}").toString();
     }
 
-    private String getHouseProfile( Set<Integer> types, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend ) {
+    private String getHouseProfile( Set<Integer> types, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend, boolean weighted ) {
 
         final double inputMultiplier = multiplier;
 
@@ -277,7 +293,7 @@ public class API {
                                 values.get(i),
                                 (int)Math.max(0, startTime - dataStartTimes.get(i)),
                                 (int)Math.min(values.get(i).length, endTime - dataStartTimes.get(i))),
-                        period, count, profile);
+                        period, count, profile, weighted);
                 ++typeCount;
             }
 
@@ -311,6 +327,7 @@ public class API {
 
     private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier, boolean trend ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+        if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
 
         if (multiplier / 20 >= 1.0) {
             multiplier = Data.getMoneyMultiplier(Data.TYPES[id - 1]) * (multiplier / 20);
@@ -768,6 +785,8 @@ public class API {
         FormData.FormValue count = postData.getFirst("count");
         FormData.FormValue saveData = postData.getFirst("save");
 
+        boolean weighted = postData.getFirst("predict") != null && !postData.getFirst("predict").getValue().isEmpty();
+
         if (count == null || count.getValue().isEmpty() ||
                 deviceID == null || deviceID.getValue().isEmpty() ||
                 start == null || start.getValue().isEmpty() ||
@@ -797,7 +816,7 @@ public class API {
             }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDeviceProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend));
+            exchange.getResponseSender().send(getDeviceProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend, weighted));
 
             if (saveData != null && !saveData.getValue().isEmpty()) {
                 JSONObject request = new JSONObject().put("selectiontype", 5).put("link", link).
@@ -831,6 +850,8 @@ public class API {
         FormData.FormValue count = postData.getFirst("count");
         FormData.FormValue saveData = postData.getFirst("save");
 
+        boolean weighted = postData.getFirst("predict") != null && !postData.getFirst("predict").getValue().isEmpty();
+
         if (count == null || count.getValue().isEmpty() ||
                 typeID == null || typeID.getValue().isEmpty() ||
                 start == null || start.getValue().isEmpty() ||
@@ -860,7 +881,7 @@ public class API {
             }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend));
+            exchange.getResponseSender().send(getTypeProfile(id, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend, weighted));
 
             if (saveData != null && !saveData.getValue().isEmpty()) {
                 JSONObject request = new JSONObject().put("selectiontype", 4).put("link", link).
@@ -894,6 +915,8 @@ public class API {
         FormData.FormValue count = postData.getFirst("count");
         FormData.FormValue saveData = postData.getFirst("save");
 
+        boolean weighted = postData.getFirst("predict") != null && !postData.getFirst("predict").getValue().isEmpty();
+
         if (count == null || count.getValue().isEmpty() ||
                 typeID == null || typeID.getValue().isEmpty() ||
                 start == null || start.getValue().isEmpty() ||
@@ -923,7 +946,7 @@ public class API {
             }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeProfile(getType(id), startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend));
+            exchange.getResponseSender().send(getTypeProfile(getType(id), startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend, weighted));
 
             if (saveData != null && !saveData.getValue().isEmpty()) {
                 JSONObject request = new JSONObject().put("selectiontype", 4).put("link", link).
@@ -957,6 +980,8 @@ public class API {
         FormData.FormValue count = postData.getFirst("count");
         FormData.FormValue saveData = postData.getFirst("save");
 
+        boolean weighted = postData.getFirst("predict") != null && !postData.getFirst("predict").getValue().isEmpty();
+
         if (count == null || count.getValue().isEmpty() ||
                 types == null || types.isEmpty() ||
                 start == null || start.getValue().isEmpty() ||
@@ -989,7 +1014,7 @@ public class API {
             }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getHouseProfile(dataTypes, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend));
+            exchange.getResponseSender().send(getHouseProfile(dataTypes, startTime, endTime, periodTime, countNumber, countExpected, multiplier, trend, weighted));
 
             int selectionType = 0;
 

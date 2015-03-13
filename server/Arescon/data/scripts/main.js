@@ -1,3 +1,10 @@
+// func to get params from hash
+function getURLParameter(name, givenstring) {
+    return decodeURI(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(givenstring)||[,null])[1]
+    );
+}
+
 $('#loginForm').submit(function(e) {  // this handles the submit event
     
     window.location = "/user.html";
