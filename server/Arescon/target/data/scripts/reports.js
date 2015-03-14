@@ -428,7 +428,8 @@ function PageData(id, start, end, period, selectiontype){//root class
         self.end = end;
     };
     self.destroyAllData = function(){
-        console.log(self);
+        $("canvas.linear").prev().removeClass("hidden-report-part");
+        $("canvas.linear").removeClass("hidden-report-part");
         self.graphs.forEach(function(entry) {
             entry.destroy();
         });
@@ -1274,35 +1275,14 @@ function Share(id, start, end, period, selectiontype){
         $('#type_deviation').hide();
         $('#type_share').show();
 
-        if(selectiontype === '5' || selectiontype === '4'){//one
-            $('.table,.share').hide();
-            interfaceInit(self.id.toString());
-            self.graphs.push(self.setLinearGraph({
-                type : self.data.type,
-                start : self.data.start,
-                period : self.data.period,
-                values : self.data.values[0]
-            }));
-        }else{//multiple
-            $('.data_block').show();
-            $('#type_deviation').hide();
-            $('.table,.share').hide();
-            interfaceInit(getParameterByName('only'));
-            for (var i = 0; i < self.data.values.length; i++){
-                self.graphs.push(self.setLinearGraph({
-                    type : self.data.types[i],
-                    start : self.data.start,
-                    period : self.data.period,
-                    values : self.data.values[i]
-                }));
-            }
-        }
-
+        $("canvas.linear").prev().addClass("hidden-report-part");
+        $("canvas.linear").addClass("hidden-report-part");
 
         if(selectiontype === '5' || selectiontype === '4'){//one
             $(typeMap[self.data.type].selector).show();
             $('.table,.share').hide();
-            self.graphs.push(self.setLinearGraph(self.data, self.valuesData));
+//            self.graphs.push(self.setLinearGraph(self.data, self.valuesData));
+
             self.graphs.push(self.setRublesGraph(self.data, self.valuesData));
         }else{//multiple
             $('.data_block').show();
