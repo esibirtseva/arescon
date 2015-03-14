@@ -17,6 +17,7 @@ import net.avkorneenkov.undertow.DatabaseIdentityManager;
 import net.avkorneenkov.undertow.UndertowUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -138,7 +139,8 @@ public class API {
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
         response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
-        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
+        response.append(Data.TYPES[id - 1]).append("\",\"legendItem\":\"").append(weighted ? "Прогноз" : "Профиль");
+        response.append(multiplier != Math.floor(multiplier) ? " (руб.)" : "").append(trend ? " (тренд)" : "").append("\",\"values\":");
 
         startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
         endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
@@ -195,7 +197,8 @@ public class API {
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"period\":\"");
         response.append(period * Data.PERIOD).append("\",\"type\":\"");
-        response.append(id).append("\",\"values\":");
+        response.append(id).append("\",\"legendItem\":\"").append(weighted ? "Прогноз" : "Профиль");
+        response.append(multiplier != Math.floor(multiplier) ? " (руб.)" : "").append(trend ? " (тренд)" : "").append("\",\"values\":");
 
         startTime = (startTime) / 60000 / Data.PERIOD;
         endTime = (endTime) / 60000 / Data.PERIOD;
@@ -270,7 +273,8 @@ public class API {
         for (int type : types) {
             list.put(type);
         }
-        response.append(list.toString()).append(",\"values\":");
+        response.append(list.toString()).append("\",\"legendItem\":\"").append(weighted ? "Прогноз" : "Профиль");
+        response.append(multiplier != Math.floor(multiplier) ? " (руб.)" : "").append(trend ? " (тренд)" : "").append(",\"values\":");
 
         startTime = (startTime) / 60000 / Data.PERIOD;
         endTime = (endTime) / 60000 / Data.PERIOD;
@@ -326,12 +330,16 @@ public class API {
     }
 
     private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier, boolean trend ) {
+
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
         if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
 
         if (multiplier / 20 >= 1.0) {
             multiplier = Data.getMoneyMultiplier(Data.TYPES[id - 1]) * (multiplier / 20);
         }
+
+        String timeInterval = " (" + new DateTime(startTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) +
+                " -- "+ new DateTime(endTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) + ")";
 
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
@@ -340,7 +348,9 @@ public class API {
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
         response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
-        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
+        response.append(Data.TYPES[id - 1]).append("\",\"legendItem\":\"").append("Реальные данные");
+        response.append(multiplier != Math.floor(multiplier) ? " (руб.)" : "").append(trend ? " (тренд)" : "");
+        response.append(timeInterval).append("\",\"values\":");
 
         startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
         endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
@@ -397,10 +407,15 @@ public class API {
         if (startTime < dataStartTime) startTime = dataStartTime;
         if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
 
+        String timeInterval = " (" + new DateTime(startTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) +
+                " -- "+ new DateTime(endTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) + ")";
+
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"period\":\"");
         response.append(period * Data.PERIOD).append("\",\"type\":\"");
-        response.append(id).append("\",\"values\":");
+        response.append(id).append("\",\"legendItem\":\"").append("Реальные данные");
+        response.append(multiplier != Math.floor(multiplier) ? " (руб.)" : "").append(trend ? " (тренд)" : "");
+        response.append(timeInterval).append("\",\"values\":");
 
         startTime = (startTime) / 60000 / Data.PERIOD;
         endTime = (endTime) / 60000 / Data.PERIOD;
@@ -466,6 +481,9 @@ public class API {
         if (startTime < dataStartTime) startTime = dataStartTime;
         if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
 
+        String timeInterval = " (" + new DateTime(startTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) +
+                " -- "+ new DateTime(endTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) + ")";
+
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"period\":\"");
         response.append(period * Data.PERIOD).append("\",\"types\":");
@@ -473,7 +491,9 @@ public class API {
         for (int type : types) {
             list.put(type);
         }
-        response.append(list.toString()).append(",\"values\":");
+        response.append(list.toString()).append("\",\"legendItem\":\"").append("Реальные данные");
+        response.append(multiplier != Math.floor(multiplier) ? " (руб.)" : "").append(trend ? " (тренд)" : "");
+        response.append(timeInterval).append(",\"values\":");
 
         startTime = (startTime) / 60000 / Data.PERIOD;
         endTime = (endTime) / 60000 / Data.PERIOD;
@@ -588,6 +608,9 @@ public class API {
 
     private String getDevicePercentage( int id, long startTime, long endTime, int period, boolean trend ) {
         if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+        if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
+        String timeInterval = " (" + new DateTime(startTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) +
+                " -- "+ new DateTime(endTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) + ")";
 
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
@@ -596,7 +619,9 @@ public class API {
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
         response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
-        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
+        response.append(Data.TYPES[id - 1]).append("\",\"legendItem\":\"").append("Реальные данные");
+        response.append(trend ? " (тренд)" : "");
+        response.append(timeInterval).append("\",\"values\":");
 
         startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
         endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
@@ -646,11 +671,16 @@ public class API {
         }
 
         if (startTime < dataStartTime) startTime = dataStartTime;
+        if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
+        String timeInterval = " (" + new DateTime(startTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) +
+                " -- "+ new DateTime(endTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) + ")";
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"period\":\"");
         response.append(period * Data.PERIOD).append("\",\"type\":\"");
-        response.append(id).append("\",\"values\":");
+        response.append(id).append("\",\"legendItem\":\"").append("Реальные данные");
+        response.append(trend ? " (тренд)" : "");
+        response.append(timeInterval).append("\",\"values\":");
 
         startTime = (startTime) / 60000 / Data.PERIOD;
         endTime = (endTime) / 60000 / Data.PERIOD;
@@ -711,6 +741,9 @@ public class API {
         }
 
         if (startTime < dataStartTime) startTime = dataStartTime;
+        if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
+        String timeInterval = " (" + new DateTime(startTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) +
+                " -- "+ new DateTime(endTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) + ")";
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"period\":\"");
@@ -719,7 +752,9 @@ public class API {
         for (int type : types) {
             list.put(type);
         }
-        response.append(list.toString()).append(",\"values\":");
+        response.append(list.toString()).append("\",\"legendItem\":\"").append("Реальные данные");
+        response.append(trend ? " (тренд)" : "");
+        response.append(timeInterval).append(",\"values\":");
 
         startTime = (startTime) / 60000 / Data.PERIOD;
         endTime = (endTime) / 60000 / Data.PERIOD;

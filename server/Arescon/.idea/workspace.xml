@@ -74,7 +74,7 @@
       <file leaf-file-name="Handlers.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2992" max-vertical-offset="4165">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2227" max-vertical-offset="3400">
               <caret line="299" column="60" selection-start-line="299" selection-start-column="60" selection-end-line="299" selection-end-column="60" />
               <folding />
             </state>
@@ -126,8 +126,8 @@
       <file leaf-file-name="API.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.28453946" vertical-offset="524" max-vertical-offset="3995">
-              <caret line="446" column="130" selection-start-line="446" selection-start-column="130" selection-end-line="446" selection-end-column="130" />
+            <state vertical-scroll-proportion="0.28618422" vertical-offset="523" max-vertical-offset="3995">
+              <caret line="461" column="130" selection-start-line="461" selection-start-column="130" selection-end-line="461" selection-end-column="130" />
               <folding>
                 <element signature="method#getType#0;class#API#0" expanded="false" />
                 <element signature="method#getProfile#0;class#API#0" expanded="false" />
@@ -282,6 +282,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -302,8 +304,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1159,8 +1159,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28453946" vertical-offset="524" max-vertical-offset="3995">
-          <caret line="446" column="130" selection-start-line="446" selection-start-column="130" selection-end-line="446" selection-end-column="130" />
+        <state vertical-scroll-proportion="0.28618422" vertical-offset="523" max-vertical-offset="3995">
+          <caret line="461" column="130" selection-start-line="461" selection-start-column="130" selection-end-line="461" selection-end-column="130" />
           <folding>
             <element signature="method#getType#0;class#API#0" expanded="false" />
             <element signature="method#getProfile#0;class#API#0" expanded="false" />
