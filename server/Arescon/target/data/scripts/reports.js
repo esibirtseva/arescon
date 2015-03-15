@@ -92,7 +92,7 @@ var showSavedReport = function(obj) {
             var dataDailyUsage = {
                 datasets: [
                     {
-                        label: typeMap[profileData.type].label,
+                        label: profileData.legendItem,
                         fillColor: 'rgb(244, 247, 251)',
                         strokeColor: 'rgb(216, 219, 223)',
                         pointColor: 'rgb(216, 219, 223)',
@@ -107,7 +107,7 @@ var showSavedReport = function(obj) {
             //values
             data_points = filter_dataset(valuesData);
             dataDailyUsage.datasets.push({
-                label: typeMap[valuesData.type].label,
+                label: valuesData.legendItem,
                 fillColor: typeMap[valuesData.type].colors.fill,
                 strokeColor: typeMap[valuesData.type].colors.stroke,
                 pointColor: typeMap[valuesData.type].colors.stroke,
@@ -428,8 +428,12 @@ function PageData(id, start, end, period, selectiontype){//root class
         self.end = end;
     };
     self.destroyAllData = function(){
+        // to remove previous legends
+        $(".legend").remove();
+
         $("canvas.linear").prev().removeClass("hidden-report-part");
         $("canvas.linear").removeClass("hidden-report-part");
+
         self.graphs.forEach(function(entry) {
             entry.destroy();
         });
@@ -563,7 +567,7 @@ function Profile(id, start, end, period, selectiontype){
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: typeMap[profileData.type].label,
+                    label: profileData.legendItem,
                     fillColor: 'rgb(244, 247, 251)',
                     strokeColor: 'rgb(216, 219, 223)',
                     pointColor: 'rgb(216, 219, 223)',
@@ -577,7 +581,7 @@ function Profile(id, start, end, period, selectiontype){
         //values
         data_points = filter_dataset(valuesData);
         dataDailyUsage.datasets.push({
-            label: typeMap[valuesData.type].label,
+            label: valuesData.legendItem,
             fillColor: typeMap[valuesData.type].colors.fill,
             strokeColor: typeMap[valuesData.type].colors.stroke,
             pointColor: typeMap[valuesData.type].colors.stroke,
@@ -611,7 +615,7 @@ function Profile(id, start, end, period, selectiontype){
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: "Среднее",
+                    label: profileData.legendItem,
                     fillColor: 'rgb(244, 247, 251)',
                     strokeColor: 'rgb(216, 219, 223)',
                     pointColor: 'rgb(216, 219, 223)',
@@ -625,7 +629,7 @@ function Profile(id, start, end, period, selectiontype){
         //values
         data_points = filter_dataset(valuesData);
         dataDailyUsage.datasets.push({
-            label: typeMap[valuesData.type].label,
+            label: valuesData.legendItem,
             fillColor: typeMap[valuesData.type].colors.fill,
             strokeColor: typeMap[valuesData.type].colors.stroke,
             pointColor: typeMap[valuesData.type].colors.stroke,
@@ -785,7 +789,7 @@ function Forecast(id, start, end, period, selectiontype){
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: typeMap[profileData.type].label,
+                    label: profileData.legendItem,
                     fillColor: 'rgb(244, 247, 251)',
                     strokeColor: 'rgb(216, 219, 223)',
                     pointColor: 'rgb(216, 219, 223)',
@@ -800,7 +804,7 @@ function Forecast(id, start, end, period, selectiontype){
         //values
         data_points = filter_dataset(valuesData);
         dataDailyUsage.datasets.push({
-            label: typeMap[valuesData.type].label,
+            label: valuesData.legendItem,
             fillColor: typeMap[valuesData.type].colors.fill,
             strokeColor: typeMap[valuesData.type].colors.stroke,
             pointColor: typeMap[valuesData.type].colors.stroke,
@@ -833,7 +837,7 @@ function Forecast(id, start, end, period, selectiontype){
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: "Среднее",
+                    label: profileData.legendItem,
                     fillColor: 'rgb(244, 247, 251)',
                     strokeColor: 'rgb(216, 219, 223)',
                     pointColor: 'rgb(216, 219, 223)',
@@ -847,7 +851,7 @@ function Forecast(id, start, end, period, selectiontype){
         //values
         data_points = filter_dataset(valuesData);
         dataDailyUsage.datasets.push({
-            label: typeMap[valuesData.type].label,
+            label: valuesData.legendItem,
             fillColor: typeMap[valuesData.type].colors.fill,
             strokeColor: typeMap[valuesData.type].colors.stroke,
             pointColor: typeMap[valuesData.type].colors.stroke,
@@ -1053,7 +1057,7 @@ function Multiple(id, start, end, period, selectiontype){
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: getTimeFormatddmmyyyy(valuesData[0].start),
+                    label: profileData.legendItem,
                     fillColor: 'rgb(244, 247, 251)',
                     strokeColor: 'rgb(216, 219, 223)',
                     pointColor: 'rgb(216, 219, 223)',
@@ -1075,7 +1079,7 @@ function Multiple(id, start, end, period, selectiontype){
                     values: valuesData[j].values
                 });
                 dataDailyUsage.datasets.push({
-                    label: typeMap[type].label,
+                    label: valuesData[j].legendItem,
                     fillColor: typeMap[type].colors.fill,
                     strokeColor: typeMap[type].colors.stroke,
                     pointColor: typeMap[type].colors.stroke,
@@ -1095,7 +1099,7 @@ function Multiple(id, start, end, period, selectiontype){
                     values: valuesData[k].values[type]
                 });
                 dataDailyUsage.datasets.push({
-                    label: typeMap[type].label,
+                    label: valuesData[k].legendItem,
                     fillColor: typeMap[type].colors.fill,
                     strokeColor: typeMap[type].colors.stroke,
                     pointColor: typeMap[type].colors.stroke,
@@ -1107,7 +1111,7 @@ function Multiple(id, start, end, period, selectiontype){
                 });
             }
         }
-        
+
         dataDailyUsage.labels = data_points.labels;
 
         // remove xAxis labels only for multiple charts
@@ -1144,7 +1148,7 @@ function Multiple(id, start, end, period, selectiontype){
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: getTimeFormatddmmyyyy(valuesData[0].start),
+                    label: profileData.legendItem,
                     fillColor: 'rgb(244, 247, 251)',
                     strokeColor: 'rgb(216, 219, 223)',
                     pointColor: 'rgb(216, 219, 223)',
@@ -1166,7 +1170,7 @@ function Multiple(id, start, end, period, selectiontype){
                     values: valuesData[i].values
                 });
                 dataDailyUsage.datasets.push({
-                    label: typeMap[type].label,
+                    label: valuesData[i].legendItem,
                     fillColor: typeMap[type].colors.fill,
                     strokeColor: typeMap[type].colors.stroke,
                     pointColor: typeMap[type].colors.stroke,
@@ -1186,7 +1190,7 @@ function Multiple(id, start, end, period, selectiontype){
                     values: valuesData[i].values[type]
                 });
                 dataDailyUsage.datasets.push({
-                    label: typeMap[type].label,
+                    label: valuesData[i].legendItem,
                     fillColor: typeMap[type].colors.fill,
                     strokeColor: typeMap[type].colors.stroke,
                     pointColor: typeMap[type].colors.stroke,
@@ -1366,7 +1370,7 @@ function Share(id, start, end, period, selectiontype){
         var dataDailyUsage = {
             datasets: [
                 {
-                    label: typeMap[data.type].label,
+                    label: data.legendItem,
                     fillColor: typeMap[data.type].colors.fill,
                     strokeColor: typeMap[data.type].colors.stroke,
                     pointColor: typeMap[data.type].colors.stroke,
@@ -1382,7 +1386,7 @@ function Share(id, start, end, period, selectiontype){
             scaleShowGridLines : false,
             showTooltips: true,
             responsive: true,
-            legendTemplate : "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=-1; i<datasets.length; i++){%><%if(!datasets[i]){%><p onclick=\"focusDataSet(<%=i%>)\"><span>●</span>Показать всё</p><%} else {%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}}%></div>"
+            legendTemplate : "<div class=\"legend <%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><p onclick=\"focusDataSet(<%=i%>)\"><span style=\"color:<%=datasets[i].strokeColor%>\">●</span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
         };
         var chart = new Chart(ctxDailyUsage).Line(dataDailyUsage, optionsDailyUsage);
         // put legend (temporary on the bottom)
