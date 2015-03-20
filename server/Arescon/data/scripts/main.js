@@ -106,6 +106,14 @@ $('#date_filter').on('apply.daterangepicker', function(ev, picker) {
         }
     });
 
+    if(diffMinutes >= 527040) { // year - minimum is day
+        $('#period option[value="180"]').hide();
+    }
+    if(diffMinutes >= 40320) { // month - minimum is hour
+        $('#period option[value="60"]').hide();
+        $('#period option[value="5"]').hide();
+    }
+
     if (isReportsPage && currentReporttype == 1) {
         $('#period .other_profile').hide();
     } else if (isReportsPage && currentReporttype != 1) {

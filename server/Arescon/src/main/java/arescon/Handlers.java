@@ -190,6 +190,32 @@ public class Handlers {
         return handler;
     }
 
+    public HttpHandler payments( String file ) {
+        final HttpHandler handler = CommonHandlers.templatedPage(file,
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getUserInfo(writer, exchange);
+                    }
+                }
+        );
+
+        return handler;
+    }
+
+    public HttpHandler rates( String file ) {
+        final HttpHandler handler = CommonHandlers.templatedPage(file,
+                new CommonHandlers.StringWriterHandler() {
+                    @Override
+                    public void execute(StringWriter writer, HttpServerExchange exchange) {
+                        util.getUserInfo(writer, exchange);
+                    }
+                }
+        );
+
+        return handler;
+    }
+
     public HttpHandler user( String file ) {
         final HttpHandler handler = CommonHandlers.templatedPage(file,
                 new CommonHandlers.StringWriterHandler() {
