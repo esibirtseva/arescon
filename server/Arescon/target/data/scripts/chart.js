@@ -264,7 +264,9 @@ function Device(id, start, end, _period){
     //defaults
     self.canvasValuesSelector = "#dailyUsageChart";
     self.canvasMoneySelector = "#dailyUsageChartMoney";
-    self.tableSelector = '.tab-content tbody';//tbody!
+    self.tableSelector = '.tab-content tbody.simple-table';//tbody!
+    self.rateSelector = '.tab-content tbody.rate-table';//tbody!
+    self.paymentsSelector = '.tab-content tbody.payments-table';//tbody!
     self.canvasShareSelector = "#shareUsageChart";
 
     self.graphs = [];
@@ -307,6 +309,8 @@ function Device(id, start, end, _period){
         self.graphs.push(self.setLinearGraph(self.canvasValuesSelector, self.valuesData));
         self.graphs.push(self.setLinearGraph(self.canvasMoneySelector, self.moneyData));
         self.setTable(self.valuesData, self.moneyData);
+        self.setRate();
+        self.setPayments();
         self.graphs.push(self.setShareGraph());
     };
 
@@ -354,6 +358,66 @@ function Device(id, start, end, _period){
             var time_str = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2);
             tbody.append("<tr><td>"+date_str+"</td><td>"+time_str+"</td><td>"+self.valuesData.values[i].toFixed(2)+"</td><td>"+self.moneyData.values[i].toFixed(2)+"</td></tr>")
         }
+    };
+
+    self.setRate = function(){
+        var tbody = $(self.rateSelector);
+        tbody.html("");
+
+        // temporary function to generate previous n dates
+        var getPreviousDatesArray = function (n, curDate, array) {
+            array.push(curDate.getDate() + "." + (curDate.getMonth()+1) + "." + curDate.getFullYear());
+            if (n > 0) {
+                curDate.setDate(curDate.getDate() - 1);
+                return getPreviousDatesArray(n - 1, curDate, array);
+            } else {
+                return array;
+            }
+        };
+
+        function generateRandomNumber(min, max) {
+            return (Math.random() * (max - min) + min).toFixed(2);
+        };
+
+        var reverseDatesArray = getPreviousDatesArray(30, new Date(), []);
+
+        var data_size = reverseDatesArray.length;
+        for (var i = data_size-1; i >= 0; i--) {
+            tbody.append("<tr><td>"+reverseDatesArray[i]+"</td><td>"+generateRandomNumber(66, 99)+"</td><td>"+generateRandomNumber(33, 66)+"</td><td>"+generateRandomNumber(1, 33)+"</td></tr>")
+        }
+
+    };
+
+    self.setPayments = function(){
+        var tbody = $(self.paymentsSelector);
+        tbody.html("");
+
+        // temporary function to generate previous n dates
+        var getPreviousDatesArray = function (n, curDate, array) {
+            array.push(curDate.getDate() + "." + (curDate.getMonth()+1) + "." + curDate.getFullYear());
+            if (n > 0) {
+                curDate.setDate(curDate.getDate() - 1);
+                return getPreviousDatesArray(n - 1, curDate, array);
+            } else {
+                return array;
+            }
+        };
+
+        var booleanGenerate = function() {
+            return !Math.floor((Math.random() * 2));
+        };
+
+        var booleanButtonGenerate = function() {
+            return '<p class="glyphicon glyphicon-'+((booleanGenerate())?'ok':'remove')+'"></p>';
+        };
+
+        var reverseDatesArray = getPreviousDatesArray(30, new Date(), []);
+
+        var data_size = reverseDatesArray.length;
+        for (var i = data_size-1; i >= 0; i--) {
+            tbody.append("<tr><td>"+reverseDatesArray[i]+"</td><td>"+booleanButtonGenerate()+"</td></tr>")
+        }
+
     };
 
     self.setShareGraph = function(){

@@ -117,6 +117,8 @@
                   <li id = "graph_tab" class="active"><a href="#1" data-toggle="tab">График (<span class="measure">measure</span>)</a></li>
                   <li id = "graph_tab_money"><a href="#3" data-toggle="tab">График (<span class="measure">руб.</span>)</a></li>
                   <li id = "table_tab"><a href="#2" data-toggle="tab">Таблица</a></li>
+                  <li id = "rate_tab"><a href="#4" data-toggle="tab">Применяемые тарифы</a></li>
+                  <li id = "payments_tab"><a href="#5" data-toggle="tab">Платежи</a></li>
                 </ul>
                 <div class="tab-content">
                   <div class="tab-pane active" id="1">
@@ -126,7 +128,6 @@
                     <canvas id="dailyUsageChartMoney" width="370" height="250"></canvas>  
                    </div>
                    <div class="tab-pane" id="2">
-                   <!--put TABLE HERE-->
                    <table class="table table-hover">
                     <thead>
                       <tr>
@@ -136,11 +137,37 @@
                         <th>Расходы (руб.)</th>
                       </tr>
                     </thead>
-                    <tbody>                      
+                    <tbody class="simple-table">
                     </tbody>
                   </table>
                    </div>
-                  </div>        
+                   <div class="tab-pane" id="4">
+                   <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Дата</th>
+                        <th>Тариф дневной</th>
+                        <th>Тариф ночной</th>
+                        <th>Тариф льготный</th>
+                      </tr>
+                    </thead>
+                    <tbody class="rate-table">
+                    </tbody>
+                  </table>
+                   </div>
+                   <div class="tab-pane" id="5">
+                   <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Дата</th>
+                        <th>Оплачено</th>
+                      </tr>
+                    </thead>
+                    <tbody class="payments-table">
+                    </tbody>
+                  </table>
+                   </div>
+                  </div>
                 </div>
                 <h4>Показатели</h4>
                 <dl class="dl-horizontal">
