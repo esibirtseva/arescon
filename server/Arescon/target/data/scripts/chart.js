@@ -56,7 +56,7 @@ window.onload = function(){
     //daterange
     initDateRangePicker();
     // to update frequency select by hiding some options
-    $('#date_filter').trigger("apply.daterangepicker", [$('input[name="daterange"]').data('daterangepicker')]);
+    periodItemsFilter($('input[name="daterange"]').data('daterangepicker'));
 
     var currentRoute = getLastParamUrl();
     var period = $("#period").val();

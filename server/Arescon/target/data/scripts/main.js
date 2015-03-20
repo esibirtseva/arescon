@@ -87,7 +87,7 @@ $('.history_reports h4').click(function(){
 });
 
 // to control change of 'Интервал' control
-$('#date_filter').on('apply.daterangepicker', function(ev, picker) {
+var periodItemsFilter = function(picker) {
     var start = new Date(picker.startDate),
         end = new Date(picker.endDate);
 
@@ -121,6 +121,10 @@ $('#date_filter').on('apply.daterangepicker', function(ev, picker) {
     }
 
     // set first option if cur value higher
-    period.val($("#period option:visible:first").val());
+    $("#period").find('option:selected').removeAttr("selected");
+    $("#period option:visible:first").attr('selected','selected');
+};
 
+$('#date_filter').on('apply.daterangepicker', function(ev, picker) {
+    periodItemsFilter(picker);
 });
