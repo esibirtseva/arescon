@@ -59,9 +59,10 @@ window.onload = function(){
     $('#date_filter').trigger("apply.daterangepicker", [$('input[name="daterange"]').data('daterangepicker')]);
 
     var currentRoute = getLastParamUrl();
+    var period = $("#period").val();
     if ($('.device.active').length > 0){
         var deviceID = $('.device.active').data("deviceid");
-        currentPageData = new Device(deviceID, daterangeStart, daterangeEnd, $("#period").val());
+        currentPageData = new Device(deviceID, daterangeStart, daterangeEnd, period);
         currentPageData.updateData(true);
     }
     else if (currentRoute === "water"){
