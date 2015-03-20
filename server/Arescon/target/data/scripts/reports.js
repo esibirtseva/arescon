@@ -334,7 +334,6 @@ var buildPageData = function(reporttype, period, start, end){
 
     if (typeof currentPageData !== 'undefined') {
         currentPageData.destroyAllData();
-        $( ".legend" ).remove();
     }
 
     if (selectiontype === '5' || selectiontype === '4'){
@@ -429,7 +428,7 @@ function PageData(id, start, end, period, selectiontype){//root class
     };
     self.destroyAllData = function(){
         // to remove previous legends
-        $(".legend").remove();
+        $(".current_report .legend").remove();
 
         $("canvas.linear").prev().removeClass("hidden-report-part");
         $("canvas.linear").removeClass("hidden-report-part");
