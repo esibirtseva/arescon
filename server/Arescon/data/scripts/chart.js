@@ -50,17 +50,18 @@ var typeMap = [
 
 var currentRoute;//odn
 var odnDataSet = [];
-var period = 1440;//default
 var currentPageData;//new meta!
 var daterangeStart, daterangeEnd;
 window.onload = function(){
     //daterange
     initDateRangePicker();
+    // to update frequency select by hiding some options
+    $('#date_filter').trigger("apply.daterangepicker", [$('input[name="daterange"]').data('daterangepicker')]);
 
     var currentRoute = getLastParamUrl();
     if ($('.device.active').length > 0){
         var deviceID = $('.device.active').data("deviceid");
-        currentPageData = new Device(deviceID, daterangeStart, daterangeEnd, period);
+        currentPageData = new Device(deviceID, daterangeStart, daterangeEnd, $("#period").val());
         currentPageData.updateData(true);
     }
     else if (currentRoute === "water"){
@@ -117,7 +118,6 @@ var filter_dataset = function(data){
     result.values = [];
     var max_number_of_datapoints = 30;
     var max_labels = 6;
-    console.log(data);
     var data_size = data.values.length;
     var segment_step = data_size < 15 ? 1 : data_size/max_labels;
     var current_segment = -1;

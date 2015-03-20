@@ -74,22 +74,21 @@
       <file leaf-file-name="Handlers.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2227" max-vertical-offset="3400">
-              <caret line="299" column="60" selection-start-line="299" selection-start-column="60" selection-end-line="299" selection-end-column="60" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4046">
+              <caret line="43" column="35" selection-start-line="43" selection-start-column="35" selection-end-line="43" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Util.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Util.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="769" max-vertical-offset="4301">
-              <caret line="166" column="63" selection-start-line="166" selection-start-column="63" selection-end-line="166" selection-end-column="63" />
+            <state vertical-scroll-proportion="0.776087" vertical-offset="2601" max-vertical-offset="4454">
+              <caret line="315" column="66" selection-start-line="315" selection-start-column="66" selection-end-line="315" selection-end-column="66" />
               <folding>
                 <element signature="method#getReportName#0;class#Util#0" expanded="false" />
                 <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
-                <element signature="method#getTypeLink#0;class#Util#0" expanded="false" />
                 <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
                 <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
                 <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
@@ -123,10 +122,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="API.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="API.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.28618422" vertical-offset="523" max-vertical-offset="3995">
+            <state vertical-scroll-proportion="0.0" vertical-offset="523" max-vertical-offset="3995">
               <caret line="461" column="130" selection-start-line="461" selection-start-column="130" selection-end-line="461" selection-end-column="130" />
               <folding>
                 <element signature="method#getType#0;class#API#0" expanded="false" />
@@ -234,10 +233,10 @@
         <option value="$PROJECT_DIR$/data.txt" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/PolynomialFitter.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Handlers.java" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/Util.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Data.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/Util.java" />
       </list>
     </option>
   </component>
@@ -282,7 +281,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -304,6 +302,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -701,14 +700,12 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24895833" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -716,13 +713,15 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39978904" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39978904" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1081,59 +1080,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2370" max-vertical-offset="4046">
-          <caret line="299" column="60" selection-start-line="299" selection-start-column="60" selection-end-line="299" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/avkorneenkov/SQLUtil.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1343">
           <caret line="17" column="51" selection-start-line="17" selection-start-column="51" selection-end-line="17" selection-end-column="51" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="769" max-vertical-offset="4301">
-          <caret line="166" column="63" selection-start-line="166" selection-start-column="63" selection-end-line="166" selection-end-column="63" />
-          <folding>
-            <element signature="method#getReportName#0;class#Util#0" expanded="false" />
-            <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
-            <element signature="method#getTypeLink#0;class#Util#0" expanded="false" />
-            <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
-            <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
-            <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
-            <element signature="method#getDevices#0;class#Util#0" expanded="false" />
-            <element signature="method#getNews#0;class#Util#0" expanded="false" />
-            <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
-            <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
-            <element signature="method#getMenu#0;class#Util#0" expanded="false" />
-            <element signature="method#getPageName#0;class#Util#0" expanded="false" />
-            <element signature="method#getAddPlaceForm#0;class#Util#0" expanded="false" />
-            <element signature="method#getInviteForm#0;class#Util#0" expanded="false" />
-            <element signature="method#getSportsmen#0;class#Util#0" expanded="false" />
-            <element signature="method#getSportsmanInfo#0;class#Util#0" expanded="false" />
-            <element signature="method#getTrainerInfo#0;class#Util#0" expanded="false" />
-            <element signature="method#getProfile#0;class#Util#0" expanded="false" />
-            <element signature="method#getSeriesType#0;class#Util#0" expanded="false" />
-            <element signature="method#getAccountType#0;class#Util#0" expanded="false" />
-            <element signature="method#getSANState#0;class#Util#0" expanded="false" />
-            <element signature="method#getRecommendationKey#0;class#Util#0" expanded="false" />
-            <element signature="method#getStateColor#0;class#Util#0" expanded="false" />
-            <element signature="method#getSeries#0;class#Util#0" expanded="false" />
-            <element signature="method#getMeasures#0;class#Util#0" expanded="false" />
-            <element signature="method#getPlaces#0;class#Util#0" expanded="false" />
-            <element signature="method#getBestSportsman#0;class#Util#0" expanded="false" />
-            <element signature="method#getBestTrainerResult#0;class#Util#0" expanded="false" />
-            <element signature="method#getSportsmanDataMap#0;class#Util#0" expanded="false" />
-            <element signature="method#getTrainerDataMap#0;class#Util#0" expanded="false" />
-            <element signature="method#getUsers#0;class#Util#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1159,7 +1110,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28618422" vertical-offset="523" max-vertical-offset="3995">
+        <state vertical-scroll-proportion="0.0" vertical-offset="523" max-vertical-offset="3995">
           <caret line="461" column="130" selection-start-line="461" selection-start-column="130" selection-end-line="461" selection-end-column="130" />
           <folding>
             <element signature="method#getType#0;class#API#0" expanded="false" />
@@ -1198,6 +1149,53 @@
             <element signature="method#addPlace#0;class#API#0" expanded="false" />
             <element signature="method#inviteSportsman#0;class#API#0" expanded="false" />
             <element signature="method#approve#0;class#API#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4046">
+          <caret line="43" column="35" selection-start-line="43" selection-start-column="35" selection-end-line="43" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.776087" vertical-offset="2601" max-vertical-offset="4454">
+          <caret line="315" column="66" selection-start-line="315" selection-start-column="66" selection-end-line="315" selection-end-column="66" />
+          <folding>
+            <element signature="method#getReportName#0;class#Util#0" expanded="false" />
+            <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
+            <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
+            <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getDevices#0;class#Util#0" expanded="false" />
+            <element signature="method#getNews#0;class#Util#0" expanded="false" />
+            <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
+            <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
+            <element signature="method#getMenu#0;class#Util#0" expanded="false" />
+            <element signature="method#getPageName#0;class#Util#0" expanded="false" />
+            <element signature="method#getAddPlaceForm#0;class#Util#0" expanded="false" />
+            <element signature="method#getInviteForm#0;class#Util#0" expanded="false" />
+            <element signature="method#getSportsmen#0;class#Util#0" expanded="false" />
+            <element signature="method#getSportsmanInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getTrainerInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getProfile#0;class#Util#0" expanded="false" />
+            <element signature="method#getSeriesType#0;class#Util#0" expanded="false" />
+            <element signature="method#getAccountType#0;class#Util#0" expanded="false" />
+            <element signature="method#getSANState#0;class#Util#0" expanded="false" />
+            <element signature="method#getRecommendationKey#0;class#Util#0" expanded="false" />
+            <element signature="method#getStateColor#0;class#Util#0" expanded="false" />
+            <element signature="method#getSeries#0;class#Util#0" expanded="false" />
+            <element signature="method#getMeasures#0;class#Util#0" expanded="false" />
+            <element signature="method#getPlaces#0;class#Util#0" expanded="false" />
+            <element signature="method#getBestSportsman#0;class#Util#0" expanded="false" />
+            <element signature="method#getBestTrainerResult#0;class#Util#0" expanded="false" />
+            <element signature="method#getSportsmanDataMap#0;class#Util#0" expanded="false" />
+            <element signature="method#getTrainerDataMap#0;class#Util#0" expanded="false" />
+            <element signature="method#getUsers#0;class#Util#0" expanded="false" />
           </folding>
         </state>
       </provider>

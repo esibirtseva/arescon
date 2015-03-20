@@ -313,7 +313,7 @@ public class Util {
                 case "hotwater":
                     dataMap.put("deviceID", "");
                     dataMap.put("typeID", "1");
-                    dataMap.put("image", "background-color:rgb(41,128,184)");
+                    dataMap.put("image", "background-color:rgb(240,68,84)");
                     dataMap.put("name", "Горячая вода");
                     dataMap.put("description", "Данные обо всех приборах данной услуги");
                     templates.getTemplated(root, "user.device_info.htm", response);
