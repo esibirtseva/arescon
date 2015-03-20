@@ -434,6 +434,10 @@ function PageData(id, start, end, period, selectiontype){//root class
         $("canvas.linear").prev().removeClass("hidden-report-part");
         $("canvas.linear").removeClass("hidden-report-part");
 
+        $("canvas.rubles").prev().each(function() {
+            $(this)[0].innerHTML = $(this)[0].innerHTML.replace("% от руб.", "руб.");
+        });
+
         self.graphs.forEach(function(entry) {
             entry.destroy();
         });
@@ -1281,6 +1285,10 @@ function Share(id, start, end, period, selectiontype){
 
         $("canvas.linear").prev().addClass("hidden-report-part");
         $("canvas.linear").addClass("hidden-report-part");
+
+        $("canvas.rubles").prev().each(function() {
+            $(this)[0].innerHTML = $(this)[0].innerHTML.replace("руб.", "% от руб.");
+        });
 
         if(selectiontype === '5' || selectiontype === '4'){//one
             $(typeMap[self.data.type].selector).show();
