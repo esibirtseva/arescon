@@ -107,6 +107,9 @@ var getLastParamUrl = function(){
     var url      = window.location.href; 
     return (url.substr(url.lastIndexOf('/')+1));    
 }
+
+// that piece make me angry,
+// because of that table generation moved from updateRepresentation() in Device class
 $('.nav-tabs>li').click(function(){
     setTimeout(function(){
         currentPageData.updateRepresentation();
@@ -298,6 +301,9 @@ function Device(id, start, end, _period){
                 self.moneyData = currentData;
                 if (updateRepresentation){
                     self.updateRepresentation();
+                    self.setTable(self.valuesData, self.moneyData);
+                    self.setRate();
+                    self.setPayments();
                 }
                 $('#graph_tab .measure').html(typeMap[currentData.type].measure);
             });
@@ -308,9 +314,6 @@ function Device(id, start, end, _period){
         self.destroyAllGraphs();
         self.graphs.push(self.setLinearGraph(self.canvasValuesSelector, self.valuesData));
         self.graphs.push(self.setLinearGraph(self.canvasMoneySelector, self.moneyData));
-        self.setTable(self.valuesData, self.moneyData);
-        self.setRate();
-        self.setPayments();
         self.graphs.push(self.setShareGraph());
     };
 
