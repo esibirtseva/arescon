@@ -122,7 +122,10 @@ var periodItemsFilter = function(picker) {
 
     // set first option if cur value higher
     $("#period").find('option:selected').removeAttr("selected");
-    $("#period option:visible:first").attr('selected','selected');
+//    $('#period option[value="1440"]').attr('selected','selected');
+
+    // select day, may be fix this later smarter way
+    $('#period').val("1440");
 };
 
 $('#date_filter').on('apply.daterangepicker', function(ev, picker) {
