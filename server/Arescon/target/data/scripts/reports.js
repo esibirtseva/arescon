@@ -326,7 +326,7 @@ var buildPageData = function(reporttype, period, start, end){
     }
 
     $('.percentpicker,.forecastpicker,.searchdescription').hide();
-    $('#add_interval,#eval_intervals,#save_report,.datepicker').hide();
+    $('#add_interval,#eval_intervals,#save_report,.datepicker,.history_reports').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
     $('#type_deviation').hide();
@@ -360,7 +360,7 @@ var buildPageData = function(reporttype, period, start, end){
         currentPageData = new Profile(id, start, end, period, selectiontype);
     }else if (reporttype === '2'){
         $('.rangepicker,.frequencypicker').hide();
-        $('#save_report').show();
+        $('#save_report,.history_reports').show();
         currentPageData = new Forecast(id, start, end, period, selectiontype); 
     }else if (reporttype === '3'){
         $('#add_interval').show();
