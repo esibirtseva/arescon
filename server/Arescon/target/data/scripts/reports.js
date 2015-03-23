@@ -851,6 +851,7 @@ function Forecast(id, start, end, period, selectiontype){
                 }
             ]
         };
+        dataDailyUsage.labels = data_points.labels;
         //values
         data_points = filter_dataset(valuesData);
         dataDailyUsage.datasets.push({
@@ -864,7 +865,6 @@ function Forecast(id, start, end, period, selectiontype){
             data: data_points.values
 
         });
-        dataDailyUsage.labels = data_points.labels;
         var optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
