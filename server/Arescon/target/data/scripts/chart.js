@@ -194,8 +194,8 @@ var initDateRangePicker = function(){
                 'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
                 'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
             },
-            startDate: daterangeStart,//moment().subtract('days', 29),
-            endDate: daterangeEnd,//moment(),
+            startDate: getTimeFormatddmmyyyy(daterangeStart),//moment().subtract('days', 29),
+            endDate: getTimeFormatddmmyyyy(daterangeEnd),//moment(),
             locale: {
                 applyLabel: 'Применить',
                 cancelLabel: 'Очистить',
