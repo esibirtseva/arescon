@@ -124,8 +124,10 @@ var periodItemsFilter = function(picker) {
     $("#period").find('option:selected').removeAttr("selected");
 //    $('#period option[value="1440"]').attr('selected','selected');
 
-    // select day, may be fix this later smarter way
-    $('#period').val("1440");
+    // only if 'day' frequency not hidden
+    if ($('#period option[value="1440"]').css('display') !== 'none') {
+        $('#period').val("1440");
+    }
 };
 
 $('#date_filter').on('apply.daterangepicker', function(ev, picker) {
