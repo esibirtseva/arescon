@@ -1,9 +1,12 @@
 package arescon;
 
 import net.avkorneenkov.util.Pair;
+import org.joda.time.DateTime;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Data {
@@ -11,6 +14,17 @@ public class Data {
     public static DeviationRecord[] DEVIATION_RECORDS;
     public static long DEVIATION_START_TIME = 1409592882825L;
     public static long MONTH = 1000L * 60L * 60L * 24L * 30L;
+
+    public static int getDevice( int type ) {
+        switch (type) {
+            case 0: return 1;
+            case 1: return 4;
+            case 2: return 3;
+            case 3: return 2;
+        }
+
+        return -1;
+    }
 
     public static Pair<Double, Integer> totalDevice( int id ) {
         double total = 0.0;
@@ -67,6 +81,8 @@ public class Data {
             { },{ },
             { },{ }
     };
+    public static final List<List<Payment>> PAYMENTS = new ArrayList<>(24);
+    public static final List<List<Rate>> RATES = new ArrayList<>(4);
 
     public static double getMoneyMultiplier( final String type ) {
         switch (type) {
@@ -107,6 +123,8 @@ public class Data {
                     VALUES[i][j] = random.nextDouble() * multiplier;
                     PERCENTAGE_VALUES[i][j] = random.nextDouble();
                 }
+
+                PAYMENTS.add(Payment.generate(START_TIMES[i], VALUES[i], getMoneyMultiplier(TYPES[i]), PERIOD * 60 * 1000));
             }
         } catch (IOException e) { e.printStackTrace(); }
 
@@ -115,6 +133,19 @@ public class Data {
             long time = DEVIATION_START_TIME + (long)i * 1000 * 60 * 60;
             DEVIATION_RECORDS[i] = new DeviationRecord(random.nextDouble() * 2.5 - 1.0,
                     i + 1, time);
+        }
+
+        for (int i = 0; i < 4; ++i) {
+            List<Rate> list = new ArrayList<>(3);
+            list.add(new Rate(new DateTime(START_TIMES[0]).minusMonths(1).getMillis(),
+                    new DateTime(START_TIMES[0]).plusMonths(3).getMillis(),
+                    0.78 * getMoneyMultiplier(Integer.toString(i)) * (i == 3 ? 1 : 1000)));
+            list.add(new Rate(new DateTime(START_TIMES[0]).plusMonths(3).getMillis(),
+                    new DateTime(START_TIMES[0]).plusMonths(6).getMillis(),
+                    0.88 * getMoneyMultiplier(Integer.toString(i)) * (i == 3 ? 1 : 1000)));
+            list.add(new Rate(new DateTime(START_TIMES[0]).plusMonths(6).getMillis(), 0,
+                    1.00 * getMoneyMultiplier(Integer.toString(i)) * (i == 3 ? 1 : 1000)));
+            RATES.add(list);
         }
     }
 

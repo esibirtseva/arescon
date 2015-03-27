@@ -326,7 +326,7 @@ var buildPageData = function(reporttype, period, start, end){
     }
 
     $('.percentpicker,.forecastpicker,.searchdescription').hide();
-    $('#add_interval,#eval_intervals,#save_report,.datepicker').hide();
+    $('#add_interval,#eval_intervals,#save_report,.datepicker,.history_reports').hide();
     $('.rangepicker,.frequencypicker').show();
     $('.table,.share').show();
     $('#type_deviation').hide();
@@ -334,7 +334,6 @@ var buildPageData = function(reporttype, period, start, end){
 
     if (typeof currentPageData !== 'undefined') {
         currentPageData.destroyAllData();
-        $( ".legend" ).remove();
     }
 
     if (selectiontype === '5' || selectiontype === '4'){
@@ -361,7 +360,7 @@ var buildPageData = function(reporttype, period, start, end){
         currentPageData = new Profile(id, start, end, period, selectiontype);
     }else if (reporttype === '2'){
         $('.rangepicker,.frequencypicker').hide();
-        $('#save_report').show();
+        $('#save_report,.history_reports').show();
         currentPageData = new Forecast(id, start, end, period, selectiontype); 
     }else if (reporttype === '3'){
         $('#add_interval').show();
@@ -429,10 +428,14 @@ function PageData(id, start, end, period, selectiontype){//root class
     };
     self.destroyAllData = function(){
         // to remove previous legends
-        $(".legend").remove();
+        $(".current_report .legend").remove();
 
         $("canvas.linear").prev().removeClass("hidden-report-part");
         $("canvas.linear").removeClass("hidden-report-part");
+
+        $("canvas.rubles").prev().each(function() {
+            $(this)[0].innerHTML = $(this)[0].innerHTML.replace("% от руб.", "руб.");
+        });
 
         self.graphs.forEach(function(entry) {
             entry.destroy();
@@ -848,6 +851,7 @@ function Forecast(id, start, end, period, selectiontype){
                 }
             ]
         };
+        dataDailyUsage.labels = data_points.labels;
         //values
         data_points = filter_dataset(valuesData);
         dataDailyUsage.datasets.push({
@@ -861,7 +865,6 @@ function Forecast(id, start, end, period, selectiontype){
             data: data_points.values
 
         });
-        dataDailyUsage.labels = data_points.labels;
         var optionsDailyUsage = {
             scaleShowGridLines : false,
             showTooltips: true,
@@ -1281,6 +1284,10 @@ function Share(id, start, end, period, selectiontype){
 
         $("canvas.linear").prev().addClass("hidden-report-part");
         $("canvas.linear").addClass("hidden-report-part");
+
+        $("canvas.rubles").prev().each(function() {
+            $(this)[0].innerHTML = $(this)[0].innerHTML.replace("руб.", "% от руб.");
+        });
 
         if(selectiontype === '5' || selectiontype === '4'){//one
             $(typeMap[self.data.type].selector).show();
@@ -1942,9 +1949,8 @@ var filter_dataset = function(data){
     }
     return result;
 };
-var months = ['янв.','фев.','мрт.','апр.','мая','июня','июля','авг.','сент.','окт.','ноя.','дек.'];
-var getStrDate = function(date){            
-    return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+var getStrDate = function(date){
+    return date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 };
 function toFixed ( number, precision ) {
     var multiplier = Math.pow( 10, precision + 1 ),

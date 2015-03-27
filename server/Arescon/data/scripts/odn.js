@@ -369,9 +369,8 @@ var filter_dataset = function(data){
     }
     return result;
 };
-var months = ['янв.','фев.','мрт.','апр.','мая','июня','июля','авг.','сент.','окт.','ноя.','дек.'];
-var getStrDate = function(date){            
-    return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+var getStrDate = function(date){
+    return date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 };
 function toFixed ( number, precision ) {
     var multiplier = Math.pow( 10, precision + 1 ),

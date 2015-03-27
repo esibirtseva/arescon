@@ -56,12 +56,13 @@ window.onload = function(){
     //daterange
     initDateRangePicker();
     // to update frequency select by hiding some options
-    $('#date_filter').trigger("apply.daterangepicker", [$('input[name="daterange"]').data('daterangepicker')]);
+    periodItemsFilter($('input[name="daterange"]').data('daterangepicker'));
 
     var currentRoute = getLastParamUrl();
+    var period = $("#period").val();
     if ($('.device.active').length > 0){
         var deviceID = $('.device.active').data("deviceid");
-        currentPageData = new Device(deviceID, daterangeStart, daterangeEnd, $("#period").val());
+        currentPageData = new Device(deviceID, daterangeStart, daterangeEnd, period);
         currentPageData.updateData(true);
     }
     else if (currentRoute === "water"){
@@ -106,6 +107,9 @@ var getLastParamUrl = function(){
     var url      = window.location.href; 
     return (url.substr(url.lastIndexOf('/')+1));    
 }
+
+// that piece make me angry,
+// because of that table generation moved from updateRepresentation() in Device class
 $('.nav-tabs>li').click(function(){
     setTimeout(function(){
         currentPageData.updateRepresentation();
@@ -160,9 +164,8 @@ var getLabels = function(data){
     } 
     return labels;
 }
-var months = ['янв.','фев.','мрт.','апр.','мая','июня','июля','авг.','сент.','окт.','ноя.','дек.'];
-var getStrDate = function(date){            
-    return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+var getStrDate = function(date){
+    return date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 };
 
 var sumCosts = function(data){
@@ -190,8 +193,8 @@ var initDateRangePicker = function(){
                 'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
                 'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
             },
-            startDate: daterangeStart,//moment().subtract('days', 29),
-            endDate: daterangeEnd,//moment(),
+            startDate: getTimeFormatddmmyyyy(daterangeStart),//moment().subtract('days', 29),
+            endDate: getTimeFormatddmmyyyy(daterangeEnd),//moment(),
             locale: {
                 applyLabel: 'Применить',
                 cancelLabel: 'Очистить',
@@ -263,7 +266,9 @@ function Device(id, start, end, _period){
     //defaults
     self.canvasValuesSelector = "#dailyUsageChart";
     self.canvasMoneySelector = "#dailyUsageChartMoney";
-    self.tableSelector = '.tab-content tbody';//tbody!
+    self.tableSelector = '.tab-content tbody.simple-table';//tbody!
+    self.rateSelector = '.tab-content tbody.rate-table';//tbody!
+    self.paymentsSelector = '.tab-content tbody.payments-table';//tbody!
     self.canvasShareSelector = "#shareUsageChart";
 
     self.graphs = [];
@@ -295,6 +300,9 @@ function Device(id, start, end, _period){
                 self.moneyData = currentData;
                 if (updateRepresentation){
                     self.updateRepresentation();
+                    self.setTable(self.valuesData, self.moneyData);
+                    self.setRate();
+                    self.setPayments();
                 }
                 $('#graph_tab .measure').html(typeMap[currentData.type].measure);
             });
@@ -305,7 +313,6 @@ function Device(id, start, end, _period){
         self.destroyAllGraphs();
         self.graphs.push(self.setLinearGraph(self.canvasValuesSelector, self.valuesData));
         self.graphs.push(self.setLinearGraph(self.canvasMoneySelector, self.moneyData));
-        self.setTable(self.valuesData, self.moneyData);
         self.graphs.push(self.setShareGraph());
     };
 
@@ -355,6 +362,66 @@ function Device(id, start, end, _period){
         }
     };
 
+    self.setRate = function(){
+        var tbody = $(self.rateSelector);
+        tbody.html("");
+
+        // temporary function to generate previous n dates
+        var getPreviousDatesArray = function (n, curDate, array) {
+            array.push(curDate.getDate() + "." + (curDate.getMonth()+1) + "." + curDate.getFullYear());
+            if (n > 0) {
+                curDate.setDate(curDate.getDate() - 1);
+                return getPreviousDatesArray(n - 1, curDate, array);
+            } else {
+                return array;
+            }
+        };
+
+        function generateRandomNumber(min, max) {
+            return (Math.random() * (max - min) + min).toFixed(2);
+        };
+
+        var reverseDatesArray = getPreviousDatesArray(30, new Date(), []);
+
+        var data_size = reverseDatesArray.length;
+        for (var i = data_size-1; i >= 0; i--) {
+            tbody.append("<tr><td>"+reverseDatesArray[i]+"</td><td>"+generateRandomNumber(66, 99)+"</td><td>"+generateRandomNumber(33, 66)+"</td><td>"+generateRandomNumber(1, 33)+"</td></tr>")
+        }
+
+    };
+
+    self.setPayments = function(){
+        var tbody = $(self.paymentsSelector);
+        tbody.html("");
+
+        // temporary function to generate previous n dates
+        var getPreviousDatesArray = function (n, curDate, array) {
+            array.push(curDate.getDate() + "." + (curDate.getMonth()+1) + "." + curDate.getFullYear());
+            if (n > 0) {
+                curDate.setDate(curDate.getDate() - 1);
+                return getPreviousDatesArray(n - 1, curDate, array);
+            } else {
+                return array;
+            }
+        };
+
+        var booleanGenerate = function() {
+            return !Math.floor((Math.random() * 2));
+        };
+
+        var booleanButtonGenerate = function() {
+            return '<p class="glyphicon glyphicon-'+((booleanGenerate())?'ok':'remove')+'"></p>';
+        };
+
+        var reverseDatesArray = getPreviousDatesArray(30, new Date(), []);
+
+        var data_size = reverseDatesArray.length;
+        for (var i = data_size-1; i >= 0; i--) {
+            tbody.append("<tr><td>"+reverseDatesArray[i]+"</td><td>"+booleanButtonGenerate()+"</td></tr>")
+        }
+
+    };
+
     self.setShareGraph = function(){
         var canvas = $(self.canvasShareSelector);
         var ctxShareUsage = canvas.get(0).getContext("2d");
@@ -378,17 +445,37 @@ function Device(id, start, end, _period){
             }
         ];
         var optionsShareUsage = {
-            segmentShowStroke : true,
-            segmentStrokeColor : "#fff",
-            segmentStrokeWidth : 5,
-            percentageInnerCutout : 50,
-            animationSteps : 100,
-            animationEasing : "easeOutBounce",
-            animateRotate : true,
-            animateScale : false,
-            legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
-        };
+                //Boolean - Whether we should show a stroke on each segment
+                segmentShowStroke : true,
+
+                //String - The colour of each segment stroke
+                segmentStrokeColor : "#fff",
+
+                //Number - The width of each segment stroke
+                segmentStrokeWidth : 2,
+
+                //Number - The percentage of the chart that we cut out of the middle
+                percentageInnerCutout : 50, // This is 0 for Pie charts
+
+                //Number - Amount of animation steps
+                animationSteps : 100,
+
+                //String - Animation easing effect
+                animationEasing : "easeOutBounce",
+
+                //Boolean - Whether we animate the rotation of the Doughnut
+                animateRotate : true,
+
+                //Boolean - Whether we animate scaling the Doughnut from the centre
+                animateScale : false,
+
+                //String - A legend template
+                legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li style=\"color:<%=segments[i].fillColor%>\"><span style=\"color:rgb(128, 128, 128);\"><%if(segments[i].label){%><%=segments[i].label%><%}%> - <%=segments[i].value%></span></li><%}%></ul>"
+
+            }
+            ;
         var chart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
+        canvas.after(chart.generateLegend());
         return chart;
     };
 
@@ -398,6 +485,7 @@ function Device(id, start, end, _period){
         }
     };
     self.destroyAllGraphs = function(){
+        $('.doughnut-legend').remove();
         for (var i = 0; i < self.graphs.length; i++){
             self.graphs[i].destroy();
         }

@@ -804,6 +804,25 @@ public class API {
         return response.append(arrays.toString()).append("}").toString();
     }
 
+    private String getTypeRates( int id ) {
+        JSONArray result = new JSONArray();
+        for (Rate r : Data.RATES.get(id)) {
+            result.put(r.toJSON());
+        }
+
+        return result.toString();
+    }
+
+    private String getDevicePayments( int id ) {
+        JSONArray result = new JSONArray();
+        for (Payment p : Data.PAYMENTS.get(id)) {
+            result.put(p.toJSON());
+        }
+        result.put(Payment.sum(Data.PAYMENTS.get(id)));
+
+        return result.toString();
+    }
+
     public void deviceProfile( HttpServerExchange exchange, double multiplier, String link, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
@@ -1560,6 +1579,126 @@ public class API {
                 exchange.getResponseSender().send(getLastRequests(count,
                         Integer.parseInt(selectionTypeData.getValue())).toString());
             }
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void deviceRates( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue deviceID = postData.getFirst("id");
+
+        if (deviceID == null || deviceID.getValue().isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(deviceID.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypeRates(Integer.parseInt(Data.TYPES[id - 1])));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void typeRates( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue deviceID = postData.getFirst("id");
+
+        if (deviceID == null || deviceID.getValue().isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(deviceID.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypeRates(id));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void devicePayments( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue deviceID = postData.getFirst("id");
+
+        if (deviceID == null || deviceID.getValue().isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(deviceID.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getDevicePayments(id - 1));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void typePayments( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue deviceID = postData.getFirst("id");
+
+        if (deviceID == null || deviceID.getValue().isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(deviceID.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getDevicePayments(Data.getDevice(id) - 1));
 
         } catch (Throwable e) {
             e.printStackTrace();
