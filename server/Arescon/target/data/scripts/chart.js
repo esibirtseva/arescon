@@ -485,6 +485,7 @@ function Device(id, start, end, _period){
         }
     };
     self.destroyAllGraphs = function(){
+        $('.doughnut-legend').remove();
         for (var i = 0; i < self.graphs.length; i++){
             self.graphs[i].destroy();
         }
