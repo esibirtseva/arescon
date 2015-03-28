@@ -398,34 +398,25 @@ function Device(id, start, end, _period){
 
     };
 
-    self.setPayments = function(){
+    self.setPayments = function(data){
         var tbody = $(self.paymentsSelector);
         tbody.html("");
 
         // temporary function to generate previous n dates
-        var getPreviousDatesArray = function (n, curDate, array) {
-            array.push(curDate.getDate() + "." + (curDate.getMonth()+1) + "." + curDate.getFullYear());
-            if (n > 0) {
-                curDate.setDate(curDate.getDate() - 1);
-                return getPreviousDatesArray(n - 1, curDate, array);
+        var getDate = function (date) {
+            if(!date) {
+                return 'Всего';
             } else {
-                return array;
+                var curDate = new Date(date);
+                return curDate.getDate() + "." + (curDate.getMonth()+1) + "." + curDate.getFullYear();
             }
         };
 
-        var booleanGenerate = function() {
-            return !Math.floor((Math.random() * 2));
-        };
+        var data_size = data.length;
+        for (var i = 0; i < data_size; i++) {
+            var item = data[i];
 
-        var booleanButtonGenerate = function() {
-            return '<p class="glyphicon glyphicon-'+((booleanGenerate())?'ok':'remove')+'"></p>';
-        };
-
-        var reverseDatesArray = getPreviousDatesArray(30, new Date(), []);
-
-        var data_size = reverseDatesArray.length;
-        for (var i = data_size-1; i >= 0; i--) {
-            tbody.append("<tr><td>"+reverseDatesArray[i]+"</td><td>"+booleanButtonGenerate()+"</td></tr>")
+            tbody.append("<tr><td>"+getDate(item.time)+"</td><td>"+item.spent+"</td><td>"+item.paid+"</td></tr>")
         }
 
     };
