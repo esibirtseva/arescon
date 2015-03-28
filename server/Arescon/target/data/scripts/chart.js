@@ -519,11 +519,26 @@ function Type(typeID, start, end, _period){
             }, function(data){
                 var currentData = JSON.parse(data);
                 self.moneyData = currentData;
-                if (updateRepresentation){
-                    self.updateRepresentation();
-                }
                 $('#graph_tab .measure').html(typeMap[currentData.type].measure);
                 self.isUpdated = true;
+                $.post('/type/payments',{
+                    'id' : self.id
+                }, function(data){
+                    var currentData = JSON.parse(data);
+                    self.paymentsData = currentData;
+                    $.post('/type/rates',{
+                        'id' : self.id
+                    }, function(data){
+                        var currentData = JSON.parse(data);
+                        self.ratesData = currentData;
+                        if (updateRepresentation){
+                            self.updateRepresentation();
+                            self.setTable(self.valuesData, self.moneyData);
+                            self.setRate(self.ratesData);
+                            self.setPayments(self.paymentsData);
+                        }
+                    });
+                });
             });
         });
     };    
