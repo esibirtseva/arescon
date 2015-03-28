@@ -298,13 +298,25 @@ function Device(id, start, end, _period){
             }, function(data){
                 var currentData = JSON.parse(data);
                 self.moneyData = currentData;
-                if (updateRepresentation){
-                    self.updateRepresentation();
-                    self.setTable(self.valuesData, self.moneyData);
-                    self.setRate();
-                    self.setPayments();
-                }
                 $('#graph_tab .measure').html(typeMap[currentData.type].measure);
+                $.post('/device/payments',{
+                    'id' : self.id
+                }, function(data){
+                    var currentData = JSON.parse(data);
+                    self.paymentsData = currentData;
+                    $.post('/device/rates',{
+                        'id' : self.id
+                    }, function(data){
+                        var currentData = JSON.parse(data);
+                        self.ratesData = currentData;
+                        if (updateRepresentation){
+                            self.updateRepresentation();
+                            self.setTable(self.valuesData, self.moneyData);
+                            self.setRate(self.ratesData);
+                            self.setPayments(self.paymentsData);
+                        }
+                    });
+                });
             });
         });
     };
@@ -362,30 +374,26 @@ function Device(id, start, end, _period){
         }
     };
 
-    self.setRate = function(){
+    self.setRate = function(data){
         var tbody = $(self.rateSelector);
         tbody.html("");
 
-        // temporary function to generate previous n dates
-        var getPreviousDatesArray = function (n, curDate, array) {
-            array.push(curDate.getDate() + "." + (curDate.getMonth()+1) + "." + curDate.getFullYear());
-            if (n > 0) {
-                curDate.setDate(curDate.getDate() - 1);
-                return getPreviousDatesArray(n - 1, curDate, array);
+        // generate cute date string, if ms param != 0
+        var getPeriodItem = function (dateStr) {
+            if(dateStr == 0) {
+                return '&nbsp;&nbsp;&nbsp;...';
             } else {
-                return array;
+                var curDate = new Date(dateStr);
+                return curDate.getDate() + "." + (curDate.getMonth()+1) + "." + curDate.getFullYear();
             }
         };
 
-        function generateRandomNumber(min, max) {
-            return (Math.random() * (max - min) + min).toFixed(2);
-        };
+        var data_size = data.length;
+        for (var i = 0; i < data_size; i++) {
+            var item = data[i],
+                period = getPeriodItem(item.start) + ' - ' + getPeriodItem(item.end);
 
-        var reverseDatesArray = getPreviousDatesArray(30, new Date(), []);
-
-        var data_size = reverseDatesArray.length;
-        for (var i = data_size-1; i >= 0; i--) {
-            tbody.append("<tr><td>"+reverseDatesArray[i]+"</td><td>"+generateRandomNumber(66, 99)+"</td><td>"+generateRandomNumber(33, 66)+"</td><td>"+generateRandomNumber(1, 33)+"</td></tr>")
+            tbody.append("<tr><td>"+period+"</td><td>"+item.rateDay+"</td><td>"+item.rateNight+"</td><td>"+item.ratePref+"</td></tr>")
         }
 
     };
