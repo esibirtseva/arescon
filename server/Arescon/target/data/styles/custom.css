@@ -9,12 +9,15 @@
 .history_notifications {
     border-bottom: 1px solid #d8dbdf;
 }
+
 .history_notifications h4 {
     padding: 10px;
 }
+
 .history_notifications h4:hover {
     cursor: pointer;
 }
+
 .history_notifications h4 span {
     font-size: 14px;
     padding: 0 10px;
