@@ -1706,6 +1706,187 @@ public class API {
         }
     }
 
+    private List<Notification> notifications = new ArrayList<>();
+
+    public void notificationsCreate( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue deviceIdData = postData.getFirst("deviceId");
+        FormData.FormValue dateRangeData = postData.getFirst("daterange");
+        FormData.FormValue limitData = postData.getFirst("limit");
+        Deque<FormData.FormValue> alertTypesData = postData.get("alert_type[]");
+
+        if (deviceIdData == null || deviceIdData.getValue().isEmpty() ||
+                dateRangeData == null || dateRangeData.getValue().isEmpty() ||
+                limitData == null || limitData.getValue().isEmpty() ||
+                alertTypesData == null || alertTypesData.isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int deviceID = Integer.parseInt(deviceIdData.getValue());
+            String dataRange = dateRangeData.getValue();
+            double limit = Double.parseDouble(limitData.getValue().replace(',', '.'));
+            List<String> alertTypes = new ArrayList<>(alertTypesData.size());
+            for (FormData.FormValue alertType : alertTypesData) alertTypes.add(alertType.getValue());
+
+            Notification notification = new Notification(deviceID, dataRange, limit, alertTypes);
+            notifications.add(notification);
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(notification.toJSON().toString());
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void notificationsRead( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        FormData.FormValue deviceIdData = null;
+        FormData.FormValue idData = null;
+        if (postData != null) {
+            deviceIdData = postData.getFirst("deviceId");
+            idData = postData.getFirst("id");
+        }
+
+        try {
+            JSONArray answer = new JSONArray();
+
+            if (idData != null && !idData.getValue().isEmpty()) {
+                int id = Integer.parseInt(idData.getValue());
+                for (Notification n : notifications) {
+                    if (n.id == id) {
+                        answer.put(n.toJSON());
+                        break;
+                    }
+                }
+            } else if (deviceIdData != null && !deviceIdData.getValue().isEmpty()) {
+                int deviceID = Integer.parseInt(deviceIdData.getValue());
+                for (Notification n : notifications) {
+                    if (n.deviceID == deviceID) answer.put(n.toJSON());
+                }
+            } else {
+                for (Notification n : notifications) answer.put(n.toJSON());
+            }
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(answer.toString());
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void notificationsUpdate( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue idData = postData.getFirst("id");
+        FormData.FormValue dateRangeData = postData.getFirst("daterange");
+        FormData.FormValue limitData = postData.getFirst("limit");
+        Deque<FormData.FormValue> alertTypesData = postData.get("alert_type[]");
+
+        if (idData == null || idData.getValue().isEmpty() ||
+                dateRangeData == null || dateRangeData.getValue().isEmpty() ||
+                limitData == null || limitData.getValue().isEmpty() ||
+                alertTypesData == null || alertTypesData.isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(idData.getValue());
+            String dataRange = dateRangeData.getValue();
+            double limit = Double.parseDouble(limitData.getValue().replace(',', '.'));
+            List<String> alertTypes = new ArrayList<>(alertTypesData.size());
+            for (FormData.FormValue alertType : alertTypesData) alertTypes.add(alertType.getValue());
+
+            Notification notification = null;
+            for (Notification n : notifications) {
+                if (n.id == id) {
+                    notification = n;
+                    break;
+                }
+            }
+
+            if (notification != null) {
+                notification.daterange = dataRange;
+                notification.limit = limit;
+                notification.alertTypes = alertTypes;
+
+                exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                exchange.getResponseSender().send(notification.toJSON().toString());
+            } else {
+                exchange.getResponseSender().send("error");
+            }
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void notificationsDelete( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue idData = postData.getFirst("id");
+
+        if (idData == null || idData.getValue().isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(idData.getValue());
+
+            for (int i = 0; i < notifications.size(); ++i) {
+                if (notifications.get(i).id == id) {
+                    notifications.remove(i);
+                    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                    exchange.getResponseSender().send("removed");
+                    return;
+                }
+            }
+
+            exchange.getResponseSender().send("error");
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
     public void profileUpdate( HttpServerExchange exchange ) throws IOException, SQLException {
 
         if (!exchange.getRequestMethod().equals(Methods.POST)) {

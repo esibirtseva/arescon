@@ -43,6 +43,7 @@ public class UndertowUtil {
 
     public static FormData parsePostData( final HttpServerExchange exchange ) throws IOException {
         final FormDataParser parser = FORM_PARSER_FACTORY.createParser(exchange);
+        if (parser == null) return null;
         parser.setCharacterEncoding("UTF-8");
         return parser.parseBlocking();
     }

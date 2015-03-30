@@ -184,6 +184,31 @@ public class Main {
             return;
         }
 
+        paths.put("notifications/create", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.notificationsCreate(exchange);
+            }
+        });
+        paths.put("notifications/read", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.notificationsRead(exchange);
+            }
+        });
+        paths.put("notifications/update", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.notificationsUpdate(exchange);
+            }
+        });
+        paths.put("notifications/delete", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.notificationsDelete(exchange);
+            }
+        });
+
         paths.put("device/rates", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
