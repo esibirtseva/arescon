@@ -129,26 +129,43 @@ public class Util {
         int id = 0;
         int type = 0;
 
+        String unitsName = "";
+
         switch (relPath) {
             case "1":
+                unitsName = "л";
+                id = Integer.parseInt(relPath);
+                break;
             case "2":
+                unitsName = "кВт.ч";
+                id = Integer.parseInt(relPath);
+                break;
             case "3":
+                unitsName = "л";
+                id = Integer.parseInt(relPath);
+                break;
             case "4":
+                unitsName = "л";
                 id = Integer.parseInt(relPath);
                 break;
             case "gas":
+                unitsName = "л";
                 type = 2;
                 break;
             case "heat":
+                unitsName = "";
 ;               type = 4;
                 break;
             case "electricity":
+                unitsName = "кВт.ч";
                 type = 3;
                 break;
             case "coldwater":
+                unitsName = "л";
                 type = 0;
                 break;
             case "hotwater":
+                unitsName = "л";
                 type = 1;
                 break;
         }
@@ -163,8 +180,8 @@ public class Util {
         average = total / months;
         averageMoney = average * multiplier;
 
-        dataMap.put("total", String.format("%.2f", total));
-        dataMap.put("average", String.format("%.2f", average));
+        dataMap.put("total", String.format("%.2f ", total) + unitsName);
+        dataMap.put("average", String.format("%.2f ", average) + unitsName);
         dataMap.put("averageMoney", String.format("%.2f", averageMoney));
 
         try {
