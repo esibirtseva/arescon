@@ -1,3 +1,21 @@
 .hidden-report-part {
     display: none;
 }
+
+.current_notification > h4, .current_notification > form, .current_notification > .btn {
+    margin-left: 10px;
+}
+
+.history_notifications {
+    border-bottom: 1px solid #d8dbdf;
+}
+.history_notifications h4 {
+    padding: 10px;
+}
+.history_notifications h4:hover {
+    cursor: pointer;
+}
+.history_notifications h4 span {
+    font-size: 14px;
+    padding: 0 10px;
+}

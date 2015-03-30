@@ -86,6 +86,10 @@ $('.history_reports h4').click(function(){
 	$('.history_reports h4 .glyphicon').toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up');
 });
 
+$('.history_notifications h4').click(function(){
+	$('.history_notifications h4 .glyphicon').toggleClass('glyphicon-chevron-down').toggleClass('glyphicon-chevron-up');
+});
+
 // to control change of 'Интервал' control
 var periodItemsFilter = function(picker) {
     var start = new Date(picker.startDate),
