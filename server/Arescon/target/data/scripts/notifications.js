@@ -17,22 +17,51 @@ function getParameterByName(name) {
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
+};
 
-$('#save_notification').click(function(){
-    function getFormData(dom_query){
+function updateSavedList() {
+    $.post('/notifications/read', {'deviceId': getParameterByName('id')}, function(data) {
+        var currentData = JSON.parse(data);
+
+        var current_tbody = $('.notifications tbody');
+        current_tbody.html("");
+        var data_size = currentData.length;
+        for(var i = 0; i < data_size; i++){
+            current_tbody.append("<tr>" +
+                "<td>"+currentData[i].datarange+"</td>" +
+                "<td>"+currentData[i].limit+"</td>" +
+                "<td>"+currentData[i].alert_type+"</td>" +
+                "<td style=\"cursor: pointer;\" onclick='removeItem("+currentData[i].id+")'>"+'Удалить'+"</td>" +
+                "</tr>");
+        }
+    });
+};
+
+function removeItem(id) {
+    $.post('/notifications/delete', {'id': id}, function(data) {
+        if(data == 'removed') {
+            updateSavedList();
+        }
+    });
+};
+
+$('#save_notification').click(function() {
+    function getFormData(dom_query) {
         var out = {},
-            s_data = $(dom_query).serializeArray(),
-            tempArr;
+            s_data = $(dom_query).serializeArray();
         //transform into simple data/value object
-        for(var i = 0; i<s_data.length; i++){
-            var record = s_data[i];
+        for(var i = 0; i<s_data.length; i++) {
+            var record = s_data[i],
+                tempArr = [];
             if(!out[record.name]) {
-                out[record.name] = record.value;
+                if (record.name != 'alert_type') {
+                    out[record.name] = record.value;
+                } else {
+                    out[record.name] = [];
+                    out[record.name][0] = record.value;
+                }
             } else {
-                if (typeof out[record.name] == "string") {
-                    tempArr = (new Array(out[record.name]));
-                } else if (typeof out[record.name] == "array") {
+                if (typeof out[record.name] == "object") {
                     tempArr = out[record.name];
                 }
                 tempArr.push(record.value);
@@ -48,12 +77,11 @@ $('#save_notification').click(function(){
     // setting params from URI
     obj['deviceId'] = getParameterByName('id');
 
-    console.log(obj); // obj - send to ajax request
-
+    // obj - send to ajax request
     $.post('/notifications/create', obj, function(data){
         var currentData = JSON.parse(data);
 
-        // do some magic on response
+        updateSavedList();
     });
 });
 
@@ -103,4 +131,5 @@ var initDateRangePicker = function(){
 window.onload = function(){
     //daterange
     initDateRangePicker();
+    updateSavedList();
 };
