@@ -217,9 +217,6 @@ function House(id, income, outcome, balance, coords, name){
                 case 'heat':                    
                     link = "/dreports?selectiontype=2&id="+self.id+"&only="+4;
                     break;
-                case 'all':
-                    link = "/dreports?selectiontype=2&id="+self.id;
-                    break;
             }
             myPlacemark.properties.set('balloonContentBody', 
                         getBaloonStr(["coldwater", "hotwater", "gas","electricity", "heat"],
@@ -251,9 +248,6 @@ function House(id, income, outcome, balance, coords, name){
                     break;
                 case 'heat':
                     $('.heat').show();
-                    break;
-                case 'all':
-                    $('.baloon_item').show();
                     break;
             }
         });
