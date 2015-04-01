@@ -16,6 +16,7 @@ function Dataset(){
     var self = this;
 
     self.data = [];
+    self.allCoordinatesInSet = [];
 
     self.parseData = function(){
         $('.tszhs>div').each(function(){
@@ -34,10 +35,13 @@ function Dataset(){
                     name = $(this).children('p').html(),
                     income = $(this).children('div').eq(0).data('income'),
                     outcome = $(this).children('div').eq(1).data('outcome'),
-                    balance = $(this).children('div').eq(2).data('balance');
+                    balance = $(this).children('div').eq(2).data('balance'),
                     coords = [$(this).data('x'), $(this).data('y')],
                     alert = $(this).data('alert');
-                
+
+                // to remember all coords for set center in the future
+                self.allCoordinatesInSet.push(coords);
+
                 var house = new House(id, income, outcome, balance, coords, name);
                 if (alert){
                     house.alert = true;
@@ -46,6 +50,28 @@ function Dataset(){
                 tszh.children.push(house);
             });
         });
+    };
+
+    self.getCoordinatesForCenter = function() {
+        var minX = self.allCoordinatesInSet[0][0],
+            minY = self.allCoordinatesInSet[0][1],
+            maxX = self.allCoordinatesInSet[0][0],
+            maxY = self.allCoordinatesInSet[0][1];
+
+        function calculateAvgPoint(element) {
+            if (element[0] < minX && element[1] < minY) {
+                minX = element[0];
+                minY = element[1];
+            }
+            if (element[0] > maxX && element[1] > maxY) {
+                maxX = element[0];
+                maxY = element[1];
+            }
+        }
+
+        self.allCoordinatesInSet.forEach(calculateAvgPoint);
+
+        return [[minX, minY], [maxX, maxY]];
     };
 
     self.removeHighlight = function(){
@@ -289,6 +315,11 @@ window.onload = function(){
         //do all staff
         dataset = new Dataset();
         dataset.parseData();
+        var res = ymaps.util.bounds.getCenterAndZoom(
+            dataset.getCoordinatesForCenter(),
+            [$('.map').width(), $('.map').height()]
+        );
+        myMap.setCenter(res.center, res.zoom);
         dataset.init();
     });
 
