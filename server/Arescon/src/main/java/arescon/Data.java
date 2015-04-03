@@ -11,6 +11,9 @@ import java.util.Random;
 
 public class Data {
 
+    static int maxLength = 0;
+    static Random random = new Random();
+
     public static DeviationRecord[] DEVIATION_RECORDS;
     public static long DEVIATION_START_TIME = 1409592882825L;
     public static long MONTH = 1000L * 60L * 60L * 24L * 30L;
@@ -94,9 +97,20 @@ public class Data {
         }
     }
 
+    public static void reboot( ) {
+        for (int i = 0; i < DELETED.length; ++i) {
+            DELETED[i] = false;
+        }
+
+        DEVIATION_RECORDS = new DeviationRecord[maxLength];
+        for (int i = 0; i < DEVIATION_RECORDS.length; ++i) {
+            long time = DEVIATION_START_TIME + (long)i * 1000 * 60 * 60;
+            DEVIATION_RECORDS[i] = new DeviationRecord(random.nextDouble() * 2.5 - 1.0,
+                    i + 1, time);
+        }
+    }
+
     static {
-        Random random = new Random();
-        int maxLength = 0;
         double multiplier = 0;
         try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream("data.txt"), Charset.forName("UTF-8")))) {
             for (int i = 0; i < VALUES.length; ++i) {

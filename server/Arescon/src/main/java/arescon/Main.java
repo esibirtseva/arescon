@@ -705,6 +705,7 @@ public class Main {
         paths.put("reboot", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {
+                Data.reboot();
                 launch(local);
                 exchange.getResponseHeaders().put(Headers.LOCATION, "/");
                 exchange.setResponseCode(StatusCodes.TEMPORARY_REDIRECT);
