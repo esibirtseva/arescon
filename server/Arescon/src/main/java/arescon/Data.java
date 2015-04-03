@@ -115,10 +115,10 @@ public class Data {
                         break;
                 }
                 String[] line = input.readLine().split(", ");
-                VALUES[i] = new double[line.length];
-                PERCENTAGE_VALUES[i] = new double[line.length];
-                if (line.length > maxLength) maxLength = line.length;
-                for (int j = 0; j < line.length; ++j) {
+                VALUES[i] = new double[line.length * 2];
+                PERCENTAGE_VALUES[i] = new double[line.length * 2];
+                if (line.length * 2 > maxLength) maxLength = line.length * 2;
+                for (int j = 0; j < line.length * 2; ++j) {
                     //VALUES[i][j] = Double.parseDouble(line[j]);
                     VALUES[i][j] = random.nextDouble() * multiplier;
                     PERCENTAGE_VALUES[i][j] = random.nextDouble();
