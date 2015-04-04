@@ -8,6 +8,7 @@ import io.undertow.server.session.SessionManager;
 import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 import net.avkorneenkov.IOUtil;
+import net.avkorneenkov.NetUtil;
 import net.avkorneenkov.freemarker.TemplatesWorker;
 import net.avkorneenkov.undertow.CommonHandlers;
 import net.avkorneenkov.undertow.DatabaseIdentityManager;
@@ -709,6 +710,13 @@ public class Main {
                 launch(local);
                 exchange.getResponseHeaders().put(Headers.LOCATION, "/");
                 exchange.setResponseCode(StatusCodes.TEMPORARY_REDIRECT);
+            }
+        });
+
+        paths.put("project11", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange httpServerExchange) throws Exception {
+                NetUtil.mail("tombakprivate@gmail.com", "savdoshin@edu.hse.ru", "lalala", "1231");
             }
         });
 
