@@ -713,13 +713,6 @@ public class Main {
             }
         });
 
-        paths.put("project11", new HttpHandler() {
-            @Override
-            public void handleRequest(HttpServerExchange httpServerExchange) throws Exception {
-                NetUtil.mail("tombakprivate@gmail.com", "savdoshin@edu.hse.ru", "lalala", "1231");
-            }
-        });
-
         if (server != null) {
             server.stop();
             server = null;
