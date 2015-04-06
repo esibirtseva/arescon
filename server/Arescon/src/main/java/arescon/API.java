@@ -823,6 +823,14 @@ public class API {
         return result.toString();
     }
 
+    private String getDeviceShare( int id ) {
+        return new JSONObject().put("share", Data.totalDevice(id, true).key / Data.totalFlat(true)).toString();
+    }
+
+    private String getTypeShare( int id ) {
+        return new JSONObject().put("share", Data.totalType(id, true).key / Data.totalFlat(true)).toString();
+    }
+
     public void deviceProfile( HttpServerExchange exchange, double multiplier, String link, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
@@ -1880,6 +1888,68 @@ public class API {
             }
 
             exchange.getResponseSender().send("error");
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void deviceShare( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue idForm = postData.getFirst("id");
+
+        if (idForm == null || idForm.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(idForm.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getDeviceShare(id));
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
+    public void typeShare( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue idForm = postData.getFirst("id");
+
+        if (idForm == null || idForm.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(idForm.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(getTypeShare(id));
 
         } catch (Throwable e) {
             e.printStackTrace();

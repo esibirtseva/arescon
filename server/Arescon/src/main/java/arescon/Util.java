@@ -172,8 +172,8 @@ public class Util {
 
         Pair<Double, Integer> stats;
         double multiplier = Data.getMoneyMultiplier(id > 0 ? Data.TYPES[id - 1] : Integer.toString(type));
-        if (id > 0) stats = Data.totalDevice(id);
-        else       stats = Data.totalType(type);
+        if (id > 0) stats = Data.totalDevice(id, false);
+        else        stats = Data.totalType(type, false);
 
         total = stats.key;
         double months = stats.value * (Data.PERIOD * 60.0 * 1000.0) / Data.MONTH;

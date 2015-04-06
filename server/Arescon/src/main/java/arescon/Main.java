@@ -185,6 +185,19 @@ public class Main {
             return;
         }
 
+        paths.put("device/share", new HttpHandler() {
+            @Override
+            public void handleRequest( HttpServerExchange exchange ) throws Exception {
+                api.deviceShare(exchange);
+            }
+        });
+        paths.put("type/share", new HttpHandler() {
+            @Override
+            public void handleRequest( HttpServerExchange exchange ) throws Exception {
+                api.typeShare(exchange);
+            }
+        });
+
         paths.put("notifications/create", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {

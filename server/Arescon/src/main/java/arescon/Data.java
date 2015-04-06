@@ -29,25 +29,37 @@ public class Data {
         return -1;
     }
 
-    public static Pair<Double, Integer> totalDevice( int id ) {
+    public static Pair<Double, Integer> totalDevice( int id, boolean money ) {
         double total = 0.0;
+        double multiplier = money ? getMoneyMultiplier(TYPES[id - 1]) : 1.0;
         for (double value : VALUES[id - 1]) {
-            total += value;
+            total += value * multiplier;
         }
         return new Pair<>(total, VALUES[id - 1].length);
     }
 
-    public static Pair<Double, Integer> totalType( int type ) {
+    public static Pair<Double, Integer> totalType( int type, boolean money ) {
         // TODO: replace with actual code
         switch (type) {
-            case 0: return totalDevice(1);
-            case 1: return totalDevice(4);
-            case 2: return totalDevice(3);
-            case 3: return totalDevice(2);
+            case 0: return totalDevice(1, money);
+            case 1: return totalDevice(4, money);
+            case 2: return totalDevice(3, money);
+            case 3: return totalDevice(2, money);
             case 4: return new Pair<>(0.0, 0);
         }
 
         return null;
+    }
+
+    private static double _totalFlat = Double.NaN;
+
+    public static synchronized double totalFlat( boolean money ) {
+        if (Double.isNaN(_totalFlat)) {
+            _totalFlat = 0.0;
+            for (int i = 1; i < 5; ++i) _totalFlat += totalDevice(i, money).key;
+        }
+
+        return _totalFlat;
     }
 
     public static final long PERIOD = 5;
