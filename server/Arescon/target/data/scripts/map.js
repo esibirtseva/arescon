@@ -289,6 +289,66 @@ function House(id, income, outcome, balance, coords, name){
 };
 var myMap;
 var dataset;
+var devices = {
+    coldwater: {
+        type: 0,
+        label: 'Холодная вода',
+        measure: "л",
+        colors: {
+            fill: "rgba(151,187,205,0.2)",
+            stroke: "rgba(151,187,205,1)"
+        },
+        odnSelector: "#odnWater"
+    },
+    hotwater: {
+        type: 1,
+        label: 'Горячая вода',
+        measure: "л",
+        colors: {
+            fill: "rgba(231, 75, 59, 0.2)",
+            stroke: "rgba(231, 75, 59, 1)"
+        } ,
+        odnSelector: "#odnWater"
+    },
+    electricity: {
+        type: 3,
+        measure: "кВт.ч",
+        colors: {
+            fill: "rgba(243, 156, 18, 0.2)",
+            stroke: "rgba(243, 156, 18, 1)"
+        }  ,
+        odnSelector: "#odnElectricity"
+    },
+    gas: {
+        type: 2,
+        measure: "куб. м.",
+        colors: {
+            fill: "rgba(75, 231, 59, 0.2)",
+            stroke: "rgba(75, 231, 59, 1)"
+        },
+        odnSelector: "#odnGas"
+    },
+    heat: {
+        type: 4,
+        measure: "отопл",
+        colors: {
+            fill: "rgba(231, 75, 59, 0.2)",
+            stroke: "rgba(231, 75, 59, 1)"
+        } ,
+        odnSelector: "#odnHeat"
+    }
+};
+
+
+// on radio button change
+$('input[name=type_select]:radio').change(
+    function(){
+        var curVal = $("input[name=type_select]:radio:checked").val();
+
+        $('.measure').html(devices[curVal].measure);
+    }
+);
+
 window.onload = function(){
     var map_container = $('#map');
     map_container.height(map_container.width());
@@ -334,11 +394,16 @@ window.onload = function(){
         var house = dataset.find(2, id);
         if (house !== null) house.highlight();
     });
+
+    // fire radio button event change
+    $('input[name=type_select]:radio').change();
 }
+
 $(window).resize(function(){
     var map_container = $('#map');
     map_container.height(map_container.width());
 });
+
 $('#toggle_alert').change(function(){
     dataset.toggleAlertsTo($(this).is(':checked'));
 });
