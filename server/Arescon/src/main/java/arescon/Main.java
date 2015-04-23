@@ -185,6 +185,13 @@ public class Main {
             return;
         }
 
+        paths.put("dispatcher_tree", new HttpHandler() {
+            @Override
+            public void handleRequest( HttpServerExchange exchange ) throws Exception {
+                api.balanceTree(exchange);
+            }
+        });
+
         paths.put("device/share", new HttpHandler() {
             @Override
             public void handleRequest( HttpServerExchange exchange ) throws Exception {

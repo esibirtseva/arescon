@@ -5,6 +5,7 @@ D:\Git\arescon\server\Arescon\src\main\java\arescon\Payment.java
 D:\Git\arescon\server\Arescon\src\main\java\arescon\PolynomialFitter.java
 D:\Git\arescon\server\Arescon\src\main\java\arescon\Util.java
 D:\Git\arescon\server\Arescon\src\main\java\de\vogella\rss\tests\ReadTest.java
+D:\Git\arescon\server\Arescon\src\main\java\arescon\House.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\IOUtil.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\SQLUtil.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\undertow\CommonActions.java
@@ -16,11 +17,16 @@ D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\undertow\CommonHand
 D:\Git\arescon\server\Arescon\src\main\java\arescon\Main.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\undertow\DatabaseIdentityManager.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\NetUtil.java
+D:\Git\arescon\server\Arescon\src\main\java\arescon\Device.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\util\Pair.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\undertow\UndertowUtil.java
+D:\Git\arescon\server\Arescon\src\main\java\arescon\HA.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\undertow\FormAuth.java
 D:\Git\arescon\server\Arescon\src\main\java\de\vogella\rss\model\FeedMessage.java
 D:\Git\arescon\server\Arescon\src\main\java\arescon\DeviationRecord.java
 D:\Git\arescon\server\Arescon\src\main\java\arescon\Rate.java
 D:\Git\arescon\server\Arescon\src\main\java\net\avkorneenkov\TimeUtil.java
+D:\Git\arescon\server\Arescon\src\main\java\arescon\Flat.java
 D:\Git\arescon\server\Arescon\src\main\java\arescon\Notification.java
+D:\Git\arescon\server\Arescon\src\main\java\arescon\Service.java
+D:\Git\arescon\server\Arescon\src\main\java\arescon\Company.java

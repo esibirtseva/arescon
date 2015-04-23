@@ -7,15 +7,21 @@ function getURLParameter(name, givenstring) {
 
 $('#loginForm').submit(function(e) {  // this handles the submit event
     
-    window.location = "/user.html";
+    window.location = "/user";
 
     e.preventDefault();
     return false;
 });
 
-$("#loginSubmitButton").click(function(){
-    $('#loginForm').submit(); // this triggers the submit event
-}); 
+$('.form-control[type=password]').keydown(function(e) {
+    // Enter press catch
+    if (e.keyCode == 13) {
+        // TODO: change this later
+        window.location = "/user";
+//        $('#loginForm').submit(); // this triggers the submit event
+    }
+});
+
 var isAdding = false;
 $(".device.add .glyphicon").click(function(){
 	if (!isAdding){

@@ -11,6 +11,8 @@ import java.util.Random;
 
 public class Data {
 
+    public static Company company;
+
     static int maxLength = 0;
     static Random random = new Random();
 
@@ -173,6 +175,49 @@ public class Data {
                     1.00 * getMoneyMultiplier(Integer.toString(i)) * (i == 3 ? 1 : 1000)));
             RATES.add(list);
         }
+    }
+
+    static {
+
+        Flat[] flats = new Flat[4];
+        flats[0] = new Flat(1, 65);
+        flats[0].addDevice(7);
+        flats[0].addDevice(8);
+        flats[0].addDevice(9);
+        flats[1] = new Flat(2, 32);
+        flats[1].addDevice(10);
+        flats[1].addDevice(11);
+        flats[1].addDevice(12);
+        flats[2] = new Flat(3, 145);
+        flats[2].addDevice(4);
+        flats[2].addDevice(5);
+        flats[2].addDevice(6);
+        flats[3] = new Flat(4, 20);
+        flats[3].addDevice(1);
+        flats[3].addDevice(2);
+        flats[3].addDevice(3);
+
+        House[] houses = new House[4];
+        houses[0] = new House("Минусинская улица, д. 37", 1);
+        houses[0].addFlat(flats[3]);
+        houses[1] = new House("Нежинская улица, д. 13", 2);
+        houses[1].addFlat(flats[2]);
+        houses[2] = new House("Башиловская улица, д. 15", 3);
+        houses[2].addFlat(flats[0]);
+        houses[3] = new House("Иловайская улица, д. 3", 4);
+        houses[3].addFlat(flats[1]);
+
+        HA[] HAs = new HA[2];
+        HAs[0] = new HA(1, "ТСЖ2");
+        HAs[0].addHouse(houses[0]);
+        HAs[0].addHouse(houses[1]);
+        HAs[1] = new HA(2, "ТСЖ1");
+        HAs[1].addHouse(houses[2]);
+        HAs[1].addHouse(houses[3]);
+
+        company = new Company(1);
+        for (HA ha : HAs) company.addHA(ha);
+
     }
 
 }

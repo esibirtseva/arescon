@@ -831,6 +831,40 @@ public class API {
         return new JSONObject().put("share", Data.totalType(id, true).key / Data.totalFlat(true)).toString();
     }
 
+    public void balanceTree( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue start = postData.getFirst("start");
+        FormData.FormValue end = postData.getFirst("end");
+
+        if (start == null || start.getValue().isEmpty() ||
+                end == null || end.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            long startTime = Long.parseLong(start.getValue());
+            long endTime = Long.parseLong(end.getValue());
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send(Data.company.getTotalJSON(startTime, endTime).toString());
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            exchange.getResponseSender().send("error");
+        }
+    }
+
     public void deviceProfile( HttpServerExchange exchange, double multiplier, String link, boolean trend ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");

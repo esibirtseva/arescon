@@ -45,7 +45,7 @@ var typeMap = [
             stroke: "rgba(231, 75, 59, 1)"
         } ,
         odnSelector: "#odnHeat"     
-    },
+    }
 ]
 
 var currentRoute;//odn
@@ -97,7 +97,7 @@ window.onload = function(){
                 new odnItem(0, daterangeStart, daterangeEnd, period),
                 new odnItem(2, daterangeStart, daterangeEnd, period),
                 new odnItem(3, daterangeStart, daterangeEnd, period),
-                new odnItem(4, daterangeStart, daterangeEnd, period),
+                new odnItem(4, daterangeStart, daterangeEnd, period)
             ]);
         currentPageData.updateData(true);
     }
