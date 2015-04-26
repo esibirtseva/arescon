@@ -12,6 +12,7 @@ public class House {
     public final int id;
 
     public final String address;
+    public final String x, y;
     public final List<Flat> flats;
 
     public HA parent;
@@ -19,9 +20,11 @@ public class House {
     public double spent = 0.0;
     public double paid = 0.0;
 
-    public House( final String address, final int id ) {
+    public House( final String address, final int id, final String x, final String y ) {
         this.address = address;
         this.id = id;
+        this.x = x;
+        this.y = y;
         this.flats = new ArrayList<>(10);
 
     }
@@ -56,8 +59,8 @@ public class House {
             paid += flatJSON.getDouble("paid");
         }
 
-        return new JSONObject().put("id", id).put("address", address).put("start", start).put("end", end)
-                .put("spentMoney", spent).put("paid", paid).put("flats", children);
+        return new JSONObject().put("id", id).put("address", address).put("x", x).put("y", y).put("start", start)
+                .put("end", end).put("spentMoney", spent).put("paid", paid).put("flats", children);
 
     }
 

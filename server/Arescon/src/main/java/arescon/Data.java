@@ -198,13 +198,13 @@ public class Data {
         flats[3].addDevice(3);
 
         House[] houses = new House[4];
-        houses[0] = new House("Минусинская улица, д. 37", 1);
+        houses[0] = new House("Минусинская улица, д. 37", 1, "55.71855041425817", "37.66815246582029");
         houses[0].addFlat(flats[3]);
-        houses[1] = new House("Нежинская улица, д. 13", 2);
+        houses[1] = new House("Нежинская улица, д. 13", 2, "55.78283647321973", "37.55691589355467");
         houses[1].addFlat(flats[2]);
-        houses[2] = new House("Башиловская улица, д. 15", 3);
+        houses[2] = new House("Башиловская улица, д. 15", 3, "55.706921098504964", "37.470398559570306");
         houses[2].addFlat(flats[0]);
-        houses[3] = new House("Иловайская улица, д. 3", 4);
+        houses[3] = new House("Иловайская улица, д. 3", 4, "55.87404807445789", "37.690125122070306");
         houses[3].addFlat(flats[1]);
 
         HA[] HAs = new HA[2];
