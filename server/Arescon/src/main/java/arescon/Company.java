@@ -53,4 +53,25 @@ public class Company {
                 .put("paid", paid).put("HAs", children);
     }
 
+    public JSONObject getTotalJSON( long start, long end, int type ) {
+
+        if (end > new DateTime().getMillis()) end = new DateTime().getMillis();
+
+        double spentMoney = 0.0;
+        double spentValue = 0.0;
+        double paid = 0.0;
+        JSONArray children = new JSONArray();
+
+        for (HA ha : this.HAs) {
+            JSONObject HAJSON = ha.getTotalJSON(start, end, type);
+            children.put(HAJSON);
+            spentMoney += HAJSON.getDouble("spentMoney");
+            spentValue += HAJSON.getDouble("spentValue");
+            paid += HAJSON.getDouble("paid");
+        }
+
+        return new JSONObject().put("id", id).put("start", start).put("end", end).put("spentMoney", spentMoney)
+                .put("paid", paid).put("HAs", children).put("type", type).put("spentValue", spentValue);
+    }
+
 }

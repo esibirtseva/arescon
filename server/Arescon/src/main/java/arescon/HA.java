@@ -60,4 +60,27 @@ public class HA {
 
     }
 
+    public JSONObject getTotalJSON( long start, long end, int type ) {
+
+        if (end > new DateTime().getMillis()) end = new DateTime().getMillis();
+
+        double spentMoney = 0.0;
+        double spentValue = 0.0;
+        double paid = 0.0;
+        JSONArray children = new JSONArray();
+
+        for (House house : this.houses) {
+            JSONObject houseJSON = house.getTotalJSON(start, end, type);
+            children.put(houseJSON);
+            spentMoney += houseJSON.getDouble("spentMoney");
+            spentValue += houseJSON.getDouble("spentValue");
+            paid += houseJSON.getDouble("paid");
+        }
+
+        return new JSONObject().put("id", id).put("name", name).put("start", start).put("end", end)
+                .put("spentMoney", spentMoney).put("paid", paid).put("houses", children).put("type", type)
+                .put("spentValue", spentValue);
+
+    }
+
 }

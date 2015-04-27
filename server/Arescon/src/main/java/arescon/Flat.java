@@ -67,4 +67,28 @@ public class Flat {
                 .put("spentMoney", spent).put("paid", paid).put("services", children);
     }
 
+    public JSONObject getTotalJSON( long start, long end, int type ) {
+
+        if (end > new DateTime().getMillis()) end = new DateTime().getMillis();
+
+        double spentMoney = 0.0;
+        double spentValue = 0.0;
+        double paid = 0.0;
+        JSONArray children = new JSONArray();
+
+        for (Device device : this.devices) {
+            if (device.type == type) {
+                JSONObject deviceJSON = device.getTotalJSON(start, end);
+                children.put(deviceJSON);
+                spentMoney += deviceJSON.getDouble("spentMoney");
+                spentValue += deviceJSON.getDouble("spentValue");
+                paid += deviceJSON.getDouble("paid");
+            }
+        }
+
+        return new JSONObject().put("id", id).put("type", type).put("number", number).put("start", start)
+                .put("end", end).put("spentMoney", spentMoney).put("paid", paid).put("services", children)
+                .put("spentValue", spentValue);
+    }
+
 }
