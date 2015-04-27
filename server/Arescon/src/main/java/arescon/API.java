@@ -855,9 +855,15 @@ public class API {
         try {
             long startTime = Long.parseLong(start.getValue());
             long endTime = Long.parseLong(end.getValue());
+            FormData.FormValue typeData = postData.getFirst("type");
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(Data.company.getTotalJSON(startTime, endTime).toString());
+            if (typeData != null && !typeData.getValue().isEmpty()) {
+                exchange.getResponseSender().send(Data.company.getTotalJSON(
+                        startTime, endTime, Integer.parseInt(typeData.getValue())).toString());
+            } else {
+                exchange.getResponseSender().send(Data.company.getTotalJSON(startTime, endTime).toString());
+            }
 
         } catch (Throwable e) {
             e.printStackTrace();

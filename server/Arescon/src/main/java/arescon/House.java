@@ -64,4 +64,27 @@ public class House {
 
     }
 
+    public JSONObject getTotalJSON( long start, long end, int type ) {
+
+        if (end > new DateTime().getMillis()) end = new DateTime().getMillis();
+
+        double spentMoney = 0.0;
+        double spentValue = 0.0;
+        double paid = 0.0;
+        JSONArray children = new JSONArray();
+
+        for (Flat flat : this.flats) {
+            JSONObject flatJSON = flat.getTotalJSON(start, end, type);
+            children.put(flatJSON);
+            spentMoney += flatJSON.getDouble("spentMoney");
+            spentValue += flatJSON.getDouble("spentValue");
+            paid += flatJSON.getDouble("paid");
+        }
+
+        return new JSONObject().put("id", id).put("address", address).put("x", x).put("y", y).put("start", start)
+                .put("end", end).put("spentMoney", spentMoney).put("paid", paid).put("flats", children)
+                .put("type", type).put("spentValue", spentValue);
+
+    }
+
 }
