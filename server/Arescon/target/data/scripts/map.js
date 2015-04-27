@@ -350,6 +350,34 @@ $('input[name=type_select]:radio').change(
 );
 
 // helper function for services
+var addItem = function(el, depth, parentId) {
+    var itemType,
+        parentItemName = $(el).parent().children('span').text();
+
+//    console.log("Глубина:" + depth);
+//    console.log("ИД папы:" + parentId);
+
+    var modal = $("#exampleModal");
+
+    switch (depth) {
+        case 0: itemType = "ТСЖ"; break;
+        case 1: itemType = "дом"; break;
+        case 2: itemType = "квартиру"; break;
+        case 3: itemType = "услугу"; break;
+    }
+
+    modal.find('.modal-title').text('Добавить ' + itemType + ' для ' + parentItemName);
+    modal.modal('show');
+
+    $(".modal-footer .btn-primary").on("click", function (event) {
+        alert("Элемент " + $('#element-name').val() + " добавлен");
+        modal.modal('hide');
+
+        $(this).off(event);
+    });
+};
+
+// helper function for services
 var findPurpose = function(object, name, value) {
     for (var key in object) {
         if (object[key][name] == value)
@@ -376,7 +404,10 @@ var appendTreeInfoLevel4 = function(obj, selector) {
 var appendTreeInfoLevel3 = function(obj, selector) {
     $.each(obj, function (index, item) {
         $(selector + " .apartments").append('<div id="apartment' + item.id + '" class="item row" data-id="2">' +
-            '<p class="col-xs-3">Квартира: ' + item.number + '</p>' +
+            '<p class="col-xs-3">' +
+            '<span>' + 'Квартира: ' + item.number + '</span>' +
+            '<img src="../images/plus-circle-outline.png" onclick="addItem(this, 3, ' + item.id + ')"/>' +
+            '</p>' +
             '<div class="balance col-xs-2" data-income="692">692</div>' +
             '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
             '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
@@ -396,7 +427,10 @@ var appendTreeInfoLevel3 = function(obj, selector) {
 var appendTreeInfoLevel2 = function(obj, selector) {
     $.each(obj, function (index, item) {
         $(selector + " .houses").append('<div id="house' + item.id + '" class="item row" data-id="4" data-x="' + item.x + '" data-y="' + item.y + '">' +
-            '<p class="col-xs-3">' + item.address + '</p>' +
+            '<p class="col-xs-3">' +
+            '<span>' + item.address + '</span>' +
+            '<img src="../images/plus-circle-outline.png" onclick="addItem(this, 2, ' + item.id + ')"/>' +
+            '</p>' +
             '<div class="balance col-xs-2" data-income="692">692</div>' +
             '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
             '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
@@ -416,7 +450,10 @@ var appendTreeInfoLevel2 = function(obj, selector) {
 var appendTreeInfoLevel1 = function(obj) {
     $.each(obj, function (index, item) {
         $(".tszhs").append('<div id="tszh' + item.id + '" class="item row" data-id="2">' +
-            '<p class="col-xs-3">' + item.name + '</p>' +
+            '<p class="col-xs-3">' +
+            '<span>' + item.name + '</span>' +
+            '<img src="../images/plus-circle-outline.png" onclick="addItem(this, 1, ' + item.id + ')"/>' +
+            '</p>' +
             '<div class="balance col-xs-2" data-income="692">692</div>' +
             '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
             '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
@@ -434,7 +471,10 @@ var appendTreeInfoLevel1 = function(obj) {
 
 var appendTreeInfoLevel0 = function(obj) {
     $(".company").append('<div class="item active row">' +
-        '<p class="col-xs-3">Управляющая компания</p>' +
+        '<p class="col-xs-3">' +
+        '<span>Управляющая компания</span>' +
+        '<img src="../images/plus-circle-outline.png" onclick="addItem(this, 0, ' + obj.id + ')"/>' +
+        '</p>' +
         '<div class="balance col-xs-2" data-income="692">692</div>' +
         '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
         '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
