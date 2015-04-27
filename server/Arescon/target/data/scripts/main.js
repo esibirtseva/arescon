@@ -35,9 +35,7 @@ $(".device.add .glyphicon").click(function(){
 });
 
 var active_tszh = false, active_house = false, active_apartment = false, active_device = false;
-$('.tszhs .item>p').click(function(){
-	$(this).siblings(".nested").toggleClass("dblock");//.toggleClass("active").removeClass("red");
-});
+
 // $('.tszhs .item').click(function(){
 // 	if (active_house) $('.houses .item.active').click();
 // 	if (!active_tszh) {
