@@ -9,6 +9,9 @@ import java.util.List;
 
 public class Company {
 
+    static int count = 0;
+    static ArrayList<Company> all = new ArrayList<>(1);
+
     public final List<HA> HAs;
 
     public final int id;
@@ -19,6 +22,12 @@ public class Company {
     public Company( final int id ) {
         this.id = id;
         HAs = new ArrayList<>(10);
+        ++Company.count;
+        all.add(this);
+    }
+
+    public Company( ) {
+        this(Company.count + 1);
     }
 
     public void addHA( HA ha ) {

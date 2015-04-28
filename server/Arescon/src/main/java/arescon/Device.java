@@ -8,6 +8,9 @@ import java.util.List;
 
 public class Device {
 
+    static int count = 0;
+    static ArrayList<Device> all = new ArrayList<>(12);
+
     public final double multiplier;
 
     public final int id;
@@ -35,10 +38,24 @@ public class Device {
 
         this.spentValue = getTotalSpent(0L, 99999999999999L, false);
         this.spentMoney = this.spentValue * this.multiplier;
+
+        ++count;
+        all.add(this);
     }
 
-    public Device( final int id ) {
-        this(id, Data.PERIOD);
+    public Device( final int type ) {
+        this.id = ++Device.count;
+        this.period = Data.PERIOD * 60000;
+        this.type = type;
+        this.start = new DateTime().getMillis();
+        this.values = new ArrayList<>(10);
+        this.multiplier = Data.getMoneyMultiplier(Integer.toString(type));
+        this.payments = new ArrayList<>(10);
+
+        this.spentValue = 0;
+        this.spentMoney = 0;
+
+        all.add(this);
     }
 
     public synchronized void spend( double... values ) {

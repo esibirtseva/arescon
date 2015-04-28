@@ -831,6 +831,206 @@ public class API {
         return new JSONObject().put("share", Data.totalType(id, true).key / Data.totalFlat(true)).toString();
     }
 
+    public void addDevice( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue typeData = postData.getFirst("type");
+        FormData.FormValue parentIdData = postData.getFirst("parentID");
+
+        if (typeData == null || typeData.getValue().isEmpty() ||
+                parentIdData == null || parentIdData.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+
+            int type = Integer.parseInt(typeData.getValue());
+            int parentID = Integer.parseInt(parentIdData.getValue());
+
+            Device device = new Device(type);
+
+            for (Flat flat : Flat.all) {
+                if (flat.id == parentID) {
+                    flat.addDevice(device);
+                    exchange.getResponseSender().send("done");
+                    return;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
+    public void addFlat( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue numberData = postData.getFirst("number");
+        FormData.FormValue parentIdData = postData.getFirst("parentID");
+
+        if (numberData == null || numberData.getValue().isEmpty() ||
+                parentIdData == null || parentIdData.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+
+            int number = Integer.parseInt(numberData.getValue());
+            int parentID = Integer.parseInt(parentIdData.getValue());
+
+            Flat flat = new Flat(number);
+
+            for (House house : House.all) {
+                if (house.id == parentID) {
+                    house.addFlat(flat);
+                    exchange.getResponseSender().send("done");
+                    return;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
+    public void addHouse( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue addressData = postData.getFirst("address");
+        FormData.FormValue xData = postData.getFirst("x");
+        FormData.FormValue yData = postData.getFirst("y");
+        FormData.FormValue parentIdData = postData.getFirst("parentID");
+
+        if (addressData == null || addressData.getValue().isEmpty() ||
+                xData == null || xData.getValue().isEmpty() ||
+                yData == null || yData.getValue().isEmpty() ||
+                parentIdData == null || parentIdData.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+
+            int parentID = Integer.parseInt(parentIdData.getValue());
+
+            House house = new House(addressData.getValue(), xData.getValue(), yData.getValue());
+
+            for (HA ha : HA.all) {
+                if (ha.id == parentID) {
+                    ha.addHouse(house);
+                    exchange.getResponseSender().send("done");
+                    return;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
+    public void addHA( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue nameData = postData.getFirst("name");
+        FormData.FormValue parentIdData = postData.getFirst("parentID");
+
+        if (nameData == null || nameData.getValue().isEmpty() ||
+                parentIdData == null || parentIdData.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+
+            int parentID = Integer.parseInt(parentIdData.getValue());
+
+            HA ha = new HA(nameData.getValue());
+
+//            for (Company company : Company.all) {
+//                if (company.id == parentID) {
+//                    company.addHA(ha);
+//                    exchange.getResponseSender().send("done");
+//                    return;
+//                }
+//            }
+            Data.company.addHA(ha);
+            exchange.getResponseSender().send("done");
+            return;
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
+    public void addCompany( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            new Company();
+
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send("done");
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
     public void balanceTree( HttpServerExchange exchange ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");

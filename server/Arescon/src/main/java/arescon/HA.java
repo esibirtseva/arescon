@@ -9,6 +9,9 @@ import java.util.List;
 
 public class HA {
 
+    static int count = 0;
+    static ArrayList<HA> all = new ArrayList<>(2);
+
     public final int id;
     public final String name;
 
@@ -23,6 +26,13 @@ public class HA {
         this.id = id;
         this.name = name;
         houses = new ArrayList<>(10);
+
+        ++count;
+        all.add(this);
+    }
+
+    public HA( final String name ) {
+        this(count + 1, name);
     }
 
     public void addHouse( House house ) {

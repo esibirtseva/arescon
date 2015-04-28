@@ -185,6 +185,37 @@ public class Main {
             return;
         }
 
+        paths.put("service/create", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.addDevice(exchange);
+            }
+        });
+        paths.put("flat/create", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.addFlat(exchange);
+            }
+        });
+        paths.put("house/create", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.addHouse(exchange);
+            }
+        });
+        paths.put("tszh/create", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.addHA(exchange);
+            }
+        });
+        paths.put("company/create", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.addCompany(exchange);
+            }
+        });
+
         paths.put("dispatcher_tree", new HttpHandler() {
             @Override
             public void handleRequest( HttpServerExchange exchange ) throws Exception {
@@ -732,6 +763,8 @@ public class Main {
                 exchange.setResponseCode(StatusCodes.TEMPORARY_REDIRECT);
             }
         });
+
+        Data.getMoneyMultiplier("1");
 
         if (server != null) {
             server.stop();

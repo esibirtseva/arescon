@@ -9,6 +9,9 @@ import java.util.List;
 
 public class House {
 
+    static int count = 0;
+    static ArrayList<House> all = new ArrayList<>(4);
+
     public final int id;
 
     public final String address;
@@ -27,6 +30,12 @@ public class House {
         this.y = y;
         this.flats = new ArrayList<>(10);
 
+        ++House.count;
+        all.add(this);
+    }
+
+    public House( final String address, final String x, final String y ) {
+        this(address, count + 1, x, y);
     }
 
     public void addFlat( Flat flat ) {

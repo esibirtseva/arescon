@@ -9,6 +9,9 @@ import java.util.List;
 
 public class Flat {
 
+    static int count = 0;
+    static ArrayList<Flat> all = new ArrayList<>(4);
+
     public final int id;
     public final int number;
 
@@ -22,6 +25,13 @@ public class Flat {
         this.number = number;
         this.id = id;
         devices = new ArrayList<>(10);
+
+        ++Flat.count;
+        all.add(this);
+    }
+
+    public Flat( final int number ) {
+        this(count + 1, number);
     }
 
     public void addDevice( final Device device ) {
@@ -31,7 +41,7 @@ public class Flat {
     }
 
     public void addDevice( final int id ) {
-        addDevice(new Device(id));
+        addDevice(new Device(id, Data.PERIOD));
     }
 
     public double getBalance( ) {
