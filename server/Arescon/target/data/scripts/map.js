@@ -352,6 +352,7 @@ $('input[name=type_select]:radio').change(
 // helper function for services
 var addItem = function(el, depth, parentId) {
     var itemType,
+        labelText,
         parentItemName = $(el).parent().children('span').text();
 
 //    console.log("Глубина:" + depth);
@@ -360,13 +361,14 @@ var addItem = function(el, depth, parentId) {
     var modal = $("#exampleModal");
 
     switch (depth) {
-        case 0: itemType = "ТСЖ"; break;
-        case 1: itemType = "дом"; break;
-        case 2: itemType = "квартиру"; break;
-        case 3: itemType = "услугу"; break;
+        case 0: itemType = "ТСЖ"; labelText = 'Имя'; break;
+        case 1: itemType = "дом"; labelText = 'Адрес'; break;
+        case 2: itemType = "квартиру"; labelText = 'Номер квартиры'; break;
+        case 3: itemType = "услугу"; labelText = 'Номер счетчика'; break;
     }
 
     modal.find('.modal-title').text('Добавить ' + itemType + ' для ' + parentItemName);
+    modal.find('.control-label').text(labelText + ':');
     modal.modal('show');
 
     $(".modal-footer .btn-primary").on("click", function (event) {
