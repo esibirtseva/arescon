@@ -353,6 +353,7 @@ $('input[name=type_select]:radio').change(
 var addItem = function(el, depth, parentId) {
     var itemType,
         labelText,
+        url,
         parentItemName = $(el).parent().children('span').text();
 
 //    console.log("Глубина:" + depth);
@@ -361,10 +362,26 @@ var addItem = function(el, depth, parentId) {
     var modal = $("#exampleModal");
 
     switch (depth) {
-        case 0: itemType = "ТСЖ"; labelText = 'Имя'; break;
-        case 1: itemType = "дом"; labelText = 'Адрес'; break;
-        case 2: itemType = "квартиру"; labelText = 'Номер квартиры'; break;
-        case 3: itemType = "услугу"; labelText = 'Номер счетчика'; break;
+        case 0:
+            itemType = "ТСЖ";
+            labelText = 'Имя';
+            url = '/tszh/create';
+            break;
+        case 1:
+            itemType = "дом";
+            labelText = 'Адрес';
+            url = '/house/create';
+            break;
+        case 2:
+            itemType = "квартиру";
+            labelText = 'Номер квартиры';
+            url = '/flat/create';
+            break;
+        case 3:
+            itemType = "услугу";
+            labelText = 'Номер счетчика';
+            url = '/service/create';
+            break;
     }
 
     modal.find('.modal-title').text('Добавить ' + itemType + ' для ' + parentItemName);
@@ -372,7 +389,37 @@ var addItem = function(el, depth, parentId) {
     modal.modal('show');
 
     $(".modal-footer .btn-primary").on("click", function (event) {
-        alert("Элемент " + $('#element-name').val() + " добавлен");
+        var obj = {"parentID": parentId},
+            types = {
+                'coldwater': 0,
+                'hotwater': 1,
+                'gas': 2,
+                'electricity': 3,
+                'heat': 4
+            };
+
+        switch (depth) {
+            case 0:
+                obj.name = $('#element-name').val();
+                break;
+            case 1:
+                obj.address = $('#element-name').val();
+                obj.x = 'x_coord'; // don't know how to set it
+                obj.y = 'y_coord'; // don't know how to set it
+                break;
+            case 2:
+                obj.number = $('#element-name').val();
+                break;
+            case 3:
+                obj.number = $('#element-name').val(); // optional for server now
+                obj.type = types[$("input[name='type_select']:checked").val()];
+                break;
+        }
+
+        $.post(url, obj, function (data) {
+            //alert("Элемент " + $('#element-name').val() + " добавлен");
+        });
+
         modal.modal('hide');
 
         $(this).off(event);
