@@ -40,6 +40,7 @@ public class Counter {
         this.transform = transform;
         this.periodic = periodic;
         this.deleted = false;
+        this.name = "Counter";
 
         this.nextTimestamp = this.start = new DateTime().getMillis();
         this.nextCheck = nextCheck;

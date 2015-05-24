@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class Data {
 
+    public static Flat userFlat;
     public static Company company;
 
     static int maxLength = 0;
@@ -142,10 +143,10 @@ public class Data {
         // 1409592882825l
         // public static final String[] TYPES = { "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2", "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2" };
 
-        COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, 1409592882825l));
-        COUNTER_DEVICES.add(new Counter("2", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
-        COUNTER_DEVICES.add(new Counter("3", 2, 0, 0, 1, 1, 1, true, 1409592882825l));
-        COUNTER_DEVICES.add(new Counter("4", 1, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик Techem AP"));
+        COUNTER_DEVICES.add(new Counter("2", 3, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик однофазный СОЭ-52"));
+        COUNTER_DEVICES.add(new Counter("3", 2, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик ГРАНД-25Т"));
+        COUNTER_DEVICES.add(new Counter("4", 1, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик СВ-15 Х \"МЕТЕР\""));
         COUNTER_DEVICES.add(new Counter("5", 1, 0, 0, 1, 1, 1, true, 1409592882825l));
         COUNTER_DEVICES.add(new Counter("6", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
         COUNTER_DEVICES.add(new Counter("7", 2, 0, 0, 1, 1, 1, true, 1409592882825l));
@@ -229,13 +230,15 @@ public class Data {
         flats[1].addDevice(11);
         flats[1].addDevice(12);
         flats[2] = new Flat(3, 145);
-        flats[2].addDevice(4);
         flats[2].addDevice(5);
         flats[2].addDevice(6);
         flats[3] = new Flat(4, 20);
         flats[3].addDevice(1);
         flats[3].addDevice(2);
         flats[3].addDevice(3);
+        flats[3].addDevice(4);
+
+        userFlat = flats[3];
 
         House[] houses = new House[4];
         houses[0] = new House("Минусинская улица, д. 37", 1, "55.71855041425817", "37.66815246582029");
