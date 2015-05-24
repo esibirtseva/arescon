@@ -170,7 +170,7 @@ public class Data {
 
         double multiplier = 0;
         try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream("data.txt"), Charset.forName("UTF-8")))) {
-            for (int i = 0; i < COUNTER_DEVICES.size(); ++i) {
+            for (int i = 0; i < COUNTER_DEVICES.size() / 2; ++i) {
                 switch (COUNTER_DEVICES.get(i).type) {
                     case 0:
                         multiplier = 1.9; // л холодной воды за 5 минут на 3 человек * 2
