@@ -26,15 +26,18 @@ public class Device {
     public Flat parent;
 
     public Device( final int id, final long period ) {
+
+        Counter counter = Data.COUNTER_DEVICES.get(id - 1);
+
         this.id = id;
         this.period = period * 60000;
-        this.type = Integer.parseInt(Data.TYPES[id - 1]);
-        this.start = Data.START_TIMES[id - 1];
-        this.values = new ArrayList<>(Data.VALUES[id - 1].length);
-        this.multiplier = Data.getMoneyMultiplier(Data.TYPES[id - 1]);
+        this.type = counter.type;
+        this.start = counter.start;
+        this.values = new ArrayList<>(counter.values.size());
+        this.multiplier = Data.getMoneyMultiplier(counter.type);
 
-        for (double value : Data.VALUES[id - 1]) this.values.add(value);
-        this.payments = Payment.generate(this.start, Data.VALUES[id - 1], this.multiplier, this.period);
+        for (CounterValue value : counter.values) this.values.add(value.value);
+        this.payments = Payment.generate(counter, this.multiplier);
 
         this.spentValue = getTotalSpent(0L, 99999999999999L, false);
         this.spentMoney = this.spentValue * this.multiplier;

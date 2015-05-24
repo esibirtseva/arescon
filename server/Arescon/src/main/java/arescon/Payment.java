@@ -64,4 +64,13 @@ public class Payment {
         return result;
     }
 
+    public static List<Payment> generate( Counter counter, double multiplier ) {
+        double[] data = new double[counter.values.size()];
+        for (int i = 0; i < data.length; ++i) {
+            data[i] = counter.values.get(i).value;
+        }
+
+        return generate(counter.start, data, multiplier, counter.period);
+    }
+
 }

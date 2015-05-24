@@ -46,6 +46,20 @@ public class API {
         this.trendDegrees = trendDegrees;
     }
 
+    FormData getPOST( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return null;
+        }
+        FormData postData = UndertowUtil.parsePostData(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return null;
+        }
+
+        return postData;
+    }
+
     int getType( int id ) {
         switch (id) {
             case 1:
@@ -126,24 +140,27 @@ public class API {
     }
 
     private String getDeviceProfile( int id, long startTime, long endTime, int period, int count, int expected, double multiplier, boolean trend, boolean weighted ) {
-        if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+
+        Counter counter = Data.COUNTER_DEVICES.get(id - 1);
+
+        if (startTime < counter.start) startTime = counter.start;
 
         if (multiplier / 20 >= 1.0) {
-            multiplier = Data.getMoneyMultiplier(Data.TYPES[id - 1]) * (multiplier / 20);
+            multiplier = Data.getMoneyMultiplier(counter.type) * (multiplier / 20);
         }
 
         period /= (int) Data.PERIOD;
         if (period < 1) period = 1;
-        double[] values = Data.VALUES[id - 1];
+        double[] values = counter.getValues();
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
-        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
-        response.append(Data.TYPES[id - 1]).append("\",\"legendItem\":\"").append(weighted ? "Прогноз" : "Профиль");
+        response.append(period * Data.PERIOD).append("\",\"name\":\"").append("Счетчик " + counter.id).append("\",\"type\":\"");
+        response.append(Integer.toString(counter.type)).append("\",\"legendItem\":\"").append(weighted ? "Прогноз" : "Профиль");
         response.append(multiplier != Math.floor(multiplier) ? " (руб.)" : "").append(trend ? " (тренд)" : "").append("\",\"values\":");
 
-        startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
-        endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+        startTime = (startTime - counter.start) / 60000 / Data.PERIOD;
+        endTime = (endTime - counter.start) / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
 
@@ -184,11 +201,11 @@ public class API {
         long dataStartTime = Long.MAX_VALUE;
         int topLength = 0;
         for (int i = 0; i < 4; ++i) {
-            if (Data.TYPES[i].equals(Integer.toString(id))) {
-                if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
-                if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
-                dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
-                values.add(Data.VALUES[i]);
+            if (Data.COUNTER_DEVICES.get(i).type == id) {
+                if (Data.COUNTER_DEVICES.get(i).start < dataStartTime) dataStartTime = Data.COUNTER_DEVICES.get(i).start;
+                if (Data.COUNTER_DEVICES.get(i).values.size() > topLength) topLength = Data.COUNTER_DEVICES.get(i).values.size();
+                dataStartTimes.add(Data.COUNTER_DEVICES.get(i).start / 60000 / Data.PERIOD);
+                values.add(Data.COUNTER_DEVICES.get(i).getValues());
             }
         }
 
@@ -257,11 +274,11 @@ public class API {
         long dataStartTime = Long.MAX_VALUE;
         int topLength = 0;
         for (int i = 0; i < 4; ++i) {
-            if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
-            if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
-            dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
-            values.add(Data.VALUES[i]);
-            dataTypes.add(Integer.parseInt(Data.TYPES[i]));
+            if (Data.COUNTER_DEVICES.get(i).start < dataStartTime) dataStartTime = Data.COUNTER_DEVICES.get(i).start;
+            if (Data.COUNTER_DEVICES.get(i).values.size() > topLength) topLength = Data.COUNTER_DEVICES.get(i).values.size();
+            dataStartTimes.add(Data.COUNTER_DEVICES.get(i).start / 60000 / Data.PERIOD);
+            values.add(Data.COUNTER_DEVICES.get(i).getValues());
+            dataTypes.add(Data.COUNTER_DEVICES.get(i).type);
         }
 
         if (startTime < dataStartTime) startTime = dataStartTime;
@@ -331,11 +348,13 @@ public class API {
 
     private String getDeviceData( int id, long startTime, long endTime, int period, double multiplier, boolean trend ) {
 
-        if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+        Counter counter = Data.COUNTER_DEVICES.get(id - 1);
+
+        if (startTime < counter.start) startTime = counter.start;
         if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
 
         if (multiplier / 20 >= 1.0) {
-            multiplier = Data.getMoneyMultiplier(Data.TYPES[id - 1]) * (multiplier / 20);
+            multiplier = Data.getMoneyMultiplier(counter.type) * (multiplier / 20);
         }
 
         String timeInterval = " (" + new DateTime(startTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) +
@@ -343,17 +362,17 @@ public class API {
 
         period /= (int)Data.PERIOD;
         if (period < 1) period = 1;
-        double[] values = Data.VALUES[id - 1];
+        double[] values = counter.getValues();
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
-        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
-        response.append(Data.TYPES[id - 1]).append("\",\"legendItem\":\"").append("Реальные данные");
+        response.append(period * Data.PERIOD).append("\",\"name\":\"").append("Счетчик " + counter.id).append("\",\"type\":\"");
+        response.append(Integer.toString(counter.type)).append("\",\"legendItem\":\"").append("Реальные данные");
         response.append(multiplier != Math.floor(multiplier) ? " (руб.)" : "").append(trend ? " (тренд)" : "");
         response.append(timeInterval).append("\",\"values\":");
 
-        startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
-        endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+        startTime = (startTime - counter.start) / 60000 / Data.PERIOD;
+        endTime = (endTime - counter.start) / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
         if (!trend) {
@@ -396,11 +415,11 @@ public class API {
         long dataStartTime = Long.MAX_VALUE;
         int topLength = 0;
         for (int i = 0; i < 4; ++i) {
-            if (Data.TYPES[i].equals(Integer.toString(id))) {
-                if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
-                if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
-                dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
-                values.add(Data.VALUES[i]);
+            if (Data.COUNTER_DEVICES.get(i).type == id) {
+                if (Data.COUNTER_DEVICES.get(i).start < dataStartTime) dataStartTime = Data.COUNTER_DEVICES.get(i).start;
+                if (Data.COUNTER_DEVICES.get(i).values.size() > topLength) topLength = Data.COUNTER_DEVICES.get(i).values.size();
+                dataStartTimes.add(Data.COUNTER_DEVICES.get(i).start / 60000 / Data.PERIOD);
+                values.add(Data.COUNTER_DEVICES.get(i).getValues());
             }
         }
 
@@ -471,11 +490,11 @@ public class API {
         long dataStartTime = Long.MAX_VALUE;
         int topLength = 0;
         for (int i = 0; i < 4; ++i) {
-            if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
-            if (Data.VALUES[i].length > topLength) topLength = Data.VALUES[i].length;
-            dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
-            values.add(Data.VALUES[i]);
-            dataTypes.add(Integer.parseInt(Data.TYPES[i]));
+            if (Data.COUNTER_DEVICES.get(i).start < dataStartTime) dataStartTime = Data.COUNTER_DEVICES.get(i).start;
+            if (Data.COUNTER_DEVICES.get(i).values.size() > topLength) topLength = Data.COUNTER_DEVICES.get(i).values.size();
+            dataStartTimes.add(Data.COUNTER_DEVICES.get(i).start / 60000 / Data.PERIOD);
+            values.add(Data.COUNTER_DEVICES.get(i).getValues());
+            dataTypes.add(Data.COUNTER_DEVICES.get(i).type);
         }
 
         if (startTime < dataStartTime) startTime = dataStartTime;
@@ -551,6 +570,9 @@ public class API {
     }
 
     private String getDeviceDeviation( int id, long startTime, long endTime, double edge, String search ) {
+
+        Counter counter = Data.COUNTER_DEVICES.get(id - 1);
+
         if (startTime < Data.DEVIATION_START_TIME) startTime = Data.DEVIATION_START_TIME;
 
         DeviationRecord[] values = Data.DEVIATION_RECORDS;
@@ -559,8 +581,8 @@ public class API {
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
-        response.append(period * Data.PERIOD * 12).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
-        response.append(Data.TYPES[id - 1]).append("\",\"values\":");
+        response.append(period * Data.PERIOD * 12).append("\",\"name\":\"").append("Счетчик " + counter.id).append("\",\"type\":\"");
+        response.append(Integer.toString(counter.type)).append("\",\"values\":");
 
         startTime = (startTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD / 12;
         endTime = (endTime - Data.DEVIATION_START_TIME) / 60000 / Data.PERIOD / 12;
@@ -607,7 +629,10 @@ public class API {
     }
 
     private String getDevicePercentage( int id, long startTime, long endTime, int period, boolean trend ) {
-        if (startTime < Data.START_TIMES[id - 1]) startTime = Data.START_TIMES[id - 1];
+
+        Counter counter = Data.COUNTER_DEVICES.get(id - 1);
+
+        if (startTime < counter.start) startTime = counter.start;
         if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
         String timeInterval = " (" + new DateTime(startTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) +
                 " -- "+ new DateTime(endTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy")) + ")";
@@ -618,13 +643,13 @@ public class API {
 
         StringBuilder response = new StringBuilder("{\"start\":");
         response.append("\"").append(startTime).append("\",\"id\":\"").append(id).append("\",\"period\":\"");
-        response.append(period * Data.PERIOD).append("\",\"name\":\"").append(Data.NAMES[id - 1]).append("\",\"type\":\"");
-        response.append(Data.TYPES[id - 1]).append("\",\"legendItem\":\"").append("Реальные данные");
+        response.append(period * Data.PERIOD).append("\",\"name\":\"").append("Счетчик " + counter.id).append("\",\"type\":\"");
+        response.append(Integer.toString(counter.type)).append("\",\"legendItem\":\"").append("Реальные данные");
         response.append(trend ? " (тренд)" : "");
         response.append(timeInterval).append("\",\"values\":");
 
-        startTime = (startTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
-        endTime = (endTime - Data.START_TIMES[id - 1]) / 60000 / Data.PERIOD;
+        startTime = (startTime - counter.start) / 60000 / Data.PERIOD;
+        endTime = (endTime - counter.start) / 60000 / Data.PERIOD;
 
         JSONArray list = new JSONArray();
         if (!trend) {
@@ -662,10 +687,10 @@ public class API {
         long dataStartTime = Long.MAX_VALUE;
         int topLength = 0;
         for (int i = 0; i < 4; ++i) {
-            if (Data.TYPES[i].equals(Integer.toString(id))) {
-                if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
+            if (Data.COUNTER_DEVICES.get(i).type == id) {
+                if (Data.COUNTER_DEVICES.get(i).start < dataStartTime) dataStartTime = Data.COUNTER_DEVICES.get(i).start;
                 if (Data.PERCENTAGE_VALUES[i].length > topLength) topLength = Data.PERCENTAGE_VALUES[i].length;
-                dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
+                dataStartTimes.add(Data.COUNTER_DEVICES.get(i).start / 60000 / Data.PERIOD);
                 values.add(Data.PERCENTAGE_VALUES[i]);
             }
         }
@@ -733,11 +758,11 @@ public class API {
         long dataStartTime = Long.MAX_VALUE;
         int topLength = 0;
         for (int i = 0; i < 4; ++i) {
-            if (Data.START_TIMES[i] < dataStartTime) dataStartTime = Data.START_TIMES[i];
+            if (Data.COUNTER_DEVICES.get(i).start < dataStartTime) dataStartTime = Data.COUNTER_DEVICES.get(i).start;
             if (Data.PERCENTAGE_VALUES[i].length > topLength) topLength = Data.PERCENTAGE_VALUES[i].length;
-            dataStartTimes.add(Data.START_TIMES[i] / 60000 / Data.PERIOD);
+            dataStartTimes.add(Data.COUNTER_DEVICES.get(i).start / 60000 / Data.PERIOD);
             values.add(Data.PERCENTAGE_VALUES[i]);
-            dataTypes.add(Integer.parseInt(Data.TYPES[i]));
+            dataTypes.add(Data.COUNTER_DEVICES.get(i).type);
         }
 
         if (startTime < dataStartTime) startTime = dataStartTime;
@@ -829,6 +854,159 @@ public class API {
 
     private String getTypeShare( int id ) {
         return new JSONObject().put("share", Data.totalType(id, true).key / Data.totalFlat(true)).toString();
+    }
+
+    public void deviceCreate( HttpServerExchange exchange ) throws IOException {
+        FormData postData = getPOST(exchange);
+        if (postData == null) return;
+
+        FormData.FormValue serialData = postData.getFirst("serial");
+        FormData.FormValue typeData = postData.getFirst("type");
+        FormData.FormValue nextCheckData = postData.getFirst("nextCheck");
+        FormData.FormValue odnFlagData = postData.getFirst("odnFlag");
+        FormData.FormValue rateFlagData = postData.getFirst("rateFlag");
+        FormData.FormValue resolutionData = postData.getFirst("resolution");
+        FormData.FormValue transformData = postData.getFirst("transform");
+        FormData.FormValue periodicData = postData.getFirst("periodic");
+
+        if (serialData == null || serialData.getValue().isEmpty() ||
+                typeData == null || typeData.getValue().isEmpty() ||
+                nextCheckData == null || nextCheckData.getValue().isEmpty() ||
+                odnFlagData == null || odnFlagData.getValue().isEmpty() ||
+                rateFlagData == null || rateFlagData.getValue().isEmpty() ||
+                resolutionData == null || resolutionData.getValue().isEmpty() ||
+                transformData == null || transformData.getValue().isEmpty() ||
+                periodicData == null || periodicData.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            String serial = serialData.getValue();
+            int type = Integer.parseInt(typeData.getValue());
+            long nextCheck = Long.parseLong(nextCheckData.getValue());
+            int odnFlag = Integer.parseInt(odnFlagData.getValue());
+            int rateFlag = Integer.parseInt(rateFlagData.getValue());
+            int resolution = Integer.parseInt(resolutionData.getValue());
+            int transform = Integer.parseInt(transformData.getValue());
+            boolean periodic = Integer.parseInt(periodicData.getValue()) != 0;
+
+            try {
+                FormData.FormValue startData = postData.getFirst("start");
+                long start = Long.parseLong(startData.getValue());
+                Data.COUNTER_DEVICES.add(new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic, start));
+            } catch (Throwable e) {
+                Data.COUNTER_DEVICES.add(new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic));
+            }
+
+            Data.PAYMENTS.add(new ArrayList<Payment>());
+
+            return;
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
+    public void deviceRead( HttpServerExchange exchange ) throws IOException {
+        FormData postData = getPOST(exchange);
+        if (postData == null) return;
+
+        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+        exchange.getResponseSender().send("not implemented");
+    }
+
+    public void deviceUpdate( HttpServerExchange exchange ) throws IOException {
+        FormData postData = getPOST(exchange);
+        if (postData == null) return;
+
+        FormData.FormValue idData = postData.getFirst("id");
+        FormData.FormValue serialData = postData.getFirst("serial");
+        FormData.FormValue typeData = postData.getFirst("type");
+        FormData.FormValue nextCheckData = postData.getFirst("nextCheck");
+        FormData.FormValue odnFlagData = postData.getFirst("odnFlag");
+        FormData.FormValue rateFlagData = postData.getFirst("rateFlag");
+        FormData.FormValue resolutionData = postData.getFirst("resolution");
+        FormData.FormValue transformData = postData.getFirst("transform");
+        FormData.FormValue periodicData = postData.getFirst("periodic");
+
+        if (idData == null || idData.getValue().isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+
+            int id = Integer.parseInt(idData.getValue());
+
+            Counter counter = Data.COUNTER_DEVICES.get(id - 1);
+
+            try {
+                counter.id = serialData.getValue();
+            } catch (Throwable ignored) { }
+            try {
+                int type = Integer.parseInt(typeData.getValue());
+                counter.type = type;
+            } catch (Throwable ignored) { }
+            try {
+                long nextCheck = Long.parseLong(nextCheckData.getValue());
+                counter.nextCheck = nextCheck;
+            } catch (Throwable ignored) { }
+            try {
+                int odnFlag = Integer.parseInt(odnFlagData.getValue());
+                counter.odnFlag = odnFlag;
+            } catch (Throwable ignored) { }
+            try {
+                int rateFlag = Integer.parseInt(rateFlagData.getValue());
+                counter.rateFlag = rateFlag;
+            } catch (Throwable ignored) { }
+            try {
+                int resolution = Integer.parseInt(resolutionData.getValue());
+                counter.resolution = resolution;
+            } catch (Throwable ignored) { }
+            try {
+                int transform = Integer.parseInt(transformData.getValue());
+                counter.transform = transform;
+            } catch (Throwable ignored) { }
+            try {
+                boolean periodic = Integer.parseInt(periodicData.getValue()) != 0;
+                counter.periodic = periodic;
+            } catch (Throwable ignored) { }
+
+            return;
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
+    public void deviceDelete( HttpServerExchange exchange ) throws IOException {
+        FormData postData = getPOST(exchange);
+        if (postData == null) return;
+
+        FormData.FormValue idData = postData.getFirst("id");
+
+        if (idData == null || idData.getValue().isEmpty()) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(idData.getValue());
+
+            Data.COUNTER_DEVICES.get(id - 1).deleted = true;
+            return;
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
     }
 
     public void addDevice( HttpServerExchange exchange ) throws IOException {
@@ -1675,8 +1853,8 @@ public class API {
             id = Integer.parseInt(relPath.substring(1));
         } catch (Throwable ignored) { }
 
-        if (id > 0 && id <= Data.DELETED.length) {
-            Data.DELETED[id - 1] = true;
+        if (id > 0 && id <= Data.COUNTER_DEVICES.size()) {
+            Data.COUNTER_DEVICES.get(id - 1).deleted = true;
         }
 
         redirect(exchange, "/user");
@@ -1856,7 +2034,7 @@ public class API {
             int id = Integer.parseInt(deviceID.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeRates(Integer.parseInt(Data.TYPES[id - 1])));
+            exchange.getResponseSender().send(getTypeRates(Data.COUNTER_DEVICES.get(id - 1).type));
 
         } catch (Throwable e) {
             e.printStackTrace();

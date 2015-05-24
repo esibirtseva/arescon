@@ -105,10 +105,10 @@ public class Util {
     void getTypeLink( int type, Writer response, String link ) {
         try {
             switch (type) {
-                case 0: if (!Data.DELETED[0]) response.append(link); break;
-                case 1: if (!Data.DELETED[3]) response.append(link); break;
-                case 2: if (!Data.DELETED[2]) response.append(link); break;
-                case 3: if (!Data.DELETED[1]) response.append(link); break;
+                case 0: if (!Data.COUNTER_DEVICES.get(0).deleted) response.append(link); break;
+                case 1: if (!Data.COUNTER_DEVICES.get(3).deleted) response.append(link); break;
+                case 2: if (!Data.COUNTER_DEVICES.get(2).deleted) response.append(link); break;
+                case 3: if (!Data.COUNTER_DEVICES.get(1).deleted) response.append(link); break;
             }
         } catch (IOException ignored) { }
     }
@@ -171,7 +171,7 @@ public class Util {
         }
 
         Pair<Double, Integer> stats;
-        double multiplier = Data.getMoneyMultiplier(id > 0 ? Data.TYPES[id - 1] : Integer.toString(type));
+        double multiplier = Data.getMoneyMultiplier(id > 0 ? Data.COUNTER_DEVICES.get(id - 1).type : type);
         if (id > 0) stats = Data.totalDevice(id, false);
         else        stats = Data.totalType(type, false);
 
@@ -237,10 +237,12 @@ public class Util {
         Map<String, Map<String, String>> root = new HashMap<>();
         root.put("map", dataMap);
 
+        int id = -1;
+
         try {
-            int id = Integer.parseInt(relPath);
+            id = Integer.parseInt(relPath);
             for (; id < 5; id++) {
-                if (!Data.DELETED[id - 1]) {
+                if (!Data.COUNTER_DEVICES.get(id - 1).deleted) {
                     relPath = Integer.toString(id);
                     break;
                 }
@@ -249,92 +251,66 @@ public class Util {
         } catch (Throwable ignored) { }
 
         try {
-            switch (relPath) {
-                case "1": // water
-                    dataMap.put("deviceID", "1");
-                    dataMap.put("typeID", "");
-                    dataMap.put("image", "background-image:url(/images/water.jpg)");
-                    dataMap.put("name", "Счетчик Techem AP");
-                    dataMap.put("description", "Водосчетчик Techem серий АР для горячей и холодной воды");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "2": // fire
-                    dataMap.put("deviceID", "2");
-                    dataMap.put("typeID", "");
-                    dataMap.put("image", "background-image:url(/images/electro.jpg)");
-                    dataMap.put("name", "Счетчик однофазный СОЭ-52");
-                    dataMap.put("description", "Электросчётчики СОЭ-52 предназначены для учёта потребления " +
-                            "электроэнергии в двухпроводных цепях электрического тока в закрытых помещениях");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "3": // earth
-                    dataMap.put("deviceID", "3");
-                    dataMap.put("typeID", "");
-                    dataMap.put("image", "background-image:url(/images/gas.jpg)");
-                    dataMap.put("name", "Счетчик ГРАНД-25Т");
-                    dataMap.put("description", "Электронные бытовые счетчики газа ГРАНД-25Т предназначены для " +
-                            "измерения объема газа, расходуемого газопотребляющим оборудованием с суммарным" +
-                            " максимальным расходом до 25 м3/час");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "4": // air
-                    dataMap.put("deviceID", "4");
-                    dataMap.put("typeID", "");
-                    dataMap.put("image", "background-image:url(/images/water-2.jpeg)");
-                    dataMap.put("name", "Счетчик СВ-15 Х \"МЕТЕР\"");
-                    dataMap.put("description", "Счетчики воды крыльчатые СВ-15Х (одноструйные, сухоходные) " +
-                            "предназначены для измерения объема горячей воды, протекающей по трубопроводу при" +
-                            " температуре от 5°С до 90°С и рабочем давлении в водопроводной сети не более 1, 0 МПа");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "water":
-                    dataMap.put("deviceID", "");
-                    dataMap.put("typeID", "01");
-                    dataMap.put("image", "background-color:rgb(41,128,184)");
-                    dataMap.put("name", "Вода");
-                    dataMap.put("description", "Данные обо всех приборах данной услуги");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "gas":
-                    dataMap.put("deviceID", "");
-                    dataMap.put("typeID", "2");
-                    dataMap.put("image", "background-color:rgb(45,204,112)");
-                    dataMap.put("name", "Газ");
-                    dataMap.put("description", "Данные обо всех приборах данной услуги");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "heat":
-                    dataMap.put("deviceID", "");
-                    dataMap.put("typeID", "4");
-                    dataMap.put("image", "background-color:rgb(231,75,59)");
-                    dataMap.put("name", "Отопление");
-                    dataMap.put("description", "Данные обо всех приборах данной услуги");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "electricity":
-                    dataMap.put("deviceID", "");
-                    dataMap.put("typeID", "3");
-                    dataMap.put("image", "background-color:rgb(243,156,18)");
-                    dataMap.put("name", "Электричество");
-                    dataMap.put("description", "Данные обо всех приборах данной услуги");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "coldwater":
-                    dataMap.put("deviceID", "");
-                    dataMap.put("typeID", "0");
-                    dataMap.put("image", "background-color:rgb(41,128,184)");
-                    dataMap.put("name", "Холодная вода");
-                    dataMap.put("description", "Данные обо всех приборах данной услуги");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
-                case "hotwater":
-                    dataMap.put("deviceID", "");
-                    dataMap.put("typeID", "1");
-                    dataMap.put("image", "background-color:rgb(240,68,84)");
-                    dataMap.put("name", "Горячая вода");
-                    dataMap.put("description", "Данные обо всех приборах данной услуги");
-                    templates.getTemplated(root, "user.device_info.htm", response);
-                    break;
+
+            if (id > 0) {
+                Counter counter = Data.COUNTER_DEVICES.get(id - 1);
+                dataMap.put("deviceID", relPath);
+                dataMap.put("typeID", "");
+                dataMap.put("image", "background-image:url(" + Data.getTypeImage(counter.type) + ")");
+                dataMap.put("name", "Счетчик " + relPath);
+                dataMap.put("description", "");
+                templates.getTemplated(root, "user.device_info.htm", response);
+            } else {
+                switch (relPath) {
+                    case "water":
+                        dataMap.put("deviceID", "");
+                        dataMap.put("typeID", "01");
+                        dataMap.put("image", "background-color:rgb(41,128,184)");
+                        dataMap.put("name", "Вода");
+                        dataMap.put("description", "Данные обо всех приборах данной услуги");
+                        templates.getTemplated(root, "user.device_info.htm", response);
+                        break;
+                    case "gas":
+                        dataMap.put("deviceID", "");
+                        dataMap.put("typeID", "2");
+                        dataMap.put("image", "background-color:rgb(45,204,112)");
+                        dataMap.put("name", "Газ");
+                        dataMap.put("description", "Данные обо всех приборах данной услуги");
+                        templates.getTemplated(root, "user.device_info.htm", response);
+                        break;
+                    case "heat":
+                        dataMap.put("deviceID", "");
+                        dataMap.put("typeID", "4");
+                        dataMap.put("image", "background-color:rgb(231,75,59)");
+                        dataMap.put("name", "Отопление");
+                        dataMap.put("description", "Данные обо всех приборах данной услуги");
+                        templates.getTemplated(root, "user.device_info.htm", response);
+                        break;
+                    case "electricity":
+                        dataMap.put("deviceID", "");
+                        dataMap.put("typeID", "3");
+                        dataMap.put("image", "background-color:rgb(243,156,18)");
+                        dataMap.put("name", "Электричество");
+                        dataMap.put("description", "Данные обо всех приборах данной услуги");
+                        templates.getTemplated(root, "user.device_info.htm", response);
+                        break;
+                    case "coldwater":
+                        dataMap.put("deviceID", "");
+                        dataMap.put("typeID", "0");
+                        dataMap.put("image", "background-color:rgb(41,128,184)");
+                        dataMap.put("name", "Холодная вода");
+                        dataMap.put("description", "Данные обо всех приборах данной услуги");
+                        templates.getTemplated(root, "user.device_info.htm", response);
+                        break;
+                    case "hotwater":
+                        dataMap.put("deviceID", "");
+                        dataMap.put("typeID", "1");
+                        dataMap.put("image", "background-color:rgb(240,68,84)");
+                        dataMap.put("name", "Горячая вода");
+                        dataMap.put("description", "Данные обо всех приборах данной услуги");
+                        templates.getTemplated(root, "user.device_info.htm", response);
+                        break;
+                }
             }
         } catch (TemplateException | IOException e) {
             e.printStackTrace();
@@ -354,7 +330,7 @@ public class Util {
         try {
             int id = Integer.parseInt(relPath);
             for (; id < 5; id++) {
-                if (!Data.DELETED[id - 1]) {
+                if (!Data.COUNTER_DEVICES.get(id - 1).deleted) {
                     relPath = Integer.toString(id);
                     break;
                 }
@@ -363,62 +339,25 @@ public class Util {
         } catch (Throwable ignored) { }
 
         try {
-            switch (type) {
-                case 0: // water
-                    if (!Data.DELETED[0]) {
-                        dataMap.put("active", relPath.equals("1") && pickActives ? " active" : "");
-                        dataMap.put("deviceID", "1");
-                        dataMap.put("name", "Счетчик Techem AP");
-                        dataMap.put("type", "Холодная вода");
-                        dataMap.put("status", "good");
-                        dataMap.put("status_icon", "ok");
-                        templates.getTemplated(root, "user.device.htm", response);
-                    } else {
-                        response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
-                    }
-                    break;
-                case 1:
-                    if (!Data.DELETED[3]) {
-                        dataMap.put("active", relPath.equals("4") && pickActives ? " active" : "");
-                        dataMap.put("deviceID", "4");
-                        dataMap.put("name", "Счетчик СВ-15 Х \"МЕТЕР\"");
-                        dataMap.put("type", "Горячая вода");
-                        dataMap.put("status", "good");
-                        dataMap.put("status_icon", "ok");
-                        templates.getTemplated(root, "user.device.htm", response);
-                    } else {
-                        response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
-                    }
-                    break;
-                case 2: // fire
-                    if (!Data.DELETED[2]) {
-                        dataMap.put("active", relPath.equals("3") && pickActives ? " active" : "");
-                        dataMap.put("deviceID", "3");
-                        dataMap.put("name", "Счетчик ГРАНД-25Т");
-                        dataMap.put("type", "");
-                        dataMap.put("status", "wait");
-                        dataMap.put("status_icon", "warning-sign");
-                        templates.getTemplated(root, "user.device.htm", response);
-                    } else {
-                        response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
-                    }
-                    break;
-                case 3: // earth
-                    if (!Data.DELETED[1]) {
-                        dataMap.put("active", relPath.equals("2") && pickActives ? " active" : "");
-                        dataMap.put("deviceID", "2");
-                        dataMap.put("name", "Счетчик однофазный СОЭ-52");
-                        dataMap.put("type", "");
-                        dataMap.put("status", "bad");
-                        dataMap.put("status_icon", "remove");
-                        templates.getTemplated(root, "user.device.htm", response);
-                    } else {
-                        response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
-                    }
-                    break;
-                case 4: // air
-                    response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
-                    break;
+
+            boolean found = false;
+            int i = 0;
+            for (Counter counter : Data.COUNTER_DEVICES) {
+                if (counter.type == type && !counter.deleted && (i < 4 || i > 23)) {
+                    dataMap.put("active", relPath.equals(Integer.toString(i + 1)) && pickActives ? " active" : "");
+                    dataMap.put("deviceID", Integer.toString(i + 1));
+                    dataMap.put("name", "Счетчик " + counter.id);
+                    dataMap.put("type", Data.getTypeName(counter.type));
+                    dataMap.put("status", "good");
+                    dataMap.put("status_icon", "ok");
+                    templates.getTemplated(root, "user.device.htm", response);
+                    found = true;
+                }
+                ++i;
+            }
+
+            if (!found) {
+                response.append("<h5 style=\"text-align: center;\">Нет подключенных приборов</h5>");
             }
         } catch (TemplateException | IOException e) {
             e.printStackTrace();

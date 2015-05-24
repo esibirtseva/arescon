@@ -185,6 +185,30 @@ public class Main {
             return;
         }
 
+        paths.put("device/create", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceCreate(exchange);
+            }
+        });
+        paths.put("device/read", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceRead(exchange);
+            }
+        });
+        paths.put("device/update", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceUpdate(exchange);
+            }
+        });
+        paths.put("device/delete", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.deviceDelete(exchange);
+            }
+        });
         paths.put("service/create", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {

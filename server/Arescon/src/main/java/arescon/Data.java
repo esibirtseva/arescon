@@ -31,13 +31,38 @@ public class Data {
         return -1;
     }
 
+    public static String getTypeName( int type ) {
+        switch (type) {
+            case 0: return "Холодная вода";
+            case 1: return "Горячая вода";
+            case 2: return ""; // gas
+            case 3: return ""; // electricity
+            case 4: return "";
+        }
+
+        return "";
+    }
+
+    public static String getTypeImage( int type ) {
+        switch (type) {
+            case 0: return "/images/water.jpg";
+            case 1: return "/images/water-2.jpeg";
+            case 2: return "/images/gas.jpg";
+            case 3: return "/images/electro.jpg";
+            case 4: return "";
+        }
+
+        return "";
+    }
+
     public static Pair<Double, Integer> totalDevice( int id, boolean money ) {
         double total = 0.0;
-        double multiplier = money ? getMoneyMultiplier(TYPES[id - 1]) : 1.0;
-        for (double value : VALUES[id - 1]) {
-            total += value * multiplier;
+        Counter counter = COUNTER_DEVICES.get(id - 1);
+        double multiplier = money ? getMoneyMultiplier(counter.type) : 1.0;
+        for (CounterValue value : counter.values) {
+            total += value.value * multiplier;
         }
-        return new Pair<>(total, VALUES[id - 1].length);
+        return new Pair<>(total, counter.values.size());
     }
 
     public static Pair<Double, Integer> totalType( int type, boolean money ) {
@@ -65,25 +90,7 @@ public class Data {
     }
 
     public static final long PERIOD = 5;
-    public static final boolean[] DELETED = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
-    public static final long[] START_TIMES = { 1409592882825l, 1409592883717l, 1409592884343l, 1409592884494l, 1409592884612l, 1409592884735l, 1409592884846l, 1409592884962l, 1409592885040l, 1409592885130l, 1409592885209l, 1409592885290l, 1409592882825l, 1409592883717l, 1409592884343l, 1409592884494l, 1409592884612l, 1409592884735l, 1409592884846l, 1409592884962l, 1409592885040l, 1409592885130l, 1409592885209l, 1409592885290l };
-    public static final String[] TYPES = { "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2", "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2" };
-    public static final String[] MEASURES = { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
-    public static final String[] NAMES = { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
-    public static final double[][] VALUES = {
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ },
-            { },{ }
-    };
+
     public static final double[][] PERCENTAGE_VALUES = {
             { },{ },
             { },{ },
@@ -101,6 +108,8 @@ public class Data {
     public static final List<List<Payment>> PAYMENTS = new ArrayList<>(24);
     public static final List<List<Rate>> RATES = new ArrayList<>(4);
 
+    public static final List<Counter> COUNTER_DEVICES = new ArrayList<>(10);
+
     public static double getMoneyMultiplier( final String type ) {
         switch (type) {
             case "0": return 0.02916;
@@ -111,9 +120,13 @@ public class Data {
         }
     }
 
+    public static double getMoneyMultiplier( final int type ) {
+        return getMoneyMultiplier(Integer.toString(type));
+    }
+
     public static void reboot( ) {
-        for (int i = 0; i < DELETED.length; ++i) {
-            DELETED[i] = false;
+        for (Counter counter : COUNTER_DEVICES) {
+            counter.deleted = false;
         }
 
         DEVIATION_RECORDS = new DeviationRecord[maxLength];
@@ -125,34 +138,61 @@ public class Data {
     }
 
     static {
+
+        // 1409592882825l
+        // public static final String[] TYPES = { "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2", "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2" };
+
+        COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("2", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("3", 2, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("4", 1, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("5", 1, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("6", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("7", 2, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("8", 0, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("9", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("10", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("11", 1, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("12", 2, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("13", 0, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("14", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("15", 2, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("16", 1, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("17", 1, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("18", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("19", 2, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("20", 0, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("21", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("22", 3, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("23", 1, 0, 0, 1, 1, 1, true, 1409592882825l));
+        COUNTER_DEVICES.add(new Counter("24", 2, 0, 0, 1, 1, 1, true, 1409592882825l));
+
         double multiplier = 0;
         try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream("data.txt"), Charset.forName("UTF-8")))) {
-            for (int i = 0; i < VALUES.length; ++i) {
-                switch (TYPES[i]) {
-                    case "0":
+            for (int i = 0; i < COUNTER_DEVICES.size(); ++i) {
+                switch (COUNTER_DEVICES.get(i).type) {
+                    case 0:
                         multiplier = 1.9; // л холодной воды за 5 минут на 3 человек * 2
                         break;
-                    case "1":
+                    case 1:
                         multiplier = 1.21875; // л горячей воды за 5 минут на 3 человек * 2
                         break;
-                    case "2":
+                    case 2:
                         multiplier = 2.2916; // л газа за 5 минут на 2.2 человек * 2
                         break;
-                    case "3":
+                    case 3:
                         multiplier = 0.05787; // кВтч электроэнергии за 5 минут на 3 человек * 2
                         break;
                 }
                 String[] line = input.readLine().split(", ");
-                VALUES[i] = new double[line.length * 2];
                 PERCENTAGE_VALUES[i] = new double[line.length * 2];
                 if (line.length * 2 > maxLength) maxLength = line.length * 2;
                 for (int j = 0; j < line.length * 2; ++j) {
-                    //VALUES[i][j] = Double.parseDouble(line[j]);
-                    VALUES[i][j] = random.nextDouble() * multiplier;
+                    COUNTER_DEVICES.get(i).addValue(random.nextDouble() * multiplier);
                     PERCENTAGE_VALUES[i][j] = random.nextDouble();
                 }
 
-                PAYMENTS.add(Payment.generate(START_TIMES[i], VALUES[i], getMoneyMultiplier(TYPES[i]), PERIOD * 60 * 1000));
+                PAYMENTS.add(Payment.generate(COUNTER_DEVICES.get(i), getMoneyMultiplier(COUNTER_DEVICES.get(i).type)));
             }
         } catch (IOException e) { e.printStackTrace(); }
 
@@ -165,13 +205,13 @@ public class Data {
 
         for (int i = 0; i < 4; ++i) {
             List<Rate> list = new ArrayList<>(3);
-            list.add(new Rate(new DateTime(START_TIMES[0]).minusMonths(1).getMillis(),
-                    new DateTime(START_TIMES[0]).plusMonths(3).getMillis(),
+            list.add(new Rate(new DateTime(1409592882825l).minusMonths(1).getMillis(),
+                    new DateTime(1409592882825l).plusMonths(3).getMillis(),
                     0.78 * getMoneyMultiplier(Integer.toString(i)) * (i == 3 ? 1 : 1000)));
-            list.add(new Rate(new DateTime(START_TIMES[0]).plusMonths(3).getMillis(),
-                    new DateTime(START_TIMES[0]).plusMonths(6).getMillis(),
+            list.add(new Rate(new DateTime(1409592882825l).plusMonths(3).getMillis(),
+                    new DateTime(1409592882825l).plusMonths(6).getMillis(),
                     0.88 * getMoneyMultiplier(Integer.toString(i)) * (i == 3 ? 1 : 1000)));
-            list.add(new Rate(new DateTime(START_TIMES[0]).plusMonths(6).getMillis(), 0,
+            list.add(new Rate(new DateTime(1409592882825l).plusMonths(6).getMillis(), 0,
                     1.00 * getMoneyMultiplier(Integer.toString(i)) * (i == 3 ? 1 : 1000)));
             RATES.add(list);
         }
@@ -217,7 +257,6 @@ public class Data {
 
         company = new Company(1);
         for (HA ha : HAs) company.addHA(ha);
-
     }
 
 }
