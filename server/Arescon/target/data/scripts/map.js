@@ -363,21 +363,25 @@ var addItem = function(el, depth, parentId) {
 
     switch (depth) {
         case 0:
+            $('.another-form-group').hide();
             itemType = "ТСЖ";
             labelText = 'Имя';
             url = '/tszh/create';
             break;
         case 1:
+            $('.another-form-group').hide();
             itemType = "дом";
             labelText = 'Адрес';
             url = '/house/create';
             break;
         case 2:
+            $('.another-form-group').hide();
             itemType = "квартиру";
             labelText = 'Номер квартиры';
             url = '/flat/create';
             break;
         case 3:
+            $('.another-form-group').show();
             itemType = "услугу";
             labelText = 'Номер счетчика';
             url = '/service/create';
@@ -538,6 +542,11 @@ var appendTreeInfoLevel0 = function(obj) {
 window.onload = function(){
     var map_container = $('#map');
     map_container.height(map_container.width());
+
+    $('#device_on_datetime').datetimepicker({ lang:'ru', step:5 });
+    $('#device_off_datetime').datetimepicker({ lang:'ru', step:5 });
+    $('#next_checking_date').datetimepicker({ lang:'ru', timepicker: false, format: 'd.m.Y' });
+    $('#manual_mode_datetime').datetimepicker({ lang:'ru', step:5 });
 
     $.post('/dispatcher_tree', {start: '0', end: '99999999999999'}, function (data) {
         var obj = JSON.parse(data);
