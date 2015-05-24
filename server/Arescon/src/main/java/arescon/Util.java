@@ -257,7 +257,7 @@ public class Util {
                 dataMap.put("deviceID", relPath);
                 dataMap.put("typeID", "");
                 dataMap.put("image", "background-image:url(" + Data.getTypeImage(counter.type) + ")");
-                dataMap.put("name", "Счетчик " + relPath);
+                dataMap.put("name", counter.name);
                 dataMap.put("description", "");
                 templates.getTemplated(root, "user.device_info.htm", response);
             } else {
@@ -346,7 +346,7 @@ public class Util {
                 if (counter.type == type && !counter.deleted && (i < 4 || i > 23)) {
                     dataMap.put("active", relPath.equals(Integer.toString(i + 1)) && pickActives ? " active" : "");
                     dataMap.put("deviceID", Integer.toString(i + 1));
-                    dataMap.put("name", "Счетчик " + counter.id);
+                    dataMap.put("name", counter.name);
                     dataMap.put("type", Data.getTypeName(counter.type));
                     dataMap.put("status", "good");
                     dataMap.put("status_icon", "ok");

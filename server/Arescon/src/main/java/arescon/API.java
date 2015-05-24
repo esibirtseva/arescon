@@ -861,6 +861,7 @@ public class API {
         if (postData == null) return;
 
         FormData.FormValue serialData = postData.getFirst("serial");
+        FormData.FormValue nameData = postData.getFirst("name");
         FormData.FormValue typeData = postData.getFirst("type");
         FormData.FormValue nextCheckData = postData.getFirst("nextCheck");
         FormData.FormValue odnFlagData = postData.getFirst("odnFlag");
@@ -870,6 +871,7 @@ public class API {
         FormData.FormValue periodicData = postData.getFirst("periodic");
 
         if (serialData == null || serialData.getValue().isEmpty() ||
+                nameData == null || nameData.getValue().isEmpty() ||
                 typeData == null || typeData.getValue().isEmpty() ||
                 nextCheckData == null || nextCheckData.getValue().isEmpty() ||
                 odnFlagData == null || odnFlagData.getValue().isEmpty() ||
@@ -884,6 +886,7 @@ public class API {
 
         try {
             String serial = serialData.getValue();
+            String name = nameData.getValue();
             int type = Integer.parseInt(typeData.getValue());
             long nextCheck = Long.parseLong(nextCheckData.getValue());
             int odnFlag = Integer.parseInt(odnFlagData.getValue());
@@ -895,12 +898,14 @@ public class API {
             try {
                 FormData.FormValue startData = postData.getFirst("start");
                 long start = Long.parseLong(startData.getValue());
-                Data.COUNTER_DEVICES.add(new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic, start));
+                Data.COUNTER_DEVICES.add(new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic, start, name));
             } catch (Throwable e) {
-                Data.COUNTER_DEVICES.add(new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic));
+                Data.COUNTER_DEVICES.add(new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic, name));
             }
 
             Data.PAYMENTS.add(new ArrayList<Payment>());
+
+            Data.userFlat.addDevice(Data.COUNTER_DEVICES.size());
 
             return;
 
