@@ -58,6 +58,11 @@ window.onload = function(){
     // to update frequency select by hiding some options
     periodItemsFilter($('input[name="daterange"]').data('daterangepicker'));
 
+    $('#device_on_datetime').datetimepicker({ lang:'ru', step:5 });
+    $('#device_off_datetime').datetimepicker({ lang:'ru', step:5 });
+    $('#next_checking_date').datetimepicker({ lang:'ru', timepicker: false, format: 'd.m.Y' });
+    $('#manual_mode_datetime').datetimepicker({ lang:'ru', step:5 });
+
     var currentRoute = getLastParamUrl();
     var period = $("#period").val();
     if ($('.device.active').length > 0){

@@ -349,55 +349,260 @@ $('input[name=type_select]:radio').change(
     }
 );
 
+// helper function for services
+var addItem = function(el, depth, parentId) {
+    var itemType,
+        labelText,
+        url,
+        parentItemName = $(el).parent().children('span').text();
+
+//    console.log("Глубина:" + depth);
+//    console.log("ИД папы:" + parentId);
+
+    var modal = $("#exampleModal");
+
+    switch (depth) {
+        case 0:
+            $('.another-form-group').hide();
+            itemType = "ТСЖ";
+            labelText = 'Имя';
+            url = '/tszh/create';
+            break;
+        case 1:
+            $('.another-form-group').hide();
+            itemType = "дом";
+            labelText = 'Адрес';
+            url = '/house/create';
+            break;
+        case 2:
+            $('.another-form-group').hide();
+            itemType = "квартиру";
+            labelText = 'Номер квартиры';
+            url = '/flat/create';
+            break;
+        case 3:
+            $('.another-form-group').show();
+            itemType = "услугу";
+            labelText = 'Номер счетчика';
+            url = '/service/create';
+            break;
+    }
+
+    modal.find('.modal-title').text('Добавить ' + itemType + ' для ' + parentItemName);
+    modal.find('.control-label').text(labelText + ':');
+    modal.modal('show');
+
+    $(".modal-footer .btn-primary").on("click", function (event) {
+        var obj = {"parentID": parentId},
+            types = {
+                'coldwater': 0,
+                'hotwater': 1,
+                'gas': 2,
+                'electricity': 3,
+                'heat': 4
+            };
+
+        switch (depth) {
+            case 0:
+                obj.name = $('#element-name').val();
+                break;
+            case 1:
+                obj.address = $('#element-name').val();
+                obj.x = 'x_coord'; // don't know how to set it
+                obj.y = 'y_coord'; // don't know how to set it
+                break;
+            case 2:
+                obj.number = $('#element-name').val();
+                break;
+            case 3:
+                obj.number = $('#element-name').val(); // optional for server now
+                obj.type = types[$("input[name='type_select']:checked").val()];
+                break;
+        }
+
+        $.post(url, obj, function (data) {
+            //alert("Элемент " + $('#element-name').val() + " добавлен");
+        });
+
+        modal.modal('hide');
+
+        $(this).off(event);
+    });
+};
+
+// helper function for services
+var findPurpose = function(object, name, value) {
+    for (var key in object) {
+        if (object[key][name] == value)
+            return object[key]; // Return as soon as the object is found
+    }
+    return null; // The object was not found
+};
+
+// services
+var appendTreeInfoLevel4 = function(obj, selector) {
+    $.each(obj, function (index, item) {
+        $(selector + " .devices").append('<div id="device' + item.id + '" class="item row" data-id="10">' +
+            '<p class="col-xs-3"><span class="device_green">&#9679;</span> ' + findPurpose(devices, 'type', item.type).measure + ' </p>' +
+            '<div class="balance col-xs-2" data-income="692">692</div>' +
+            '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
+            '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
+            '<div class="balance negative col-xs-2" data-odn="666">666</div>' +
+            '<a class="col-xs-1" href="/dreports?selectiontype=4&id=' + item.id + '&type=' + item.type + '">получить отчет</a>' +
+            '</div>');
+    });
+};
+
+// flats
+var appendTreeInfoLevel3 = function(obj, selector) {
+    $.each(obj, function (index, item) {
+        $(selector + " .apartments").append('<div id="apartment' + item.id + '" class="item row" data-id="2">' +
+            '<p class="col-xs-3">' +
+            '<span>' + 'Квартира: ' + item.number + '</span>' +
+            '<img src="../images/plus-circle-outline.png" onclick="addItem(this, 3, ' + item.id + ')"/>' +
+            '</p>' +
+            '<div class="balance col-xs-2" data-income="692">692</div>' +
+            '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
+            '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
+            '<div class="balance negative col-xs-2" data-odn="666">666</div>' +
+            '<a class="col-xs-1" href="/dreports?selectiontype=3&id=' + item.id + '">получить отчет</a>' +
+            '<div style="clear: both;"></div>' +
+            '<div class="devices nested" style="display:none;">' +
+            '</div>' +
+            '</div>');
+
+        appendTreeInfoLevel4(item.services, '#apartment' + item.id);
+
+    });
+};
+
+// houses
+var appendTreeInfoLevel2 = function(obj, selector) {
+    $.each(obj, function (index, item) {
+        $(selector + " .houses").append('<div id="house' + item.id + '" class="item row" data-id="4" data-x="' + item.x + '" data-y="' + item.y + '">' +
+            '<p class="col-xs-3">' +
+            '<span>' + item.address + '</span>' +
+            '<img src="../images/plus-circle-outline.png" onclick="addItem(this, 2, ' + item.id + ')"/>' +
+            '</p>' +
+            '<div class="balance col-xs-2" data-income="692">692</div>' +
+            '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
+            '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
+            '<div class="balance negative col-xs-2" data-odn="666">666</div>' +
+            '<a class="col-xs-1" href="/dreports?selectiontype=2&id=4">получить отчет</a>' +
+            '<div style="clear: both;"></div>' +
+            '<div class="apartments nested" style="display:none;">' +
+            '</div>' +
+            '</div>');
+
+        appendTreeInfoLevel3(item.flats, '#house' + item.id);
+
+    });
+};
+
+// ТСЖ
+var appendTreeInfoLevel1 = function(obj) {
+    $.each(obj, function (index, item) {
+        $(".tszhs").append('<div id="tszh' + item.id + '" class="item row" data-id="2">' +
+            '<p class="col-xs-3">' +
+            '<span>' + item.name + '</span>' +
+            '<img src="../images/plus-circle-outline.png" onclick="addItem(this, 1, ' + item.id + ')"/>' +
+            '</p>' +
+            '<div class="balance col-xs-2" data-income="692">692</div>' +
+            '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
+            '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
+            '<div class="balance negative col-xs-2" data-odn="666">666</div>' +
+            '<a class="col-xs-1" href="/dreports?selectiontype=1&id=' + item.id + '">получить отчет</a>' +
+            '<div style="clear: both;"></div>' +
+            '<div class="houses nested" style="display:none;">' +
+            '</div>' +
+            '</div>');
+
+        appendTreeInfoLevel2(item.houses, '#tszh' + item.id);
+
+    });
+};
+
+var appendTreeInfoLevel0 = function(obj) {
+    $(".company").append('<div class="item active row">' +
+        '<p class="col-xs-3">' +
+        '<span>Управляющая компания</span>' +
+        '<img src="../images/plus-circle-outline.png" onclick="addItem(this, 0, ' + obj.id + ')"/>' +
+        '</p>' +
+        '<div class="balance col-xs-2" data-income="692">692</div>' +
+        '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
+        '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
+        '<div class="balance negative col-xs-2" data-odn="666">666</div>' +
+        '<a class="col-xs-1" href="/dreports?selectiontype=0&id=' + obj.id + '">получить отчет</a>' +
+        '</div>');
+
+    // ТСЖ
+    appendTreeInfoLevel1(obj.HAs);
+};
+
 window.onload = function(){
     var map_container = $('#map');
     map_container.height(map_container.width());
 
-    if (typeof ymaps == 'undefined') return;
-    ymaps.ready(function(){
-        myMap = new ymaps.Map('map', {
-            center: [55.76, 37.64],
-            zoom: 10
+    $('#device_on_datetime').datetimepicker({ lang:'ru', step:5 });
+    $('#device_off_datetime').datetimepicker({ lang:'ru', step:5 });
+    $('#next_checking_date').datetimepicker({ lang:'ru', timepicker: false, format: 'd.m.Y' });
+    $('#manual_mode_datetime').datetimepicker({ lang:'ru', step:5 });
+
+    $.post('/dispatcher_tree', {start: '0', end: '99999999999999'}, function (data) {
+        var obj = JSON.parse(data);
+
+        appendTreeInfoLevel0(obj);
+
+        $('.tszhs .item>p').click(function(){
+            $(this).siblings(".nested").toggleClass("dblock");//.toggleClass("active").removeClass("red");
         });
-        myMap.controls.remove('geolocationControl');
-        myMap.controls.remove('searchControl');
-        myMap.controls.remove('routeEditor');
-        myMap.controls.remove('trafficControl');
-        myMap.controls.remove('fullscreenControl');
-        myMap.controls.remove('typeSelector');
 
-        //do all staff
-        dataset = new Dataset();
-        dataset.parseData();
-        var res = ymaps.util.bounds.getCenterAndZoom(
-            dataset.getCoordinatesForCenter(),
-            [$('.map').width(), $('.map').height()]
-        );
-        myMap.setCenter(res.center, res.zoom);
-        dataset.init();
+        if (typeof ymaps == 'undefined') return;
+        ymaps.ready(function(){
+            myMap = new ymaps.Map('map', {
+                center: [55.76, 37.64],
+                zoom: 10
+            });
+            myMap.controls.remove('geolocationControl');
+            myMap.controls.remove('searchControl');
+            myMap.controls.remove('routeEditor');
+            myMap.controls.remove('trafficControl');
+            myMap.controls.remove('fullscreenControl');
+            myMap.controls.remove('typeSelector');
+
+            //do all staff
+            dataset = new Dataset();
+            dataset.parseData();
+            var res = ymaps.util.bounds.getCenterAndZoom(
+                dataset.getCoordinatesForCenter(),
+                [$('.map').width(), $('.map').height()]
+            );
+            myMap.setCenter(res.center, res.zoom);
+            dataset.init();
+        });
+
+
+
+        $('.company>.item>p').click(function(){
+            dataset.removeHighlight();
+        });
+        $('.tszhs>.item>p').click(function(){
+            dataset.removeHighlight();
+            var id = $(this).parent().data('id');
+            var tszh = dataset.find(1, id);
+            if (tszh !== null) tszh.highlight();
+        });
+        $('.houses>.item>p').click(function(){
+            dataset.removeHighlight();
+            var id = $(this).parent().data('id');
+            var house = dataset.find(2, id);
+            if (house !== null) house.highlight();
+        });
+
+        // fire radio button event change
+        $('input[name=type_select]:radio').change();
     });
-
-
-
-    $('.company>.item>p').click(function(){
-        dataset.removeHighlight();
-    });
-    $('.tszhs>.item>p').click(function(){
-        dataset.removeHighlight();
-        var id = $(this).parent().data('id');
-        var tszh = dataset.find(1, id);
-        if (tszh !== null) tszh.highlight();
-    });
-    $('.houses>.item>p').click(function(){
-        dataset.removeHighlight();
-        var id = $(this).parent().data('id');
-        var house = dataset.find(2, id);
-        if (house !== null) house.highlight();
-    });
-
-    // fire radio button event change
-    $('input[name=type_select]:radio').change();
-}
+};
 
 $(window).resize(function(){
     var map_container = $('#map');

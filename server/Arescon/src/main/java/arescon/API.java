@@ -930,6 +930,7 @@ public class API {
 
         FormData.FormValue idData = postData.getFirst("id");
         FormData.FormValue serialData = postData.getFirst("serial");
+        FormData.FormValue nameData = postData.getFirst("name");
         FormData.FormValue typeData = postData.getFirst("type");
         FormData.FormValue nextCheckData = postData.getFirst("nextCheck");
         FormData.FormValue odnFlagData = postData.getFirst("odnFlag");
@@ -951,6 +952,9 @@ public class API {
 
             try {
                 counter.id = serialData.getValue();
+            } catch (Throwable ignored) { }
+            try {
+                counter.name = nameData.getValue();
             } catch (Throwable ignored) { }
             try {
                 int type = Integer.parseInt(typeData.getValue());
