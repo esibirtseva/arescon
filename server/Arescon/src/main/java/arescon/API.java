@@ -48,12 +48,10 @@ public class API {
 
     FormData getPOST( HttpServerExchange exchange ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
-            exchange.getResponseSender().send("error");
             return null;
         }
         FormData postData = UndertowUtil.parsePostData(exchange);
         if (postData == null) {
-            exchange.getResponseSender().send("error");
             return null;
         }
 
@@ -858,7 +856,10 @@ public class API {
 
     public void deviceCreate( HttpServerExchange exchange ) throws IOException {
         FormData postData = getPOST(exchange);
-        if (postData == null) return;
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
 
         FormData.FormValue serialData = postData.getFirst("serial");
         FormData.FormValue nameData = postData.getFirst("name");
@@ -918,7 +919,10 @@ public class API {
 
     public void deviceRead( HttpServerExchange exchange ) throws IOException {
         FormData postData = getPOST(exchange);
-        if (postData == null) return;
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
 
         exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
         exchange.getResponseSender().send("not implemented");
@@ -926,7 +930,10 @@ public class API {
 
     public void deviceUpdate( HttpServerExchange exchange ) throws IOException {
         FormData postData = getPOST(exchange);
-        if (postData == null) return;
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
 
         FormData.FormValue idData = postData.getFirst("id");
         FormData.FormValue serialData = postData.getFirst("serial");
@@ -996,7 +1003,10 @@ public class API {
 
     public void deviceDelete( HttpServerExchange exchange ) throws IOException {
         FormData postData = getPOST(exchange);
-        if (postData == null) return;
+        if (postData == null) {
+            deleteDevice(exchange);
+            return;
+        }
 
         FormData.FormValue idData = postData.getFirst("id");
 
@@ -1008,7 +1018,9 @@ public class API {
         try {
             int id = Integer.parseInt(idData.getValue());
 
-            Data.COUNTER_DEVICES.get(id - 1).deleted = true;
+            if (id > 0 && id <= Data.COUNTER_DEVICES.size()) {
+                Data.COUNTER_DEVICES.get(id - 1).deleted = true;
+            }
             return;
 
         } catch (Throwable e) {
