@@ -48,6 +48,27 @@ var typeMap = [
     }
 ]
 
+var fillImpulseCombo = function() {
+    // add options for impulse counters list of combobox
+    $.post('/impulse/read', {'onlyFree': '1'}, function (data) {
+        var arrayOfItems = JSON.parse(data);
+
+        $.each(arrayOfItems, function(key, item) {
+            $('#device_impulse')
+                .append($("<option></option>")
+                    .attr("value",item.id)
+                    .text(item.name));
+        });
+    });
+};
+
+var addImpulseItem = function() {
+    $.post('/impulse/create', {'name': $('#new-impulse-device').val(), 'ip': 'lala', 'ports': 2 }, function (data) {
+        $('#device_impulse').html('');
+        fillImpulseCombo();
+    });
+};
+
 var currentRoute;//odn
 var odnDataSet = [];
 var currentPageData;//new meta!
@@ -63,17 +84,7 @@ window.onload = function(){
     $('#next_checking_date').datetimepicker({ lang:'ru', timepicker: false, format: 'd.m.Y' });
     $('#manual_mode_datetime').datetimepicker({ lang:'ru', step:5 });
 
-    // add options for impulse counters list of combobox
-    $.post('/impulse/read', {'onlyFree': '1'}, function (data) {
-        var arrayOfItems = JSON.parse(data);
-
-        $.each(arrayOfItems, function(key, item) {
-            $('#device_impulse')
-                .append($("<option></option>")
-                    .attr("value",item.id)
-                    .text(item.name));
-        });
-    });
+    fillImpulseCombo();
 
     var currentRoute = getLastParamUrl();
     var period = $("#period").val();
@@ -266,6 +277,28 @@ $('.remove_device').click(function(e){
         }
     });   
     e.preventDefault();
+});
+
+$('#device-add').click(function() {
+    var obj = {};
+    obj.name = $('#device_name').val();
+    obj.serial = $('#device_serial').val();
+    obj.type = $('#device_type').val();
+    obj.impulseID = $('#device_impulse').val();
+    //device_on_datetime
+    //device_off_datetime
+    obj.nextCheck = parseRusDate($('#next_checking_date').val()).getTime();
+    //manual_mode_datetime
+    //manual_mode_value
+    obj.odnFlag = $('#home_common_counter_flag').val();
+    obj.rateFlag = $('#tariff').val();
+    obj.resolution = $('#device_capacity').val();
+    obj.transform = $('#transformation_coefficient').val();
+    obj.periodic = $('#values_registration_way').val();
+
+    $.post('/device/create', obj, function(data){
+        location.reload();
+    });
 });
  
 
@@ -835,4 +868,9 @@ var getTimeFormatddmmyyyy = function(date_ms){
     var current_date = new Date(date_ms);
     var date_str = current_date.getDate() + "." + (current_date.getMonth()+1) + "." + current_date.getFullYear();
     return date_str;
+}
+
+var parseRusDate = function(date_str){
+    var dtArr = date_str.split('.');
+    return new Date(dtArr[2], parseInt(dtArr[1])-1, dtArr[0]);
 }
