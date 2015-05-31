@@ -12,12 +12,16 @@ public class ImpulseCounter {
     public int occupied;
     public int id;
 
-    public ImpulseCounter( final String ip, final int ports ) {
+    public ImpulseCounter( final String name, final String ip, final int ports ) {
         this.ip = ip;
         this.ports = ports;
         this.occupied = 0;
         this.id = ++counter;
-        this.name = "";
+        this.name = name;
+    }
+
+    public ImpulseCounter( final String ip, final int ports ) {
+        this("", ip, ports);
     }
 
     public JSONObject toJSON( ) {

@@ -191,6 +191,12 @@ public class Main {
                 api.impulseCounterRead(exchange);
             }
         });
+        paths.put("impulse/create", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.impulseCounterCreate(exchange);
+            }
+        });
 
         paths.put("device/create", new HttpHandler() {
             @Override

@@ -1030,6 +1030,41 @@ public class API {
         exchange.getResponseSender().send("error");
     }
 
+    public void impulseCounterCreate( HttpServerExchange exchange ) throws IOException {
+        FormData postData = getPOST(exchange);
+        if (postData == null) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        FormData.FormValue ipData = postData.getFirst("ip");
+        FormData.FormValue nameData = postData.getFirst("name");
+        FormData.FormValue portsData = postData.getFirst("ports");
+
+        if (ipData == null || ipData.getValue().isEmpty() ||
+                nameData == null || nameData.getValue().isEmpty() ||
+                portsData == null || portsData.getValue().isEmpty())
+        {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+
+        try {
+            String ip = ipData.getValue();
+            String name = nameData.getValue();
+            int ports = Integer.parseInt(portsData.getValue());
+
+            Data.IMPULSE_COUNTERS.add(new ImpulseCounter(name, ip, ports));
+
+            return;
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
     public void impulseCounterRead( HttpServerExchange exchange ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
