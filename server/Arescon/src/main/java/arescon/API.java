@@ -895,18 +895,24 @@ public class API {
             int resolution = Integer.parseInt(resolutionData.getValue());
             int transform = Integer.parseInt(transformData.getValue());
             boolean periodic = Integer.parseInt(periodicData.getValue()) != 0;
+            long start = new DateTime().getMillis();
 
             try {
-                FormData.FormValue startData = postData.getFirst("start");
-                long start = Long.parseLong(startData.getValue());
-                Data.COUNTER_DEVICES.add(new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic, start, name));
-            } catch (Throwable e) {
-                Data.COUNTER_DEVICES.add(new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic, name));
-            }
+                start = Long.parseLong(postData.getFirst("start").getValue());
+            } catch (Throwable ignored) { }
+
+            Counter device = new Counter(serial, type, nextCheck, odnFlag, rateFlag, resolution, transform, periodic, start, name);
+            Data.COUNTER_DEVICES.add(device);
+            int id = Data.COUNTER_DEVICES.size();
+
+            try {
+                double value = Double.parseDouble(postData.getFirst("value").getValue().replace(',', '.'));
+                device.addValue(value, new DateTime().getMillis());
+            } catch (Throwable ignored) { }
 
             Data.PAYMENTS.add(new ArrayList<Payment>());
 
-            Data.userFlat.addDevice(Data.COUNTER_DEVICES.size());
+            Data.userFlat.addDevice(id);
 
             return;
 
