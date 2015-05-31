@@ -185,6 +185,13 @@ public class Main {
             return;
         }
 
+        paths.put("impulse/read", new HttpHandler() {
+            @Override
+            public void handleRequest(HttpServerExchange exchange) throws Exception {
+                api.impulseCounterRead(exchange);
+            }
+        });
+
         paths.put("device/create", new HttpHandler() {
             @Override
             public void handleRequest(HttpServerExchange exchange) throws Exception {

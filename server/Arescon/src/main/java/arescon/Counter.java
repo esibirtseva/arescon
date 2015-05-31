@@ -3,7 +3,6 @@ package arescon;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Counter {

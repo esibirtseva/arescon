@@ -110,6 +110,7 @@ public class Data {
     public static final List<List<Rate>> RATES = new ArrayList<>(4);
 
     public static final List<Counter> COUNTER_DEVICES = new ArrayList<>(10);
+    public static final List<ImpulseCounter> IMPULSE_COUNTERS = new ArrayList<>(4);
 
     public static double getMoneyMultiplier( final String type ) {
         switch (type) {
@@ -142,6 +143,13 @@ public class Data {
 
         // 1409592882825l
         // public static final String[] TYPES = { "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2", "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2" };
+
+        IMPULSE_COUNTERS.add(new ImpulseCounter("xxx.xxx.xxx.xxx", 2));
+        IMPULSE_COUNTERS.get(0).occupied = 2;
+        IMPULSE_COUNTERS.add(new ImpulseCounter("xxx.xxx.xxx.yyy", 2));
+        IMPULSE_COUNTERS.get(1).occupied = 2;
+        IMPULSE_COUNTERS.add(new ImpulseCounter("xxx.xxx.xxx.zzz", 2));
+        IMPULSE_COUNTERS.add(new ImpulseCounter("xxx.xxx.xxx.aaa", 2));
 
         COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик Techem AP"));
         COUNTER_DEVICES.add(new Counter("2", 3, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик однофазный СОЭ-52"));

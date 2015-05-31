@@ -1030,6 +1030,59 @@ public class API {
         exchange.getResponseSender().send("error");
     }
 
+    public void impulseCounterRead( HttpServerExchange exchange ) throws IOException {
+        if (!exchange.getRequestMethod().equals(Methods.POST)) {
+            exchange.getResponseSender().send("error");
+            return;
+        }
+        FormData postData = getPOST(exchange);
+        FormData.FormValue idData = null;
+        FormData.FormValue onlyFreeData = null;
+
+        try {
+
+            if (postData != null) {
+                idData = postData.getFirst("id");
+                onlyFreeData = postData.getFirst("onlyFree");
+            }
+
+            try {
+                if (idData != null && !idData.getValue().isEmpty()) {
+                    int id = Integer.parseInt(idData.getValue());
+                    for (ImpulseCounter counter : Data.IMPULSE_COUNTERS) {
+                        if (id == counter.id) {
+                            exchange.getResponseSender().send(counter.toJSON().toString());
+                            return;
+                        }
+                    }
+                    exchange.getResponseSender().send("error");
+                    return;
+                }
+            } catch (Throwable ignored) { }
+
+            JSONArray list = new JSONArray();
+
+            if (onlyFreeData == null || onlyFreeData.getValue().isEmpty() || onlyFreeData.getValue().equals("0")) {
+                for (ImpulseCounter counter : Data.IMPULSE_COUNTERS) {
+                    list.put(counter.toJSON());
+                }
+            } else {
+                for (ImpulseCounter counter : Data.IMPULSE_COUNTERS) {
+                    if (counter.occupied < counter.ports) list.put(counter.toJSON());
+                }
+            }
+
+            exchange.getResponseSender().send(list.toString());
+
+            return;
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        exchange.getResponseSender().send("error");
+    }
+
     public void addDevice( HttpServerExchange exchange ) throws IOException {
         if (!exchange.getRequestMethod().equals(Methods.POST)) {
             exchange.getResponseSender().send("error");
