@@ -63,6 +63,18 @@ window.onload = function(){
     $('#next_checking_date').datetimepicker({ lang:'ru', timepicker: false, format: 'd.m.Y' });
     $('#manual_mode_datetime').datetimepicker({ lang:'ru', step:5 });
 
+    // add options for impulse counters list of combobox
+    $.post('/impulse/read', {'onlyFree': '1'}, function (data) {
+        var arrayOfItems = JSON.parse(data);
+
+        $.each(arrayOfItems, function(key, item) {
+            $('#device_impulse')
+                .append($("<option></option>")
+                    .attr("value",item.id)
+                    .text(item.name));
+        });
+    });
+
     var currentRoute = getLastParamUrl();
     var period = $("#period").val();
     if ($('.device.active').length > 0){
