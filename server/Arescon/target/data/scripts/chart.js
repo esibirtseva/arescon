@@ -286,7 +286,7 @@ $('#device-add').click(function() {
     obj.periodic = $('#values_registration_way').val();
 
     $.post('/device/create', obj, function(data){
-
+        location.reload();
     });
 });
  
