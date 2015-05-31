@@ -48,6 +48,27 @@ var typeMap = [
     }
 ]
 
+var fillImpulseCombo = function() {
+    // add options for impulse counters list of combobox
+    $.post('/impulse/read', {'onlyFree': '1'}, function (data) {
+        var arrayOfItems = JSON.parse(data);
+
+        $.each(arrayOfItems, function(key, item) {
+            $('#device_impulse')
+                .append($("<option></option>")
+                    .attr("value",item.id)
+                    .text(item.name));
+        });
+    });
+};
+
+var addImpulseItem = function() {
+    $.post('/impulse/create', {'name': $('#new-impulse-device').val(), 'ip': 'lala', 'ports': 2 }, function (data) {
+        $('#device_impulse').html('');
+        fillImpulseCombo();
+    });
+};
+
 var currentRoute;//odn
 var odnDataSet = [];
 var currentPageData;//new meta!
@@ -63,17 +84,7 @@ window.onload = function(){
     $('#next_checking_date').datetimepicker({ lang:'ru', timepicker: false, format: 'd.m.Y' });
     $('#manual_mode_datetime').datetimepicker({ lang:'ru', step:5 });
 
-    // add options for impulse counters list of combobox
-    $.post('/impulse/read', {'onlyFree': '1'}, function (data) {
-        var arrayOfItems = JSON.parse(data);
-
-        $.each(arrayOfItems, function(key, item) {
-            $('#device_impulse')
-                .append($("<option></option>")
-                    .attr("value",item.id)
-                    .text(item.name));
-        });
-    });
+    fillImpulseCombo();
 
     var currentRoute = getLastParamUrl();
     var period = $("#period").val();
