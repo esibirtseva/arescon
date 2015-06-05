@@ -382,9 +382,10 @@ var addItem = function(el, depth, parentId) {
             break;
         case 3:
             $('.another-form-group').show();
+            fillImpulseCombo();
             itemType = "услугу";
             labelText = 'Номер счетчика';
-            url = '/service/create';
+            url = '/device/create';
             break;
     }
 
@@ -416,7 +417,23 @@ var addItem = function(el, depth, parentId) {
                 break;
             case 3:
                 obj.number = $('#element-name').val(); // optional for server now
+
+
+                obj.name = $('#device_name').val();
+                obj.serial = $('#device_serial').val();
                 obj.type = types[$("input[name='type_select']:checked").val()];
+                obj.impulseID = $('#device_impulse').val();
+                //device_on_datetime
+                //device_off_datetime
+                obj.nextCheck = parseRusDate($('#next_checking_date').val()).getTime();
+                //manual_mode_datetime
+                //manual_mode_value
+                obj.odnFlag = $('#home_common_counter_flag').val();
+                obj.rateFlag = $('#tariff').val();
+                obj.resolution = $('#device_capacity').val();
+                obj.transform = $('#transformation_coefficient').val();
+                obj.periodic = $('#values_registration_way').val();
+
                 break;
         }
 
