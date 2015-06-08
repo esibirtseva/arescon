@@ -13,6 +13,7 @@ public class Device {
 
     public final double multiplier;
 
+    public final String name;
     public final int id;
     public final int type;
     public final long start;
@@ -29,6 +30,7 @@ public class Device {
 
         Counter counter = Data.COUNTER_DEVICES.get(id - 1);
 
+        this.name = counter.name;
         this.id = id;
         this.period = period * 60000;
         this.type = counter.type;
@@ -46,7 +48,8 @@ public class Device {
         all.add(this);
     }
 
-    public Device( final int type ) {
+    public Device( final int type, final String name ) {
+        this.name = name;
         this.id = ++Device.count;
         this.period = Data.PERIOD * 60000;
         this.type = type;
@@ -115,7 +118,8 @@ public class Device {
 
         // TODO: date-based multipliers...
         return new JSONObject().put("id", id).put("type", type).put("start", start).put("end", end)
-                .put("spentValue", spent).put("spentMoney", spent * this.multiplier).put("paid", paid);
+                .put("spentValue", spent).put("spentMoney", spent * this.multiplier).put("paid", paid)
+                .put("name", this.name);
     }
 
     public String toString( ) {

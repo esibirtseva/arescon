@@ -912,7 +912,17 @@ public class API {
 
             Data.PAYMENTS.add(new ArrayList<Payment>());
 
-            Data.userFlat.addDevice(id);
+            try {
+                int parent = Integer.parseInt(postData.getFirst("parentID").getValue());
+                for (Flat flat : Flat.all) {
+                    if (flat.id == parent) {
+                        flat.addDevice(id);
+                        break;
+                    }
+                }
+            } catch (Throwable ignored) {
+                Data.userFlat.addDevice(id);
+            }
 
             return;
 
@@ -1135,36 +1145,36 @@ public class API {
             return;
         }
 
-        FormData.FormValue typeData = postData.getFirst("type");
-        FormData.FormValue parentIdData = postData.getFirst("parentID");
-
-        if (typeData == null || typeData.getValue().isEmpty() ||
-                parentIdData == null || parentIdData.getValue().isEmpty())
-        {
-            exchange.getResponseSender().send("error");
-            return;
-        }
-
-        try {
-            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-
-            int type = Integer.parseInt(typeData.getValue());
-            int parentID = Integer.parseInt(parentIdData.getValue());
-
-            Device device = new Device(type);
-
-            for (Flat flat : Flat.all) {
-                if (flat.id == parentID) {
-                    flat.addDevice(device);
-                    exchange.getResponseSender().send("done");
-                    return;
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-        exchange.getResponseSender().send("error");
+//        FormData.FormValue typeData = postData.getFirst("type");
+//        FormData.FormValue parentIdData = postData.getFirst("parentID");
+//
+//        if (typeData == null || typeData.getValue().isEmpty() ||
+//                parentIdData == null || parentIdData.getValue().isEmpty())
+//        {
+//            exchange.getResponseSender().send("error");
+//            return;
+//        }
+//
+//        try {
+//            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+//
+//            int type = Integer.parseInt(typeData.getValue());
+//            int parentID = Integer.parseInt(parentIdData.getValue());
+//
+//            Device device = new Device(type);
+//
+//            for (Flat flat : Flat.all) {
+//                if (flat.id == parentID) {
+//                    flat.addDevice(device);
+//                    exchange.getResponseSender().send("done");
+//                    return;
+//                }
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+//
+//        exchange.getResponseSender().send("error");
     }
 
     public void addFlat( HttpServerExchange exchange ) throws IOException {
