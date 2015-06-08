@@ -392,7 +392,7 @@ var addItem = function(el, depth, parentId) {
             $('.another-form-group').show();
             fillImpulseCombo();
             itemType = "услугу";
-            labelText = 'Номер счетчика';
+            labelText = 'Название счетчика';
             url = '/device/create';
             break;
     }
