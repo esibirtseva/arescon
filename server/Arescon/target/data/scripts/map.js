@@ -339,6 +339,14 @@ var devices = {
     }
 };
 
+var types = {
+    'coldwater': 0,
+    'hotwater': 1,
+    'gas': 2,
+    'electricity': 3,
+    'heat': 4
+};
+
 
 // on radio button change
 $('input[name=type_select]:radio').change(
@@ -394,14 +402,7 @@ var addItem = function(el, depth, parentId) {
     modal.modal('show');
 
     $(".modal-footer .btn-primary").on("click", function (event) {
-        var obj = {"parentID": parentId},
-            types = {
-                'coldwater': 0,
-                'hotwater': 1,
-                'gas': 2,
-                'electricity': 3,
-                'heat': 4
-            };
+        var obj = {"parentID": parentId};
 
         switch (depth) {
             case 0:
@@ -462,7 +463,7 @@ var appendTreeInfoLevel4 = function(obj, selector) {
         $(selector + " .devices").append('<div id="device' + item.id + '" class="item row" data-id="10">' +
             //'<p class="col-xs-3"><span class="device_green">&#9679;</span> ' + findPurpose(devices, 'type', item.type).measure + ' </p>' +
             // TODO: temporary, remove on demand
-            '<p class="col-xs-3"><span class="device_green">&#9679;</span> Счётчик №' + parseInt(Math.random()*100) + ' </p>' +
+            '<p class="col-xs-3"><span class="device_green">&#9679;</span>' + item.name + ' </p>' +
             '<div class="balance col-xs-2" data-income="692">692</div>' +
             '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
             '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
@@ -567,7 +568,7 @@ window.onload = function(){
     $('#next_checking_date').datetimepicker({ lang:'ru', timepicker: false, format: 'd.m.Y' });
     $('#manual_mode_datetime').datetimepicker({ lang:'ru', step:5 });
 
-    $.post('/dispatcher_tree', {start: '0', end: '99999999999999'}, function (data) {
+    $.post('/dispatcher_tree', {start: '0', end: '99999999999999', type: types[$("input[name='type_select']:checked").val()]}, function (data) {
         var obj = JSON.parse(data);
 
         appendTreeInfoLevel0(obj);
