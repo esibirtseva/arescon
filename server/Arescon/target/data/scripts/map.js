@@ -417,10 +417,9 @@ var addItem = function(el, depth, parentId) {
                 obj.number = $('#element-name').val();
                 break;
             case 3:
-                obj.number = $('#element-name').val(); // optional for server now
+                obj.name = $('#element-name').val(); // optional for server now
 
 
-                obj.name = $('#device_name').val();
                 obj.serial = $('#device_serial').val();
                 obj.type = types[$("input[name='type_select']:checked").val()];
                 obj.impulseID = $('#device_impulse').val();
