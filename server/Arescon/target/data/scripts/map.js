@@ -460,7 +460,9 @@ var findPurpose = function(object, name, value) {
 var appendTreeInfoLevel4 = function(obj, selector) {
     $.each(obj, function (index, item) {
         $(selector + " .devices").append('<div id="device' + item.id + '" class="item row" data-id="10">' +
-            '<p class="col-xs-3"><span class="device_green">&#9679;</span> ' + findPurpose(devices, 'type', item.type).measure + ' </p>' +
+            //'<p class="col-xs-3"><span class="device_green">&#9679;</span> ' + findPurpose(devices, 'type', item.type).measure + ' </p>' +
+            // TODO: temporary, remove on demand
+            '<p class="col-xs-3"><span class="device_green">&#9679;</span> Счётчик №' + parseInt(Math.random()*100) + ' </p>' +
             '<div class="balance col-xs-2" data-income="692">692</div>' +
             '<div class="balance negative col-xs-2" data-outcome="560">-560</div>' +
             '<div class="balance negative col-xs-2" data-balance="-132">-132</div>' +
