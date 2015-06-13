@@ -377,13 +377,25 @@ public class Util {
             Map<String, String> dataMap = new HashMap<>(4);
             Map<String, Map<String, String>> root = new HashMap<>();
             root.put("map", dataMap);
-            dataMap.put("title", "Заголовок");
-            dataMap.put("text", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste saepe doloremque et" +
-                    " minima eligendi dolores molestias adipisci, sed ducimus. Alias ipsa quas distinctio? Laborios" +
-                    "am dolorum nihil veniam quisquam dolorem animi!");
-            dataMap.put("link", "#");
-            templates.getTemplated(root, "index.news.htm", response);
-            templates.getTemplated(root, "index.news.htm", response);
+            if (index == 0) {
+                dataMap.put("title", "Завершается  реализация проекта «ARESCON» в г. Дзержинск");
+                dataMap.put("text", "В 1000 квартирном доме подходит к финальной стадии внедрение автоматизированной информационно - измерительной  системы  коммерческого учета энергоресурсов компании «ARESCON» в г. Дзержинск для жилищно-коммунального и домового хозяйства.");
+                dataMap.put("link", "#");
+                templates.getTemplated(root, "index.news.htm", response);
+                dataMap.put("title", "В жилых домах Москвы появятся телеметрические приборы учета");
+                dataMap.put("text", "Власти Москвы намерены оснастить школы, больницы и многоквартирные дома телеметрическими приборами учета потребления ресурсов. Они позволят гражданам экономить до 60% расходов на воду и электричество. Пилотными объектами инновационных счетчиков в ближайшее время станут 4 тысячи образовательных и 1,5 тысячи медучреждений. В 2016 году...");
+                dataMap.put("link", "#");
+                templates.getTemplated(root, "index.news.htm", response);
+            } else {
+                dataMap.put("title", "В Москве внедряется система автоматизированного учета потребления воды и электричества");
+                dataMap.put("text", "Такое предложение прозвучало 13 мая на прошедшем под председательством заместителя губернатора области Николая Полежаева совещании по вопросам лицензирования предпринимательской деятельности...");
+                dataMap.put("link", "#");
+                templates.getTemplated(root, "index.news.htm", response);
+                dataMap.put("title", "Круглый стол на тему \"Техническое регулирование в сфере ЖКХ. Состояние, проблемы, перспективы\"");
+                dataMap.put("text", "На сегодняшний день выявлены факты нарушений установленной законодательством процедуры перевода жилых помещений в нежилой фонд. Пострадавшими могут быть не только жильцы многоквартирных домов...");
+                dataMap.put("link", "#");
+                templates.getTemplated(root, "index.news.htm", response);
+            }
         } catch (TemplateException | IOException e) {
             e.printStackTrace();
         }
