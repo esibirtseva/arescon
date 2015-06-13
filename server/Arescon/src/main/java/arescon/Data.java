@@ -151,10 +151,7 @@ public class Data {
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 3", "xxx.xxx.xxx.zzz", 2));
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 4", "xxx.xxx.xxx.aaa", 2));
 
-
-        long goodTime = new DateTime(1409518800000l).getMillis();
-
-        COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, goodTime, "Счетчик Techem AP"));
+        COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, 1409504400000l, "Счетчик Techem AP"));
         COUNTER_DEVICES.add(new Counter("2", 3, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик однофазный СОЭ-52"));
         COUNTER_DEVICES.add(new Counter("3", 2, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик ГРАНД-25Т"));
         COUNTER_DEVICES.add(new Counter("4", 1, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик СВ-15 Х \"МЕТЕР\""));
