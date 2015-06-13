@@ -152,7 +152,7 @@ public class Data {
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 4", "xxx.xxx.xxx.aaa", 2));
 
 
-        long goodTime = new DateTime(1409518800000l).minusHours(new DateTime(1409518800000l).getHourOfDay()).getMillis();
+        long goodTime = new DateTime(1409518800000l).getMillis();
 
         COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, goodTime, "Счетчик Techem AP"));
         COUNTER_DEVICES.add(new Counter("2", 3, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик однофазный СОЭ-52"));
