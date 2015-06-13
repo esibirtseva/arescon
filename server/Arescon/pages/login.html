@@ -26,7 +26,7 @@
             <input class="form-control" type="text" placeholder="ЛОГИН">
             <input class="form-control" type="password" placeholder="ПАРОЛЬ">
             <!-- <input class="btn btn-info" type="submit" value="arrow"> -->
-            <a class="btn btn-info" href="/user"></a>
+            <a class="btn btn-info" onclick="location.href = $(this).parent().children('input[type=text]').val()"></a>
           </form>
           <p><a htrf="#">Забыли пароль?</a></p>
           <p><a href="/registration">Зарегистрироваться</a></p>

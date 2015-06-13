@@ -12,16 +12,32 @@
                         <input type="text" class="form-control" id="element-name">
                     </div>
                     <div class="another-form-group">
-                        <label for="device_on_datetime">Дата, время включения</label>
+                        <label for="device_serial">Серийный номер прибора</label>
+                        <input id="device_serial" class="form-control" type="text" placeholder="Серийный номер прибора">
+                        <label for="device_impulse">Выберите счетчик импульсов</label>
+                        <select class="form-control" name="" id="device_impulse">
+
+                        </select>
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <img src="../images/plus-circle-outline.png" onclick="addImpulseItem()"/>
+                            </div>
+                            <div class="col-xs-10">
+                                <input id="new-impulse-device" class="form-control" type="text">
+                            </div>
+                        </div>
+
+
+                        <!--<label for="device_on_datetime">Дата, время включения</label>
                         <input type="text" id="device_on_datetime" class="form-control" value="" />
                         <label for="device_off_datetime">Дата, время отключения</label>
-                        <input type="text" id="device_off_datetime" class="form-control" value="" />
+                        <input type="text" id="device_off_datetime" class="form-control" value="" />-->
                         <label for="next_checking_date">Дата поверки</label>
                         <input type="text" id="next_checking_date" class="form-control" value="" />
-                        <label for="manual_mode_datetime">Дата, время показаний фикс. в руч. режиме</label>
+                        <!--<label for="manual_mode_datetime">Дата, время показаний фикс. в руч. режиме</label>
                         <input type="text" id="manual_mode_datetime" class="form-control" value="" />
                         <label for="manual_mode_value">Показания счетчика фикс. в руч. режиме</label>
-                        <input id="manual_mode_value" class="form-control" type="text" />
+                        <input id="manual_mode_value" class="form-control" type="text" />-->
 
                         <label for="home_common_counter_flag">Флаг общедом.счетчика</label>
                         <select id="home_common_counter_flag" class="form-control">

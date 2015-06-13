@@ -71,11 +71,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="API.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="API.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3930921">
-              <caret line="905" column="49" selection-start-line="905" selection-start-column="49" selection-end-line="905" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="350" column="21" selection-start-line="350" selection-start-column="21" selection-end-line="350" selection-end-column="21" />
               <folding>
                 <element signature="method#getType#0;class#API#0" expanded="false" />
                 <element signature="method#getProfile#0;class#API#0" expanded="false" />
@@ -84,7 +84,6 @@
                 <element signature="method#getDeviceProfile#0;class#API#0" expanded="false" />
                 <element signature="method#getTypeProfile#0;class#API#0" expanded="false" />
                 <element signature="method#getHouseProfile#0;class#API#0" expanded="false" />
-                <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
                 <element signature="method#getTypeData#0;class#API#0" expanded="false" />
                 <element signature="method#getHouseData#0;class#API#0" expanded="false" />
                 <element signature="method#getDeviceDeviation#0;class#API#0" expanded="false" />
@@ -93,13 +92,16 @@
                 <element signature="method#getTypePercentage#0;class#API#0" expanded="false" />
                 <element signature="method#getHousePercentage#0;class#API#0" expanded="false" />
                 <element signature="method#getTypeRates#0;class#API#0" expanded="false" />
+                <element signature="method#getDevicePayments#0;class#API#0" expanded="false" />
                 <element signature="method#getDeviceShare#0;class#API#0" expanded="false" />
                 <element signature="method#getTypeShare#0;class#API#0" expanded="false" />
+                <element signature="method#deviceCreate#0;class#API#0" expanded="false" />
                 <element signature="method#deviceRead#0;class#API#0" expanded="false" />
                 <element signature="method#deviceUpdate#0;class#API#0" expanded="false" />
                 <element signature="method#deviceDelete#0;class#API#0" expanded="false" />
                 <element signature="method#impulseCounterCreate#0;class#API#0" expanded="false" />
                 <element signature="method#impulseCounterRead#0;class#API#0" expanded="false" />
+                <element signature="method#addDevice#0;class#API#0" expanded="false" />
                 <element signature="method#addFlat#0;class#API#0" expanded="false" />
                 <element signature="method#addHouse#0;class#API#0" expanded="false" />
                 <element signature="method#addHA#0;class#API#0" expanded="false" />
@@ -109,7 +111,6 @@
                 <element signature="method#typeProfile#0;class#API#0" expanded="false" />
                 <element signature="method#serviceProfile#0;class#API#0" expanded="false" />
                 <element signature="method#houseProfile#0;class#API#0" expanded="false" />
-                <element signature="method#deviceData#0;class#API#0" expanded="false" />
                 <element signature="method#typeData#0;class#API#0" expanded="false" />
                 <element signature="method#serviceData#0;class#API#0" expanded="false" />
                 <element signature="method#houseData#0;class#API#0" expanded="false" />
@@ -142,6 +143,19 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="SQLAdapter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/arescon/SQLAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="20" column="35" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+              <folding>
+                <element signature="e#382#383#0" expanded="true" />
+                <element signature="e#385#436#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ImpulseCounter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/ImpulseCounter.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -168,7 +182,6 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="265" column="52" selection-start-line="265" selection-start-column="52" selection-end-line="265" selection-end-column="52" />
               <folding>
-                <element signature="imports" expanded="false" />
                 <element signature="method#Util#0;class#Util#0" expanded="false" />
                 <element signature="method#getReportName#0;class#Util#0" expanded="false" />
                 <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
@@ -186,25 +199,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Handlers.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="241" column="32" selection-start-line="241" selection-start-column="32" selection-end-line="241" selection-end-column="32" />
-              <folding>
-                <element signature="method#odn#0;class#Handlers#0" expanded="false" />
-                <element signature="method#index#0;class#Handlers#0" expanded="false" />
-                <element signature="method#dreports#0;class#Handlers#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Data.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Data.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="146" column="92" selection-start-line="146" selection-start-column="92" selection-end-line="146" selection-end-column="92" />
+            <state vertical-scroll-proportion="0.33271718">
+              <caret line="154" column="0" selection-start-line="154" selection-start-column="0" selection-end-line="154" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -214,19 +213,11 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="334" column="69" selection-start-line="334" selection-start-column="69" selection-end-line="334" selection-end-column="69" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Counter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Counter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="43" column="42" selection-start-line="43" selection-start-column="42" selection-end-line="43" selection-end-column="42" />
+              <caret line="803" column="0" selection-start-line="803" selection-start-column="0" selection-end-line="803" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#3565#3566#0" expanded="true" />
+                <element signature="e#3645#3646#0" expanded="true" />
+                <marker date="1433883615942" expanded="true" signature="8062:33494" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -299,8 +290,9 @@
         <option value="$PROJECT_DIR$/src/main/java/arescon/ImpulseCounter.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Device.java" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/Data.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/SQLAdapter.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/Data.java" />
       </list>
     </option>
   </component>
@@ -355,7 +347,6 @@
     <panes>
       <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -376,6 +367,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -774,7 +766,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20260416" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -782,7 +774,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39978904" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39978904" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -816,31 +808,20 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="220" />
+      <option name="time" value="236" />
     </breakpoint-manager>
-    <watches-manager />
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="new DateTime(1409518800000l).getHourOfDay()" language="JAVA" custom="" />
+        <watch expression="new DateTime(1409518800000l).toString()" language="JAVA" custom="" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="183" column="23" selection-start-line="183" selection-start-column="23" selection-end-line="183" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Company.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1135,36 +1116,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="265" column="52" selection-start-line="265" selection-start-column="52" selection-end-line="265" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#Util#0;class#Util#0" expanded="false" />
-            <element signature="method#getReportName#0;class#Util#0" expanded="false" />
-            <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
-            <element signature="method#getTypeLink#0;class#Util#0" expanded="false" />
-            <element signature="method#getUserStats#0;class#Util#0" expanded="false" />
-            <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
-            <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
-            <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
-            <element signature="method#getDevices#0;class#Util#0" expanded="false" />
-            <element signature="method#getNews#0;class#Util#0" expanded="false" />
-            <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
-            <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/ImpulseCounter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Counter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1183,6 +1134,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="803" column="0" selection-start-line="803" selection-start-column="0" selection-end-line="803" selection-end-column="0" />
+          <folding>
+            <element signature="e#3565#3566#0" expanded="true" />
+            <element signature="e#3645#3646#0" expanded="true" />
+            <marker date="1433883615942" expanded="true" signature="8062:33494" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/io/undertow/undertow-core/1.0.16.Final/undertow-core-1.0.16.Final.jar!/io/undertow/server/HttpServerExchange.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35019454">
+          <caret line="695" column="0" selection-start-line="695" selection-start-column="0" selection-end-line="695" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Payment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1191,34 +1162,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/SQLAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="334" column="69" selection-start-line="334" selection-start-column="69" selection-end-line="334" selection-end-column="69" />
-          <folding />
+          <caret line="20" column="35" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+          <folding>
+            <element signature="e#382#383#0" expanded="true" />
+            <element signature="e#385#436#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/ImpulseCounter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="146" column="92" selection-start-line="146" selection-start-column="92" selection-end-line="146" selection-end-column="92" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Device.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="59" selection-start-line="30" selection-start-column="59" selection-end-line="30" selection-end-column="59" />
+          <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3930921">
-          <caret line="905" column="49" selection-start-line="905" selection-start-column="49" selection-end-line="905" selection-end-column="49" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="350" column="21" selection-start-line="350" selection-start-column="21" selection-end-line="350" selection-end-column="21" />
           <folding>
             <element signature="method#getType#0;class#API#0" expanded="false" />
             <element signature="method#getProfile#0;class#API#0" expanded="false" />
@@ -1227,7 +1193,6 @@
             <element signature="method#getDeviceProfile#0;class#API#0" expanded="false" />
             <element signature="method#getTypeProfile#0;class#API#0" expanded="false" />
             <element signature="method#getHouseProfile#0;class#API#0" expanded="false" />
-            <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
             <element signature="method#getTypeData#0;class#API#0" expanded="false" />
             <element signature="method#getHouseData#0;class#API#0" expanded="false" />
             <element signature="method#getDeviceDeviation#0;class#API#0" expanded="false" />
@@ -1236,13 +1201,16 @@
             <element signature="method#getTypePercentage#0;class#API#0" expanded="false" />
             <element signature="method#getHousePercentage#0;class#API#0" expanded="false" />
             <element signature="method#getTypeRates#0;class#API#0" expanded="false" />
+            <element signature="method#getDevicePayments#0;class#API#0" expanded="false" />
             <element signature="method#getDeviceShare#0;class#API#0" expanded="false" />
             <element signature="method#getTypeShare#0;class#API#0" expanded="false" />
+            <element signature="method#deviceCreate#0;class#API#0" expanded="false" />
             <element signature="method#deviceRead#0;class#API#0" expanded="false" />
             <element signature="method#deviceUpdate#0;class#API#0" expanded="false" />
             <element signature="method#deviceDelete#0;class#API#0" expanded="false" />
             <element signature="method#impulseCounterCreate#0;class#API#0" expanded="false" />
             <element signature="method#impulseCounterRead#0;class#API#0" expanded="false" />
+            <element signature="method#addDevice#0;class#API#0" expanded="false" />
             <element signature="method#addFlat#0;class#API#0" expanded="false" />
             <element signature="method#addHouse#0;class#API#0" expanded="false" />
             <element signature="method#addHA#0;class#API#0" expanded="false" />
@@ -1252,7 +1220,6 @@
             <element signature="method#typeProfile#0;class#API#0" expanded="false" />
             <element signature="method#serviceProfile#0;class#API#0" expanded="false" />
             <element signature="method#houseProfile#0;class#API#0" expanded="false" />
-            <element signature="method#deviceData#0;class#API#0" expanded="false" />
             <element signature="method#typeData#0;class#API#0" expanded="false" />
             <element signature="method#serviceData#0;class#API#0" expanded="false" />
             <element signature="method#houseData#0;class#API#0" expanded="false" />
@@ -1281,6 +1248,43 @@
             <element signature="method#approve#0;class#API#0" expanded="false" />
             <element signature="method#register#0;class#API#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Device.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="59" selection-start-line="30" selection-start-column="59" selection-end-line="30" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="265" column="52" selection-start-line="265" selection-start-column="52" selection-end-line="265" selection-end-column="52" />
+          <folding>
+            <element signature="method#Util#0;class#Util#0" expanded="false" />
+            <element signature="method#getReportName#0;class#Util#0" expanded="false" />
+            <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
+            <element signature="method#getTypeLink#0;class#Util#0" expanded="false" />
+            <element signature="method#getUserStats#0;class#Util#0" expanded="false" />
+            <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
+            <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getDevices#0;class#Util#0" expanded="false" />
+            <element signature="method#getNews#0;class#Util#0" expanded="false" />
+            <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
+            <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33271718">
+          <caret line="154" column="0" selection-start-line="154" selection-start-column="0" selection-end-line="154" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -34,6 +34,32 @@ $(".device.add .glyphicon").click(function(){
 	isAdding = !isAdding;
 });
 
+var addImpulseItem = function() {
+    $.post('/impulse/create', {'name': $('#new-impulse-device').val(), 'ip': 'lala', 'ports': 2 }, function (data) {
+        $('#device_impulse').html('');
+        fillImpulseCombo();
+    });
+};
+
+var fillImpulseCombo = function() {
+    // add options for impulse counters list of combobox
+    $.post('/impulse/read', {'onlyFree': '1'}, function (data) {
+        var arrayOfItems = JSON.parse(data);
+
+        $.each(arrayOfItems, function(key, item) {
+            $('#device_impulse')
+                .append($("<option></option>")
+                    .attr("value",item.id)
+                    .text(item.name));
+        });
+    });
+};
+
+var parseRusDate = function(date_str){
+    var dtArr = date_str.split('.');
+    return new Date(dtArr[2], parseInt(dtArr[1])-1, dtArr[0]);
+}
+
 var active_tszh = false, active_house = false, active_apartment = false, active_device = false;
 
 // $('.tszhs .item').click(function(){

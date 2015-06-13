@@ -348,6 +348,8 @@ public class API {
 
         Counter counter = Data.COUNTER_DEVICES.get(id - 1);
 
+        endTime += 1;
+
         if (startTime < counter.start) startTime = counter.start;
         if (endTime > new DateTime().getMillis()) endTime = new DateTime().getMillis();
 
@@ -1676,7 +1678,8 @@ public class API {
             int periodTime = Integer.parseInt(period.getValue());
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDeviceData(id, startTime, endTime, periodTime, multiplier, trend));
+            String response = getDeviceData(id, startTime, endTime, periodTime, multiplier, trend);
+            exchange.getResponseSender().send(response);
 
         } catch (Throwable e) {
             e.printStackTrace();

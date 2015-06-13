@@ -151,7 +151,10 @@ public class Data {
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 3", "xxx.xxx.xxx.zzz", 2));
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 4", "xxx.xxx.xxx.aaa", 2));
 
-        COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик Techem AP"));
+
+        long goodTime = new DateTime(1409518800000l).minusHours(new DateTime(1409518800000l).getHourOfDay()).getMillis();
+
+        COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, goodTime, "Счетчик Techem AP"));
         COUNTER_DEVICES.add(new Counter("2", 3, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик однофазный СОЭ-52"));
         COUNTER_DEVICES.add(new Counter("3", 2, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик ГРАНД-25Т"));
         COUNTER_DEVICES.add(new Counter("4", 1, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик СВ-15 Х \"МЕТЕР\""));
@@ -176,6 +179,19 @@ public class Data {
         COUNTER_DEVICES.add(new Counter("23", 1, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик 23"));
         COUNTER_DEVICES.add(new Counter("24", 2, 0, 0, 1, 1, 1, true, 1409592882825l, "Счетчик 24"));
 
+        List<Double> realData = new ArrayList<>(500);
+
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream("realdata.txt"), Charset.forName("UTF-8")))) {
+
+            while (input.ready()) {
+                String line = input.readLine().trim();
+                double val = Double.parseDouble(line) / 2.0;
+                realData.add(val);
+                realData.add(val);
+            }
+
+        } catch (IOException e) { e.printStackTrace(); }
+
         double multiplier = 0;
         try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream("data.txt"), Charset.forName("UTF-8")))) {
             int i = 0;
@@ -198,7 +214,11 @@ public class Data {
                 PERCENTAGE_VALUES[i] = new double[line.length * 2];
                 if (line.length * 2 > maxLength) maxLength = line.length * 2;
                 for (int j = 0; j < line.length * 2; ++j) {
-                    COUNTER_DEVICES.get(i).addValue(random.nextDouble() * multiplier);
+                    if (i == 0) {
+                        COUNTER_DEVICES.get(0).addValue(realData.get(j % realData.size()));
+                    } else {
+                        COUNTER_DEVICES.get(i).addValue(random.nextDouble() * multiplier);
+                    }
                     PERCENTAGE_VALUES[i][j] = random.nextDouble();
                 }
 
