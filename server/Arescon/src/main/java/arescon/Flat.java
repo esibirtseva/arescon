@@ -12,26 +12,28 @@ public class Flat {
     static int count = 0;
     static ArrayList<Flat> all = new ArrayList<>(4);
 
-    public final int id;
+    public int id;
     public final int number;
 
     public final List<Device> devices;
     public House parent;
+    public int parent_id;
 
     public double spent = 0.0;
     public double paid = 0.0;
 
-    public Flat( final int id, final int number ) {
+    public Flat( final int number ) {
         this.number = number;
-        this.id = id;
+        this.id = count + 1;
         devices = new ArrayList<>(10);
 
         ++Flat.count;
         all.add(this);
     }
 
-    public Flat( final int number ) {
-        this(count + 1, number);
+    public Flat( final int parent_id, final int number ) {
+        this(number);
+        this.parent_id = parent_id;
     }
 
     public void addDevice( final Device device ) {

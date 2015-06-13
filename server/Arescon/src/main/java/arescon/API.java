@@ -918,13 +918,14 @@ public class API {
                 int parent = Integer.parseInt(postData.getFirst("parentID").getValue());
                 for (Flat flat : Flat.all) {
                     if (flat.id == parent) {
-                        flat.addDevice(id);
+                        Device object = new Device(id, Data.PERIOD);
+                        object.parent_id = parent;
+                        flat.addDevice(object);
+                        SQLAdapter.insert(object);
                         break;
                     }
                 }
-            } catch (Throwable ignored) {
-                Data.userFlat.addDevice(id);
-            }
+            } catch (Throwable ignored) { }
 
             return;
 
@@ -1211,6 +1212,8 @@ public class API {
             for (House house : House.all) {
                 if (house.id == parentID) {
                     house.addFlat(flat);
+                    flat.parent_id = parentID;
+                    SQLAdapter.insert(flat);
                     exchange.getResponseSender().send("done");
                     return;
                 }
@@ -1257,6 +1260,8 @@ public class API {
             for (HA ha : HA.all) {
                 if (ha.id == parentID) {
                     ha.addHouse(house);
+                    house.parent_id = parentID;
+                    SQLAdapter.insert(house);
                     exchange.getResponseSender().send("done");
                     return;
                 }
@@ -1304,6 +1309,8 @@ public class API {
 //                }
 //            }
             Data.company.addHA(ha);
+            ha.parent_id = parentID;
+            SQLAdapter.insert(ha);
             exchange.getResponseSender().send("done");
             return;
         } catch (Throwable e) {

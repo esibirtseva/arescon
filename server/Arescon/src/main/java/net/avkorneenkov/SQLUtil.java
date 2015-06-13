@@ -7,6 +7,8 @@ import java.util.TimerTask;
 
 public class SQLUtil {
 
+    public static boolean TURN_OFF = false;
+
     private static Connection connection = null;
 
     private static String connectionString;
@@ -14,7 +16,7 @@ public class SQLUtil {
 
     public synchronized static Connection getMySQLConnection( String username, String password,
                                           String host, String database, int port ) throws SQLException, ClassNotFoundException {
-        if (connection == null) {
+        if (connection == null && !TURN_OFF) {
             Class.forName("com.mysql.jdbc.Driver");
             connectionProps = new Properties();
             connectionProps.put("user", username);

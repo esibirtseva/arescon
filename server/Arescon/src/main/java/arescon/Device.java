@@ -13,18 +13,19 @@ public class Device {
 
     public final double multiplier;
 
-    public final String name;
-    public final int id;
-    public final int type;
-    public final long start;
-    public final long period;
-    public final List<Double> values;
-    public final List<Payment> payments;
+    public String name;
+    public int id;
+    public int type;
+    public long start;
+    public long period;
+    public List<Double> values;
+    public List<Payment> payments;
 
     public double spentValue;
     public double spentMoney;
 
     public Flat parent;
+    public int parent_id;
 
     public Device( final int id, final long period ) {
 

@@ -14,7 +14,8 @@ public class Company {
 
     public final List<HA> HAs;
 
-    public final int id;
+    public int id;
+    public String name = "company";
 
     public double spent = 0.0;
     public double paid = 0.0;

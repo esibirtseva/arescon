@@ -12,20 +12,21 @@ public class House {
     static int count = 0;
     static ArrayList<House> all = new ArrayList<>(4);
 
-    public final int id;
+    public int id;
 
     public final String address;
     public final String x, y;
     public final List<Flat> flats;
 
     public HA parent;
+    public int parent_id;
 
     public double spent = 0.0;
     public double paid = 0.0;
 
-    public House( final String address, final int id, final String x, final String y ) {
+    public House( final String address, final String x, final String y ) {
         this.address = address;
-        this.id = id;
+        this.id = count + 1;
         this.x = x;
         this.y = y;
         this.flats = new ArrayList<>(10);
@@ -34,8 +35,9 @@ public class House {
         all.add(this);
     }
 
-    public House( final String address, final String x, final String y ) {
-        this(address, count + 1, x, y);
+    public House( final int parent_id, final String address, final String x, final String y ) {
+        this(address, x, y);
+        this.parent_id = parent_id;
     }
 
     public void addFlat( Flat flat ) {

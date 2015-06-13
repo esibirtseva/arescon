@@ -9,6 +9,7 @@ import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 import net.avkorneenkov.IOUtil;
 import net.avkorneenkov.NetUtil;
+import net.avkorneenkov.SQLUtil;
 import net.avkorneenkov.freemarker.TemplatesWorker;
 import net.avkorneenkov.undertow.CommonHandlers;
 import net.avkorneenkov.undertow.DatabaseIdentityManager;
@@ -96,13 +97,20 @@ public class Main {
         try { readConfig(CONFIG_PATH, local); }
         catch (IOException e) { e.printStackTrace(); }
 
-//        try {
-//            SQLUtil.getMySQLConnection(DB_USERNAME, DB_PASSWORD, DB_HOSTNAME, DB_DATABASE, DB_PORT);
-//            SQLUtil.addPing("USE " + DB_DATABASE, PING_PERIOD);
-//        } catch (SQLException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//            return;
-//        }
+        if (DB_HOSTNAME != null) {
+            try {
+                SQLUtil.getMySQLConnection(DB_USERNAME, DB_PASSWORD, DB_HOSTNAME, DB_DATABASE, DB_PORT);
+                SQLUtil.addPing("USE " + DB_DATABASE, PING_PERIOD);
+
+                Data.company = SQLAdapter.tree(1);
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+                return;
+            }
+        } else {
+            SQLUtil.TURN_OFF = true;
+            Data.initWithoutDB();
+        }
 
         final File resources = new File(RESOURCES_PATH);
 

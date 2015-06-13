@@ -12,18 +12,19 @@ public class HA {
     static int count = 0;
     static ArrayList<HA> all = new ArrayList<>(2);
 
-    public final int id;
-    public final String name;
+    public int id;
+    public String name;
 
     public final List<House> houses;
 
     public Company parent;
+    public int parent_id;
 
     public double spent = 0.0;
     public double paid = 0.0;
 
-    public HA( final int id, final String name ) {
-        this.id = id;
+    public HA( final String name ) {
+        this.id = count + 1;
         this.name = name;
         houses = new ArrayList<>(10);
 
@@ -31,8 +32,9 @@ public class HA {
         all.add(this);
     }
 
-    public HA( final String name ) {
-        this(count + 1, name);
+    public HA( final int parent_id, final String name ) {
+        this(name);
+        this.parent_id = parent_id;
     }
 
     public void addHouse( House house ) {
