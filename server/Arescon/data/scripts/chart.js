@@ -259,6 +259,7 @@ $('.remove_device').click(function(e){
 $('#device-add').click(function() {
     var obj = {};
     obj.name = $('#device_name').val();
+    obj.value = $('#device_value').val();
     obj.serial = $('#device_serial').val();
     obj.type = $('#device_type').val();
     obj.impulseID = $('#device_impulse').val();

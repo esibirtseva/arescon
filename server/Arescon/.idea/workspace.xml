@@ -71,11 +71,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="API.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="API.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="1373" column="0" selection-start-line="1373" selection-start-column="0" selection-end-line="1373" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.33223686">
+              <caret line="2495" column="9" selection-start-line="2495" selection-start-column="9" selection-end-line="2495" selection-end-column="9" />
               <folding>
                 <element signature="method#getType#0;class#API#0" expanded="false" />
                 <element signature="method#getProfile#0;class#API#0" expanded="false" />
@@ -96,6 +96,7 @@
                 <element signature="method#getDevicePayments#0;class#API#0" expanded="false" />
                 <element signature="method#getDeviceShare#0;class#API#0" expanded="false" />
                 <element signature="method#getTypeShare#0;class#API#0" expanded="false" />
+                <element signature="method#deviceCreate#0;class#API#0" expanded="false" />
                 <element signature="method#deviceRead#0;class#API#0" expanded="false" />
                 <element signature="method#deviceUpdate#0;class#API#0" expanded="false" />
                 <element signature="method#deviceDelete#0;class#API#0" expanded="false" />
@@ -104,7 +105,9 @@
                 <element signature="method#addDevice#0;class#API#0" expanded="false" />
                 <element signature="method#addFlat#0;class#API#0" expanded="false" />
                 <element signature="method#addHouse#0;class#API#0" expanded="false" />
+                <element signature="method#addHA#0;class#API#0" expanded="false" />
                 <element signature="method#addCompany#0;class#API#0" expanded="false" />
+                <element signature="method#balanceTree#0;class#API#0" expanded="false" />
                 <element signature="method#deviceProfile#0;class#API#0" expanded="false" />
                 <element signature="method#typeProfile#0;class#API#0" expanded="false" />
                 <element signature="method#serviceProfile#0;class#API#0" expanded="false" />
@@ -130,8 +133,6 @@
                 <element signature="method#notificationsRead#0;class#API#0" expanded="false" />
                 <element signature="method#notificationsUpdate#0;class#API#0" expanded="false" />
                 <element signature="method#notificationsDelete#0;class#API#0" expanded="false" />
-                <element signature="method#deviceShare#0;class#API#0" expanded="false" />
-                <element signature="method#typeShare#0;class#API#0" expanded="false" />
                 <element signature="method#profileUpdate#0;class#API#0" expanded="false" />
                 <element signature="method#addPlace#0;class#API#0" expanded="false" />
                 <element signature="method#inviteSportsman#0;class#API#0" expanded="false" />
@@ -194,7 +195,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="289" column="44" selection-start-line="289" selection-start-column="44" selection-end-line="289" selection-end-column="44" />
+              <caret line="96" column="61" selection-start-line="96" selection-start-column="61" selection-end-line="96" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -210,11 +211,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.6217105">
-              <caret line="129" column="13" selection-start-line="129" selection-start-column="13" selection-end-line="129" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="152" column="34" selection-start-line="152" selection-start-column="34" selection-end-line="152" selection-end-column="34" />
               <folding>
                 <marker date="1434214009265" expanded="true" signature="8294:33726" placeholder="{...}" />
               </folding>
@@ -226,9 +227,11 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="104" column="33" selection-start-line="104" selection-start-column="33" selection-end-line="104" selection-end-column="33" />
+              <caret line="325" column="34" selection-start-line="325" selection-start-column="34" selection-end-line="325" selection-end-column="34" />
               <folding>
                 <element signature="method#odn#0;class#Handlers#0" expanded="false" />
+                <element signature="e#4273#4536#0" expanded="true" />
+                <element signature="e#4535#4536#0" expanded="true" />
                 <element signature="method#dreports#0;class#Handlers#0" expanded="false" />
               </folding>
             </state>
@@ -239,13 +242,12 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="394" column="228" selection-start-line="394" selection-start-column="228" selection-end-line="394" selection-end-column="228" />
+              <caret line="174" column="38" selection-start-line="174" selection-start-column="38" selection-end-line="174" selection-end-column="38" />
               <folding>
                 <element signature="method#Util#0;class#Util#0" expanded="false" />
                 <element signature="method#getReportName#0;class#Util#0" expanded="false" />
                 <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
                 <element signature="method#getTypeLink#0;class#Util#0" expanded="false" />
-                <element signature="method#getUserStats#0;class#Util#0" expanded="false" />
                 <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
                 <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
                 <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
@@ -304,11 +306,11 @@
         <option value="$PROJECT_DIR$/src/main/java/arescon/House.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Flat.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/SQLAdapter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
         <option value="$PROJECT_DIR$/config.txt" />
-        <option value="$PROJECT_DIR$/src/main/java/arescon/Data.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/arescon/Util.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/Data.java" />
+        <option value="$PROJECT_DIR$/src/main/java/arescon/API.java" />
       </list>
     </option>
   </component>
@@ -361,9 +363,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -464,6 +463,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -857,7 +859,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20260416" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -913,6 +915,25 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="394" column="228" selection-start-line="394" selection-start-column="228" selection-end-line="394" selection-end-column="228" />
+          <folding>
+            <element signature="method#Util#0;class#Util#0" expanded="false" />
+            <element signature="method#getReportName#0;class#Util#0" expanded="false" />
+            <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
+            <element signature="method#getTypeLink#0;class#Util#0" expanded="false" />
+            <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
+            <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getDevices#0;class#Util#0" expanded="false" />
+            <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
+            <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Company.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1153,9 +1174,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="43" column="42" selection-start-line="43" selection-start-column="42" selection-end-line="43" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1163,7 +1181,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="55" selection-start-line="8" selection-start-column="55" selection-end-line="8" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1186,7 +1203,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1202,10 +1218,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="14" column="11" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
-          <folding>
-            <element signature="method#House#0;class#House#0" expanded="false" />
-            <element signature="method#House#1;class#House#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1225,120 +1237,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1373" column="0" selection-start-line="1373" selection-start-column="0" selection-end-line="1373" selection-end-column="0" />
-          <folding>
-            <element signature="method#getType#0;class#API#0" expanded="false" />
-            <element signature="method#getProfile#0;class#API#0" expanded="false" />
-            <element signature="method#getProfile#1;class#API#0" expanded="false" />
-            <element signature="method#getLastRequests#0;class#API#0" expanded="false" />
-            <element signature="method#getDeviceProfile#0;class#API#0" expanded="false" />
-            <element signature="method#getTypeProfile#0;class#API#0" expanded="false" />
-            <element signature="method#getHouseProfile#0;class#API#0" expanded="false" />
-            <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
-            <element signature="method#getTypeData#0;class#API#0" expanded="false" />
-            <element signature="method#getHouseData#0;class#API#0" expanded="false" />
-            <element signature="method#getDeviceDeviation#0;class#API#0" expanded="false" />
-            <element signature="method#getTypeDeviation#0;class#API#0" expanded="false" />
-            <element signature="method#getDevicePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#getTypePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#getHousePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#getTypeRates#0;class#API#0" expanded="false" />
-            <element signature="method#getDevicePayments#0;class#API#0" expanded="false" />
-            <element signature="method#getDeviceShare#0;class#API#0" expanded="false" />
-            <element signature="method#getTypeShare#0;class#API#0" expanded="false" />
-            <element signature="method#deviceRead#0;class#API#0" expanded="false" />
-            <element signature="method#deviceUpdate#0;class#API#0" expanded="false" />
-            <element signature="method#deviceDelete#0;class#API#0" expanded="false" />
-            <element signature="method#impulseCounterCreate#0;class#API#0" expanded="false" />
-            <element signature="method#impulseCounterRead#0;class#API#0" expanded="false" />
-            <element signature="method#addDevice#0;class#API#0" expanded="false" />
-            <element signature="method#addFlat#0;class#API#0" expanded="false" />
-            <element signature="method#addHouse#0;class#API#0" expanded="false" />
-            <element signature="method#addCompany#0;class#API#0" expanded="false" />
-            <element signature="method#deviceProfile#0;class#API#0" expanded="false" />
-            <element signature="method#typeProfile#0;class#API#0" expanded="false" />
-            <element signature="method#serviceProfile#0;class#API#0" expanded="false" />
-            <element signature="method#houseProfile#0;class#API#0" expanded="false" />
-            <element signature="method#deviceData#0;class#API#0" expanded="false" />
-            <element signature="method#typeData#0;class#API#0" expanded="false" />
-            <element signature="method#serviceData#0;class#API#0" expanded="false" />
-            <element signature="method#houseData#0;class#API#0" expanded="false" />
-            <element signature="method#devicePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#typePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#servicePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#housePercentage#0;class#API#0" expanded="false" />
-            <element signature="method#deleteDevice#0;class#API#0" expanded="false" />
-            <element signature="method#deviceDeviation#0;class#API#0" expanded="false" />
-            <element signature="method#typeDeviation#0;class#API#0" expanded="false" />
-            <element signature="method#deviationRecordName#0;class#API#0" expanded="false" />
-            <element signature="method#lastRequests#0;class#API#0" expanded="false" />
-            <element signature="method#deviceRates#0;class#API#0" expanded="false" />
-            <element signature="method#typeRates#0;class#API#0" expanded="false" />
-            <element signature="method#devicePayments#0;class#API#0" expanded="false" />
-            <element signature="method#typePayments#0;class#API#0" expanded="false" />
-            <element signature="method#notificationsCreate#0;class#API#0" expanded="false" />
-            <element signature="method#notificationsRead#0;class#API#0" expanded="false" />
-            <element signature="method#notificationsUpdate#0;class#API#0" expanded="false" />
-            <element signature="method#notificationsDelete#0;class#API#0" expanded="false" />
-            <element signature="method#deviceShare#0;class#API#0" expanded="false" />
-            <element signature="method#typeShare#0;class#API#0" expanded="false" />
-            <element signature="method#profileUpdate#0;class#API#0" expanded="false" />
-            <element signature="method#addPlace#0;class#API#0" expanded="false" />
-            <element signature="method#inviteSportsman#0;class#API#0" expanded="false" />
-            <element signature="method#approve#0;class#API#0" expanded="false" />
-            <element signature="method#register#0;class#API#0" expanded="false" />
-            <element signature="method#deletePlace#0;class#API#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="289" column="44" selection-start-line="289" selection-start-column="44" selection-end-line="289" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Company.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="104" column="33" selection-start-line="104" selection-start-column="33" selection-end-line="104" selection-end-column="33" />
-          <folding>
-            <element signature="method#odn#0;class#Handlers#0" expanded="false" />
-            <element signature="method#dreports#0;class#Handlers#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="394" column="228" selection-start-line="394" selection-start-column="228" selection-end-line="394" selection-end-column="228" />
-          <folding>
-            <element signature="method#Util#0;class#Util#0" expanded="false" />
-            <element signature="method#getReportName#0;class#Util#0" expanded="false" />
-            <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
-            <element signature="method#getTypeLink#0;class#Util#0" expanded="false" />
-            <element signature="method#getUserStats#0;class#Util#0" expanded="false" />
-            <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
-            <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
-            <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
-            <element signature="method#getDevices#0;class#Util#0" expanded="false" />
-            <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
-            <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1367,10 +1270,121 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.6217105">
-          <caret line="129" column="13" selection-start-line="129" selection-start-column="13" selection-end-line="129" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="152" column="34" selection-start-line="152" selection-start-column="34" selection-end-line="152" selection-end-column="34" />
           <folding>
             <marker date="1434214009265" expanded="true" signature="8294:33726" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Handlers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="325" column="34" selection-start-line="325" selection-start-column="34" selection-end-line="325" selection-end-column="34" />
+          <folding>
+            <element signature="method#odn#0;class#Handlers#0" expanded="false" />
+            <element signature="e#4273#4536#0" expanded="true" />
+            <element signature="e#4535#4536#0" expanded="true" />
+            <element signature="method#dreports#0;class#Handlers#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Util.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="174" column="38" selection-start-line="174" selection-start-column="38" selection-end-line="174" selection-end-column="38" />
+          <folding>
+            <element signature="method#Util#0;class#Util#0" expanded="false" />
+            <element signature="method#getReportName#0;class#Util#0" expanded="false" />
+            <element signature="method#getActiveDevice#0;class#Util#0" expanded="false" />
+            <element signature="method#getTypeLink#0;class#Util#0" expanded="false" />
+            <element signature="method#getDispatcherTree#0;class#Util#0" expanded="false" />
+            <element signature="method#getDispatcherInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getUserInfo#0;class#Util#0" expanded="false" />
+            <element signature="method#getDevices#0;class#Util#0" expanded="false" />
+            <element signature="method#getIndexArrows#0;class#Util#0" expanded="false" />
+            <element signature="method#getInviteMail#0;class#Util#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/Data.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="96" column="61" selection-start-line="96" selection-start-column="61" selection-end-line="96" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/arescon/API.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33223686">
+          <caret line="2495" column="9" selection-start-line="2495" selection-start-column="9" selection-end-line="2495" selection-end-column="9" />
+          <folding>
+            <element signature="method#getType#0;class#API#0" expanded="false" />
+            <element signature="method#getProfile#0;class#API#0" expanded="false" />
+            <element signature="method#getProfile#1;class#API#0" expanded="false" />
+            <element signature="method#getLastRequests#0;class#API#0" expanded="false" />
+            <element signature="method#getDeviceProfile#0;class#API#0" expanded="false" />
+            <element signature="method#getTypeProfile#0;class#API#0" expanded="false" />
+            <element signature="method#getHouseProfile#0;class#API#0" expanded="false" />
+            <element signature="method#getDeviceData#0;class#API#0" expanded="false" />
+            <element signature="method#getTypeData#0;class#API#0" expanded="false" />
+            <element signature="method#getHouseData#0;class#API#0" expanded="false" />
+            <element signature="method#getDeviceDeviation#0;class#API#0" expanded="false" />
+            <element signature="method#getTypeDeviation#0;class#API#0" expanded="false" />
+            <element signature="method#getDevicePercentage#0;class#API#0" expanded="false" />
+            <element signature="method#getTypePercentage#0;class#API#0" expanded="false" />
+            <element signature="method#getHousePercentage#0;class#API#0" expanded="false" />
+            <element signature="method#getTypeRates#0;class#API#0" expanded="false" />
+            <element signature="method#getDevicePayments#0;class#API#0" expanded="false" />
+            <element signature="method#getDeviceShare#0;class#API#0" expanded="false" />
+            <element signature="method#getTypeShare#0;class#API#0" expanded="false" />
+            <element signature="method#deviceCreate#0;class#API#0" expanded="false" />
+            <element signature="method#deviceRead#0;class#API#0" expanded="false" />
+            <element signature="method#deviceUpdate#0;class#API#0" expanded="false" />
+            <element signature="method#deviceDelete#0;class#API#0" expanded="false" />
+            <element signature="method#impulseCounterCreate#0;class#API#0" expanded="false" />
+            <element signature="method#impulseCounterRead#0;class#API#0" expanded="false" />
+            <element signature="method#addDevice#0;class#API#0" expanded="false" />
+            <element signature="method#addFlat#0;class#API#0" expanded="false" />
+            <element signature="method#addHouse#0;class#API#0" expanded="false" />
+            <element signature="method#addHA#0;class#API#0" expanded="false" />
+            <element signature="method#addCompany#0;class#API#0" expanded="false" />
+            <element signature="method#balanceTree#0;class#API#0" expanded="false" />
+            <element signature="method#deviceProfile#0;class#API#0" expanded="false" />
+            <element signature="method#typeProfile#0;class#API#0" expanded="false" />
+            <element signature="method#serviceProfile#0;class#API#0" expanded="false" />
+            <element signature="method#houseProfile#0;class#API#0" expanded="false" />
+            <element signature="method#deviceData#0;class#API#0" expanded="false" />
+            <element signature="method#typeData#0;class#API#0" expanded="false" />
+            <element signature="method#serviceData#0;class#API#0" expanded="false" />
+            <element signature="method#houseData#0;class#API#0" expanded="false" />
+            <element signature="method#devicePercentage#0;class#API#0" expanded="false" />
+            <element signature="method#typePercentage#0;class#API#0" expanded="false" />
+            <element signature="method#servicePercentage#0;class#API#0" expanded="false" />
+            <element signature="method#housePercentage#0;class#API#0" expanded="false" />
+            <element signature="method#deleteDevice#0;class#API#0" expanded="false" />
+            <element signature="method#deviceDeviation#0;class#API#0" expanded="false" />
+            <element signature="method#typeDeviation#0;class#API#0" expanded="false" />
+            <element signature="method#deviationRecordName#0;class#API#0" expanded="false" />
+            <element signature="method#lastRequests#0;class#API#0" expanded="false" />
+            <element signature="method#deviceRates#0;class#API#0" expanded="false" />
+            <element signature="method#typeRates#0;class#API#0" expanded="false" />
+            <element signature="method#devicePayments#0;class#API#0" expanded="false" />
+            <element signature="method#typePayments#0;class#API#0" expanded="false" />
+            <element signature="method#notificationsCreate#0;class#API#0" expanded="false" />
+            <element signature="method#notificationsRead#0;class#API#0" expanded="false" />
+            <element signature="method#notificationsUpdate#0;class#API#0" expanded="false" />
+            <element signature="method#notificationsDelete#0;class#API#0" expanded="false" />
+            <element signature="method#profileUpdate#0;class#API#0" expanded="false" />
+            <element signature="method#addPlace#0;class#API#0" expanded="false" />
+            <element signature="method#inviteSportsman#0;class#API#0" expanded="false" />
+            <element signature="method#approve#0;class#API#0" expanded="false" />
+            <element signature="method#register#0;class#API#0" expanded="false" />
+            <element signature="method#deletePlace#0;class#API#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -79,6 +79,38 @@ public class Data {
         return null;
     }
 
+    public static double totalDevice( long start, long end, int id, boolean money ) {
+        double total = 0.0;
+        Counter counter = COUNTER_DEVICES.get(id - 1);
+        double multiplier = money ? getMoneyMultiplier(counter.type) : 1.0;
+        for (CounterValue value : counter.values) {
+            if (value.timestamp >= start && value.timestamp <= end) {
+                total += value.value * multiplier;
+            }
+        }
+        return total;
+    }
+
+    public static double totalType( long start, long end, int type, boolean money ) {
+        // TODO: replace with actual code
+        switch (type) {
+            case 0: return totalDevice(start, end, 1, money);
+            case 1: return totalDevice(start, end, 4, money);
+            case 2: return totalDevice(start, end, 3, money);
+            case 3: return totalDevice(start, end, 2, money);
+            case 4: return 0.0;
+        }
+
+        return 0.0;
+    }
+
+    public static double totalFlat( long start, long end, boolean money ) {
+        double total = 0.0;
+        for (int i = 1; i < 5; ++i) total += totalDevice(start, end, i, money);
+
+        return total;
+    }
+
     private static double _totalFlat = Double.NaN;
 
     public static synchronized double totalFlat( boolean money ) {

@@ -848,12 +848,20 @@ public class API {
         return result.toString();
     }
 
-    private String getDeviceShare( int id ) {
-        return new JSONObject().put("share", Data.totalDevice(id, true).key / Data.totalFlat(true)).toString();
+    private String getDeviceShare( long start, long end, int id ) {
+
+        double device = Data.totalDevice(start, end, id, true);
+        double flat = Data.totalFlat(start, end, true);
+
+        return new JSONObject().put("share", device / flat).put("subject", device).put("total", flat).toString();
     }
 
-    private String getTypeShare( int id ) {
-        return new JSONObject().put("share", Data.totalType(id, true).key / Data.totalFlat(true)).toString();
+    private String getTypeShare( long start, long end, int id ) {
+
+        double type = Data.totalType(start, end, id, true);
+        double flat = Data.totalFlat(start, end, true);
+
+        return new JSONObject().put("share", type / flat).put("subject", type).put("total", flat).toString();
     }
 
     public void deviceCreate( HttpServerExchange exchange ) throws IOException {
@@ -2460,18 +2468,27 @@ public class API {
         }
 
         FormData.FormValue idForm = postData.getFirst("id");
+        FormData.FormValue startForm = postData.getFirst("start");
+        FormData.FormValue endForm = postData.getFirst("end");
 
-        if (idForm == null || idForm.getValue().isEmpty())
-        {
+        if (idForm == null || idForm.getValue().isEmpty()) {
             exchange.getResponseSender().send("error");
             return;
         }
 
         try {
             int id = Integer.parseInt(idForm.getValue());
+            long start = 0L;
+            long end = 99999999999999L;
+            if (startForm != null && !startForm.getValue().isEmpty()) {
+                start = Long.parseLong(startForm.getValue());
+            }
+            if (endForm != null && !endForm.getValue().isEmpty()) {
+                end = Long.parseLong(endForm.getValue());
+            }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getDeviceShare(id));
+            exchange.getResponseSender().send(getDeviceShare(start, end, id));
 
         } catch (Throwable e) {
             e.printStackTrace();
@@ -2491,6 +2508,8 @@ public class API {
         }
 
         FormData.FormValue idForm = postData.getFirst("id");
+        FormData.FormValue startForm = postData.getFirst("start");
+        FormData.FormValue endForm = postData.getFirst("end");
 
         if (idForm == null || idForm.getValue().isEmpty())
         {
@@ -2500,9 +2519,17 @@ public class API {
 
         try {
             int id = Integer.parseInt(idForm.getValue());
+            long start = 0L;
+            long end = 99999999999999L;
+            if (startForm != null && !startForm.getValue().isEmpty()) {
+                start = Long.parseLong(startForm.getValue());
+            }
+            if (endForm != null && !endForm.getValue().isEmpty()) {
+                end = Long.parseLong(endForm.getValue());
+            }
 
             exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-            exchange.getResponseSender().send(getTypeShare(id));
+            exchange.getResponseSender().send(getTypeShare(start, end, id));
 
         } catch (Throwable e) {
             e.printStackTrace();
