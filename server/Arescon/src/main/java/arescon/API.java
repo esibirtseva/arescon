@@ -1081,7 +1081,9 @@ public class API {
             String name = nameData.getValue();
             int ports = Integer.parseInt(portsData.getValue());
 
-            Data.IMPULSE_COUNTERS.add(new ImpulseCounter(name, ip, ports));
+            for (int port = 1; port <= ports; ++port) {
+                Data.IMPULSE_COUNTERS.add(new ImpulseCounter(name, ip, port));
+            }
 
             return;
 
@@ -1130,7 +1132,7 @@ public class API {
                 }
             } else {
                 for (ImpulseCounter counter : Data.IMPULSE_COUNTERS) {
-                    if (counter.occupied < counter.ports) list.put(counter.toJSON());
+                    if (!counter.occupied) list.put(counter.toJSON());
                 }
             }
 

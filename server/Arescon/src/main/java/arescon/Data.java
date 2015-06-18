@@ -176,11 +176,17 @@ public class Data {
         // 1409592882825l
         // public static final String[] TYPES = { "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2", "0", "3", "2", "1", "1", "3", "2", "0", "3", "3", "1", "2" };
 
+        IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 1", "xxx.xxx.xxx.xxx", 1));
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 1", "xxx.xxx.xxx.xxx", 2));
-        IMPULSE_COUNTERS.get(0).occupied = 2;
+        IMPULSE_COUNTERS.get(0).occupied = true;
+        IMPULSE_COUNTERS.get(1).occupied = true;
+        IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 2", "xxx.xxx.xxx.yyy", 1));
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 2", "xxx.xxx.xxx.yyy", 2));
-        IMPULSE_COUNTERS.get(1).occupied = 2;
+        IMPULSE_COUNTERS.get(2).occupied = true;
+        IMPULSE_COUNTERS.get(3).occupied = true;
+        IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 3", "xxx.xxx.xxx.zzz", 1));
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 3", "xxx.xxx.xxx.zzz", 2));
+        IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 4", "xxx.xxx.xxx.aaa", 1));
         IMPULSE_COUNTERS.add(new ImpulseCounter("Impulse Counter 4", "xxx.xxx.xxx.aaa", 2));
 
         COUNTER_DEVICES.add(new Counter("1", 0, 0, 0, 1, 1, 1, true, 1409504400000l, "Счетчик Techem AP"));
