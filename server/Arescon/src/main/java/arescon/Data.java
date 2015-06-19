@@ -36,9 +36,9 @@ public class Data {
         switch (type) {
             case 0: return "Холодная вода";
             case 1: return "Горячая вода";
-            case 2: return ""; // gas
-            case 3: return ""; // electricity
-            case 4: return "";
+            case 2: return "Газ"; // gas
+            case 3: return "Электричество"; // electricity
+            case 4: return "Отопление";
         }
 
         return "";

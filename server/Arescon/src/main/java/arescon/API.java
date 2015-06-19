@@ -852,16 +852,20 @@ public class API {
 
         double device = Data.totalDevice(start, end, id, true);
         double flat = Data.totalFlat(start, end, true);
+        String name = Data.COUNTER_DEVICES.get(id - 1).name;
 
-        return new JSONObject().put("share", device / flat).put("subject", device).put("total", flat).toString();
+        return new JSONObject().put("share", device / flat).put("subject", device).put("total", flat)
+                .put("name", name).toString();
     }
 
     private String getTypeShare( long start, long end, int id ) {
 
         double type = Data.totalType(start, end, id, true);
         double flat = Data.totalFlat(start, end, true);
+        String name = Data.getTypeName(id);
 
-        return new JSONObject().put("share", type / flat).put("subject", type).put("total", flat).toString();
+        return new JSONObject().put("share", type / flat).put("subject", type).put("total", flat)
+                .put("name", name).toString();
     }
 
     public void deviceCreate( HttpServerExchange exchange ) throws IOException {
