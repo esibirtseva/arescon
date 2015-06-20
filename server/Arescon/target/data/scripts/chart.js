@@ -283,6 +283,10 @@ $('#device-add').click(function() {
 
 function Device(id, start, end, _period){
     var self = this;
+    // if not called from Type
+    if (!self.type) {
+        self.type = 'device';
+    }
 
     self.id = id;
     self.start = start;
@@ -450,60 +454,62 @@ function Device(id, start, end, _period){
     };
 
     self.setShareGraph = function(){
-        var canvas = $(self.canvasShareSelector);
-        var ctxShareUsage = canvas.get(0).getContext("2d");
-        ctxShareUsage.canvas.width = canvas.parent().width();
-        
-        var personal_costs = Math.round(sumCosts(self.moneyData));
-        var all_costs = personal_costs*3;//TODO: change implementation
-        var type = typeMap[self.moneyData.type];
-        var dataShareUsage = [
-            {
-                value: all_costs,
-                color:"rgba(66, 139, 202, 0.2)",
-                highlight: "rgba(66, 139, 202, 0.4)",
-                label: "Общие расходы (руб.)"
-            },
-            {
-                value: Math.round(personal_costs),
-                color: type.colors.stroke,
-                highlight: type.colors.fill,
-                label: type.label + " (руб.)"
-            }
-        ];
-        var optionsShareUsage = {
-                //Boolean - Whether we should show a stroke on each segment
-                segmentShowStroke : true,
+        $.post('/' + self.type + '/share', {id: self.id, start: self.start, end: self.end}, function (data) {
+            var currentData = JSON.parse(data);
 
-                //String - The colour of each segment stroke
-                segmentStrokeColor : "#fff",
+            var canvas = $(self.canvasShareSelector);
+            var ctxShareUsage = canvas.get(0).getContext("2d");
+            ctxShareUsage.canvas.width = canvas.parent().width();
 
-                //Number - The width of each segment stroke
-                segmentStrokeWidth : 2,
+            var type = typeMap[self.moneyData.type];
+            var dataShareUsage = [
+                {
+                    value: Math.round(currentData.total),
+                    color:"rgba(66, 139, 202, 0.2)",
+                    highlight: "rgba(66, 139, 202, 0.4)",
+                    label: "Общие расходы (руб.)"
+                },
+                {
+                    value: Math.round(currentData.subject),
+                    color: type.colors.stroke,
+                    highlight: type.colors.fill,
+                    label: currentData.name + " (руб.)"
+                }
+            ];
+            var optionsShareUsage = {
+                    //Boolean - Whether we should show a stroke on each segment
+                    segmentShowStroke : true,
 
-                //Number - The percentage of the chart that we cut out of the middle
-                percentageInnerCutout : 50, // This is 0 for Pie charts
+                    //String - The colour of each segment stroke
+                    segmentStrokeColor : "#fff",
 
-                //Number - Amount of animation steps
-                animationSteps : 100,
+                    //Number - The width of each segment stroke
+                    segmentStrokeWidth : 2,
 
-                //String - Animation easing effect
-                animationEasing : "easeOutBounce",
+                    //Number - The percentage of the chart that we cut out of the middle
+                    percentageInnerCutout : 50, // This is 0 for Pie charts
 
-                //Boolean - Whether we animate the rotation of the Doughnut
-                animateRotate : true,
+                    //Number - Amount of animation steps
+                    animationSteps : 100,
 
-                //Boolean - Whether we animate scaling the Doughnut from the centre
-                animateScale : false,
+                    //String - Animation easing effect
+                    animationEasing : "easeOutBounce",
 
-                //String - A legend template
-                legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li style=\"color:<%=segments[i].fillColor%>\"><span style=\"color:rgb(128, 128, 128);\"><%if(segments[i].label){%><%=segments[i].label%><%}%> - <%=segments[i].value%></span></li><%}%></ul>"
+                    //Boolean - Whether we animate the rotation of the Doughnut
+                    animateRotate : true,
 
-            }
-            ;
-        var chart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
-        canvas.after(chart.generateLegend());
-        return chart;
+                    //Boolean - Whether we animate scaling the Doughnut from the centre
+                    animateScale : false,
+
+                    //String - A legend template
+                    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li style=\"color:<%=segments[i].fillColor%>\"><span style=\"color:rgb(128, 128, 128);\"><%if(segments[i].label){%><%=segments[i].label%><%}%> - <%=segments[i].value%></span></li><%}%></ul>"
+
+                }
+                ;
+            var chart = new Chart(ctxShareUsage).Doughnut(dataShareUsage, optionsShareUsage);
+            canvas.after(chart.generateLegend());
+            return chart;
+        });
     };
 
     self.resizeAllGraphs = function(){
@@ -525,6 +531,7 @@ function Device(id, start, end, _period){
 
 function Type(typeID, start, end, _period){    
     var self = this;
+    self.type = 'type';
 
     Device.call(this, typeID, start, end, _period);
 
