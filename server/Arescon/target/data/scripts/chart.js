@@ -464,10 +464,10 @@ function Device(id, start, end, _period){
             var type = typeMap[self.moneyData.type];
             var dataShareUsage = [
                 {
-                    value: Math.round(currentData.total),
+                    value: Math.round(currentData.total - currentData.subject),
                     color:"rgba(66, 139, 202, 0.2)",
                     highlight: "rgba(66, 139, 202, 0.4)",
-                    label: "Общие расходы (руб.)"
+                    label: "Остальные расходы (руб.)"
                 },
                 {
                     value: Math.round(currentData.subject),
